@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<script src='pixi.min.js'></script>
+		<script>
+			window.onload = function() {
+				//Aliases
+				let Application = PIXI.Application,
+					loader = PIXI.loader,
+					resources = PIXI.loader.resources,
+					Sprite = PIXI.Sprite;
+
+				//Create a Pixi Application
+				let app = new Application({
+					width: 256,
+					height: 256,
+					antialiasing: true,
+					transparent: false,
+					resolution: 1
+				});
+
+				app.renderer.view.style.border = "3px dashed red";
+				app.renderer.backgroundColor = 0xFFFFFF;
+				//Add the canvas that Pixi automatically created for you to the HTML document
+				document.body.appendChild(app.view);
+				//load an image and run the `setup` function when it's done
+				loader
+					.add("cat.jpg")
+					.load(setup);
+				//定义全局的精灵
+				let cat, state;
+				//所有的图片加载完了才会进入这个setup函数
+				function setup(res) {
+					console.log(arguments);
+					//创建一个精灵
+					cat = new Sprite(resources["cat.jpg"].texture);
+					cat.vx = 1;
+					//Add the cat to the stage
+					app.stage.addChild(cat);
+					
+					state = play;
+					
+					app.ticker.add(delta => gameloop(delta));
+
+				}
+				// GameStates
+
+				function gameloop(delta) {
+					state(delta);
+				}
+
+				function play(delta) {
+					
+				}
+
+				function keyboard(keyCode) {
+					let key = {};
+					key.code = keyCode;
+					key.isDown = false;
+					key.isUp = true;
+					key.press = undefined;
+					key.release = undefined;
+					key.downHandler = event => {
+						if(event.keyCode === key.code) {
+							if(key.isUp && key.press) key.press();
+							key.isDown = true;
+							key.isUp = false;
+						}
+						event.preventDefault();
+					}
+					//The `upHandler`
+					key.upHandler = event => {
+						if(event.keyCode === key.code) {
+							if(key.isDown && key.release) key.release();
+							key.isDown = false;
+							key.isUp = true;
+						}
+						event.preventDefault();
+					};
+
+					//Attach event listeners
+					window.addEventListener(
+						"keydown", key.downHandler.bind(key), false
+					);
+					window.addEventListener(
+						"keyup", key.upHandler.bind(key), false
+					);
+					return key;
+				}
+				//监听up键
+				let keyObject = keyboard(38);
+				keyObject.press = () => {
+					//key object pressed
+					cat.x += cat.vx;
+					console.log('按下去了');
+				};
+				keyObject.release = () => {
+					//key object released
+					console.log('弹上来了');
+				};
+				//				document.onkeydown=function(event){
+				//					console.log(event);
+				//				}
+				//				window.addEventListener('keydown', function(e) {
+				//					console.log(e);
+				//				});
+			}
+		</script>
+	</body>
+
+</html>

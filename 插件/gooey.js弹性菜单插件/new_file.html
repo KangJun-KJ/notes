@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="gooey.min.css" />
+
+		<style>
+			#gooey-round {
+				margin: 200px;
+				height:200px;
+				width: 200px;
+			}
+			
+			#gooey-API {
+				position: fixed;
+				left: 8rem;
+				top: 5.7rem;
+				width: 1rem;
+				height: 1rem;
+				box-sizing: content-box;
+				/*min-width: 1rem;*/
+				/*min-height: 1rem;*/
+				padding-top: 1.5rem;
+				padding-left: 1.5rem;
+				padding-bottom: 1.5rem;
+			}
+		</style>
+	</head>
+
+	<body>
+		<nav id="gooey-round">
+			<input type="checkbox" class="menu-open" name="menu-open3" id="menu-open3" />
+			<label class="open-button" for="menu-open3">
+				<span class="burger burger-1"></span>
+				<span class="burger burger-2"></span>
+				<span class="burger burger-3"></span>
+			</label>
+
+			<a href="#" class="gooey-menu-item"> <i class="fa fa-train"></i> </a>
+			<a href="#" class="gooey-menu-item"> <i class="fa fa-bicycle"></i> </a>
+			<a href="#" class="gooey-menu-item"> <i class="fa fa-rocket"></i> </a>
+
+		</nav>
+		<div id="gooey-API">
+			<input type="checkbox" class="menu-open" name="menu-open5" id="menu-open5" />
+			<label class="open-button" for="menu-open5">
+                	<span class="burger burger-1"></span>
+                	<span class="burger burger-2"></span>
+                    <span class="burger burger-3"></span>
+                </label>
+			<a class="gooey-menu-item" 	></a>
+			<a class="gooey-menu-item" >
+				<i>测试1</i>
+			</a>
+			<a class="gooey-menu-item" >
+				<i>测试2</i>
+			</a>
+			<a class="gooey-menu-item">
+				<i>测试3</i>
+			</a>
+			<a class="gooey-menu-item">
+				<i>测试4</i>
+			</a>
+			<a class="gooey-menu-item" style="opacity: 0"></a>
+			<a class="gooey-menu-item" style="opacity: 0"></a>
+		</div>
+		<script src='../js/jquery-2.1.0.js'></script>
+		<script src='gooey.min.js'></script>
+		<script>
+			$(function() {
+				$("#gooey-round").gooeymenu({
+					bgColor: "#ffc0cb",
+					contentColor: "white",
+					style: "circle",
+					circle: {
+						radius: 120
+					},
+					size: 60
+				});
+				$("#gooey-API").gooeymenu({
+					bgColor: "#7840ea",
+					contentColor: "white",
+					style: "circle",
+					circle: {
+						radius: 120
+					},
+					margin: "large",
+					size: 60,
+					bounce: true,
+					bounceLength: "large",
+					transitionStep: 100,
+					hover: "#5dbb89",
+					open: function() {
+						$(this).find(".gooey-menu-item").css("background", "-webkit-linear-gradient(bottom,  #b244fd,#7840ea)");
+						$(this).find(".open-button").css("background", "-webkit-linear-gradient(bottom,  #b244fd,#7840ea)");
+					},
+					close: function() {
+						$(this).find(".gooey-menu-item").css("background", "-webkit-linear-gradient(bottom,  #b244fd,#7840ea)");
+						$(this).find(".open-button").css("background", "-webkit-linear-gradient(bottom,  #b244fd,#7840ea)");
+					}
+				});
+			});
+		</script>
+	</body>
+
+</html>

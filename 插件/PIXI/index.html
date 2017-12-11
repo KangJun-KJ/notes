@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<script src='pixi.min.js'></script>
+		<script>
+			window.onload = function() {
+				//Aliases
+				let Application = PIXI.Application,
+					loader = PIXI.loader,
+					resources = PIXI.loader.resources,
+					Sprite = PIXI.Sprite;
+
+				//Create a Pixi Application
+				let app = new Application({
+					width: 256,
+					height: 256,
+					antialiasing: true,
+					transparent: false,
+					resolution: 1
+				});
+				
+				app.renderer.view.style.border = "3px dashed red";
+				app.renderer.backgroundColor = 0xFFFFFF;
+				//Add the canvas that Pixi automatically created for you to the HTML document
+				document.body.appendChild(app.view);
+				//load an image and run the `setup` function when it's done
+				loader
+					.add("cat.jpg")
+					.on("progress", loadProgressHandler)
+					.load(setup);
+
+				function loadProgressHandler(loader, resource) {
+					console.log(resource);
+					//加载图片的src
+					console.log("loading:" + resource.url);
+					//加载的进度
+					console.log('prgress: ' + loader.progress + "%");
+				}
+				//所有的图片加载完了才会进入这个setup函数
+				function setup(res) {
+					console.log(arguments);
+					//创建一个精灵
+					let cat = new Sprite(resources["cat.jpg"].texture);
+
+					//Add the cat to the stage
+					app.stage.addChild(cat);
+
+					
+				}
+
+			}
+		</script>
+	</body>
+
+</html>

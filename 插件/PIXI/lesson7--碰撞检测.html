@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<script src='pixi.min.js'></script>
+		<script>
+			window.onload = function() {
+				//Aliases
+				let Application = PIXI.Application,
+					loader = PIXI.loader,
+					resources = PIXI.loader.resources,
+					Sprite = PIXI.Sprite,
+					Graphics = PIXI.Graphics;
+
+				//Create a Pixi Application
+				let app = new Application({
+					width: 256,
+					height: 256,
+					antialiasing: true,
+					transparent: false,
+					resolution: 1
+				});
+				let a = 1;
+				console.log(app.ticker);
+				app.renderer.view.style.border = "3px dashed red";
+				app.renderer.backgroundColor = 0xFFFFFF;
+
+				//Add the canvas that Pixi automatically created for you to the HTML document
+				document.body.appendChild(app.view);
+
+				//load an image and run the `setup` function when it's done
+				loader
+					.add("cat.jpg")
+					.load(setup);
+				//定义全局的精灵
+				let cat, state,circle ;
+				//所有的图片加载完了才会进入这个setup函数
+				function setup(res) {
+					console.log(arguments);
+					//创建一个精灵
+					cat = new Sprite(resources["cat.jpg"].texture);
+					cat.vx = 1;
+					//Add the cat to the stage
+					app.stage.addChild(cat);
+					state = play;
+					app.ticker.add(delta => gameloop(delta));
+
+				}
+				circle = new Graphics();
+				circle.beginFill(0x9966FF);
+				circle.drawCircle(0, 0, 32);
+				circle.endFill();
+				circle.x = 164;
+				circle.y = 30;
+				app.stage.addChild(circle);
+				// GameStates
+				function gameloop(delta) {
+					state(delta);
+				}
+
+				function play(delta) {
+					cat.x += cat.vx;
+					if(hitTestRectangle(cat, circle)) {
+						console.log('hit');
+					}else{
+						console.log("miss");
+					}
+				}
+
+				function hitTestRectangle(r1, r2) {
+
+					//Define the variables we'll need to calculate
+					let hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
+
+					//hit will determine whether there's a collision
+					hit = false;
+
+					//Find the center points of each sprite
+					r1.centerX = r1.x + r1.width / 2;
+					r1.centerY = r1.y + r1.height / 2;
+					r2.centerX = r2.x + r2.width / 2;
+					r2.centerY = r2.y + r2.height / 2;
+
+					//Find the half-widths and half-heights of each sprite
+					r1.halfWidth = r1.width / 2;
+					r1.halfHeight = r1.height / 2;
+					r2.halfWidth = r2.width / 2;
+					r2.halfHeight = r2.height / 2;
+
+					//Calculate the distance vector between the sprites
+					vx = r1.centerX - r2.centerX;
+					vy = r1.centerY - r2.centerY;
+
+					//Figure out the combined half-widths and half-heights
+					combinedHalfWidths = r1.halfWidth + r2.halfWidth;
+					combinedHalfHeights = r1.halfHeight + r2.halfHeight;
+
+					//Check for a collision on the x axis
+					if(Math.abs(vx) < combinedHalfWidths) {
+
+						//A collision might be occuring. Check for a collision on the y axis
+						if(Math.abs(vy) < combinedHalfHeights) {
+
+							//There's definitely a collision happening
+							hit = true;
+						} else {
+
+							//There's no collision on the y axis
+							hit = false;
+						}
+					} else {
+
+						//There's no collision on the x axis
+						hit = false;
+					}
+
+					//`hit` will be either `true` or `false`
+					return hit;
+				};
+			}
+		</script>
+	</body>
+
+</html>

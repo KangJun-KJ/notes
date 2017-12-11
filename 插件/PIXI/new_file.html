@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+
+		<script src='pixi.min.js'></script>
+		<script>
+			var renderer = PIXI.autoDetectRenderer(256, 256);
+			renderer.view.style.border = "3px dashed red";
+			renderer.backgroundColor = 0xFFFFFF;
+			document.body.appendChild(renderer.view);
+
+			var stage = new PIXI.Container();
+			PIXI.loader
+				.add("cat.jpg")
+				.load(setup);
+
+			function setup() {
+				var sprite = new PIXI.Sprite(
+					PIXI.loader.resources["cat.jpg"].texture
+				);
+				//1.position
+//				sprite.x=70;
+//				sprite.y=70;
+				const x=70,y=70;
+				sprite.position.set(x,y);
+				//2.宽高 缩放
+				sprite.width=100;
+				sprite.height=100;
+				sprite.scale.set(2,2);
+				stage.addChild(sprite);
+				renderer.render(stage);
+//				setTimeout( ()=>{
+//					stage.removeChild(sprite);
+////					stage.visible =false;//同上
+//					renderer.render(stage);
+//				},1000);
+			}
+			renderer.render(stage);
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,56 @@
+text() - 设置或返回所选元素的文本内容
+html() - 设置或返回所选元素的内容（包括 HTML 标记）
+val() - 设置或返回表单字段的值
+
+通过attr()来获取属性值
+可以设置多个属性
+$("#w3s").attr({
+    "href" : "http://www.w3school.com.cn/jquery",
+    "title" : "W3School jQuery Tutorial"
+  });
+
+$("").html(function(i,origText){
+	i表示被选元素列表中当前元素的下标
+	origText表示原来的值
+	return "";用retrue返回一个值 给他新建一个值。
+});
+
+append() - 在被选元素的结尾插入内容
+prepend() - 在被选元素的开头插入内容
+after() - 在被选元素之后插入内容
+before() - 在被选元素之前插入内容
+
+remove() - 删除被选元素（及其子元素）
+empty() - 从被选元素中删除子元素
+
+addClass();添加CSS样式，可以每次选择多个元素
+$("h1,h2,p").addClass("blue");
+removeClass() 移除Css样式
+toggleClass();被选元素进行添加/删除CSS样式的切换操作
+
+css可以获取或者设置元素样式
+$("p").css("backgroud-color","yellow");
+//可以通知设置多个css样式	
+$("p").css({"background-color":"yellow",
+		"font-size":"200%"});
+
+
+index方法；
+$(this).index（）;或者在父元素处于第几个
+
+$(selector).index(element);返回element相对于selector的位置
+
+
+toArray方法：toArray() 方法以数组的形式返回 jQuery 选择器匹配的元素。
+	x=$("li").toArray()
+      for (i=0;i<x.length;i++)
+      {
+      alert(x[i].innerHTML);
+      }
+
+size() 方法返回被 jQuery 选择器匹配的元素的数量。
+
+
+get() 方法获得由选择器指定的 DOM 元素
+$(selector).get(index) ；
+index	可选。规定获取哪个匹配元素（通过 index 编号）。

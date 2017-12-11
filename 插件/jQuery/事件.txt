@@ -1,0 +1,21 @@
+$(selector).action(function(){});
+
+$(this) 指的是当前的元素
+
+当$与其他的JavaScript库中的函数名字重复的时候
+可以使用noConflict()方法来解决
+
+$.noConflict();
+jQuery("button").click(function(){});
+
+var jq=jQuery.noConflict();
+
+$(document).ready(function)	将函数绑定到文档的就绪事件（当文档完成加载时）
+$(selector).click(function)	触发或将函数绑定到被选元素的点击事件
+$(selector).dblclick(function)	触发或将函数绑定到被选元素的双击事件
+$(selector).focus(function)	触发或将函数绑定到被选元素的获得焦点事件
+$(selector).mouseover(function)	触发或将函数绑定到被选元素的鼠标悬停事件
+
+$(selector).unbind("click");//解除某个事件
+
+

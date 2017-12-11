@@ -1,0 +1,19 @@
+$(selector).action()
+$表示jQuery 
+(selector)代表查询和查找元素
+action表示执行的事件
+
+
+//在文档完全加载完成之后在执行代码。
+$(document).read(function(){
+
+});
+
+jQuery选择器
+id 前面加# class前面加.
+$("#mydiv") 选中所有id为mydiv的元素
+$(".mydiv")选中所有class为mydiv的元素
+$("div.p") 选中所有class为p的div元素
+$("[href]") 选中所有带href属性的元素
+$("ul li:first") 选中每个<ul>中的第一个<li>标签
+$("href=#")	选中每一个href属性为#的元素

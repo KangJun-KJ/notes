@@ -1,0 +1,52 @@
+
+
+
+处理响应结果的回调结果：
+success,error,statuCode,complete;
+成功 错误 状态码 完成之后都会执行
+
+请求数据：data,processDate,contentType,traditional
+
+data:{
+
+ 	'id':GetId,
+   
+        'rename':NameNow
+ 
+      }
+	
+ processDate 默认为true是否对数据进行预处理
+contentType 数据的格式
+traditional 默认为false 对数据深层次迭代，适用于数组
+
+响应数据:dataType dataFilter
+
+
+dataType:'test|html|json|script|jsonp'
+设置返回的数据的格式
+dataFilter 对底层的数据进行一个预先的处理
+dataFilter: function(data, type) {	不返回整个的数据 只返回数据的个数
+                console.log(data);
+                console.log(type);
+                var tmp =  JSON.parse(data);
+                return tmp.length;
+            }
+请求类型：type GET|POST|DELETE|默认是GET
+同步异步：async 默认异步
+是否缓存 cache 默认true
+前置处理 :beforeSend
+headers:设置请求头
+
+beforeSend:function(jqXHR,setting){
+	jqXHR.setRequestHeader('test','haha');
+	jqXHR.testData={a:1,b:2};
+
+}
+
+global：是否触发全局事件
+ifModifed:浸在服务器数据改变时加载数据
+username:password http需要验证时使用
+timeout:设置请求超时时间 若请求超时，触发error（xhr,'tieout','timeout')
+context 回到this 指向的对象
+
+

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>从雪碧图中提取图片</title>
+	</head>
+
+	<body>
+		<script src='pixi.min.js'></script>
+		<script>
+			window.onload = function() {
+				//Aliases
+				let Application = PIXI.Application,
+					loader = PIXI.loader,
+					resources = PIXI.loader.resources,
+					Sprite = PIXI.Sprite,
+					Rectangle = PIXI.Rectangle,
+					TextureCache = PIXI.utils.TextureCache;
+
+				//Create a Pixi Application
+				let app = new Application({
+					width: 256,
+					height: 256,
+					antialiasing: true,
+					transparent: false,
+					resolution: 1
+				});
+				document.body.appendChild(app.view);
+				loader.add("09.png")
+					.load(setup);
+
+				function setup() {
+					//纹理中创建精灵图片
+					let texture = TextureCache["09.png"];
+
+					//定义一个裁切矩阵，传入他的位置和大小
+					let rectangle = new Rectangle(96, 64, 32, 32);
+
+					texture.frame = rectangle;
+
+					let rocket = new Sprite(texture);
+
+					rocket.x = 32;
+					rocket.y = 32;
+
+					app.stage.addChild(rocket);
+				}
+			}
+		</script>
+	</body>
+
+</html>

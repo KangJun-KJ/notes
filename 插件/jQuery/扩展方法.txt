@@ -1,0 +1,10 @@
+			//扩展 
+//			$.extend({
+//				aaa:function(){alert("为$扩展");}
+//			});
+//			$.aaa();
+			为元素扩展方法：
+//			$.fn.extend({
+//				bbb:function(){alert("为元素扩展方法")}
+//			})
+//			$("input").bbb();
