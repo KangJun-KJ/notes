@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			.Show_title {
+				width: 130px;
+				height: 80px;
+				line-height: 80px;
+				position: relative;
+				margin: auto;
+				font-size: xx-large;
+				font-family: "微软雅黑";
+				cursor: pointer;
+			}
+			
+			.Show_title:hover {
+				color: #fff;
+			}
+			
+			.Show_title:after {
+				content: attr(data-wenzi);
+				position: absolute;
+				overflow: hidden;
+				color: #4eacff;
+				left: 0;
+				top: 0;
+				white-space: nowrap;
+				width: 0%;
+				-webkit-transition: width 0.4s;
+				transition: width 0.4s;
+			}
+			
+			.Show_title:hover:after {
+				width: 100%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id='show1_addtop' style="background-color:  #00FFFF;width: 100%;">
+			<div class='Show_title' data-wenzi="自我介绍">自我介绍</div>
+		</div>
+	</body>
+
+</html>

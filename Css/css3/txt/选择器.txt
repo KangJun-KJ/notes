@@ -1,0 +1,45 @@
+	/*ID包含div的这个字符串就会选择*/
+        [id*=div]{
+            color:lime;
+        }
+        /*只有首字母为div的才会有效果*/
+        [id^=div]{
+            color:darkmagenta;
+        }
+        /*结束字符为div*/
+        [id$=div]{  
+            color:#ac2925;
+        }
+    	当结束字符为数字的时候加一个\就可以了，不然会报错
+
+   p:first-line{ 	选择第一行
+            color:red;
+        }
+        p:first-letter{  选择首字母
+            color:aqua;
+        }
+        p:before{  在元素之前添加内容
+            content:'--';
+        }
+        p:after{  在元素后面添加内容
+            content:'说明';
+        }
+
+	root:选择HTML文档，当使用body来设置的时候，会使用
+	root设置的内容，但是正文部分会使用body
+		
+ 	not:不会选中
+	:not(p)或 div *:not(h1)
+ 	empty:
+	将没有内容的标签元素比如没有填写的表格元素。
+	target:
+	选中被来链接中的内容元素
+	
+	first-child 选择属于其父元素的首个子元素必须包裹在其他元素中
+	last-child 制定属于其父元素的最后一个子元素的 不用必须包其他元素
+	nth-child（index）:选择其父元素第几个元素
+	nth-last-child(index):从最后一个元素开始
+	index可以不为具体的数字.
+	odd为奇数 even:为偶数
+
+	

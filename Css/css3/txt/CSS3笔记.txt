@@ -1,0 +1,9 @@
+background-clip：border-box、padding-box、content-box；
+背景区域：包括外边距、包括内边距、只包括正文；
+background-orgin:border-box、padding-box、content-box
+设置图片的起始位置，分别从边框、内边距框、正文起点开始。
+
+inline-table、inline-block
+
+background:-webkie-linear-graient(top,#fff,#999);
+背景颜色渐变。

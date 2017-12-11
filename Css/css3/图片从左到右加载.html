@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+			}
+			
+			
+			
+			#myimg {
+				position: absolute;
+				/*overflow: hidden;*/
+				color: #4eacff;
+				left: 0;
+				top: 0;
+				white-space: nowrap;
+				width: 0;
+				height: 80px;
+				/*background: url("../img/Pumpkin.png") no-repeat 130px 80px;*/
+				background-image: url(../img/Pumpkin.png);
+				background-size: 130px 80px;
+				-webkit-transition: width 1.4s;
+				transition: width 1.4s;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div id="myimg"></div>
+
+		<script type="text/javascript">
+			setTimeout(function() {
+				document.getElementById("myimg").style.width = "130px";
+			}, 1000);
+		</script>
+	</body>
+
+</html>

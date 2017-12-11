@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			.mybutton{
+				position: absolute;
+				top:400px;
+				left:400px;
+			}
+			.ripple-effect {
+				position: relative;
+				overflow: hidden;
+			}
+			
+			.btn {
+				width: 150px;
+				height: 40px;
+				border: 1px solid #d9d9d9;
+				outline: none;
+				background: #008DC5;
+				color: #fff;
+			}
+			
+			.ripple {
+				border-radius: 50%;
+				background: rgba(0, 0, 0, .5);
+				-webkit-transform: scale(0);
+				transform: scale(0);
+				position: absolute;
+				opacity: 1;
+			}
+			
+			.rippleEffect {
+				-webkit-animation: rippleEffect 2s cubic-bezier(0.23, 1, 0.32, 1);
+				animation: rippleEffect 2s cubic-bezier(0.23, 1, 0.32, 1);
+			}
+			
+				
+			
+			@keyframes rippleEffect {
+				100% {
+					-webkit-transform: scale(2);
+					transform: scale(2);
+					opacity: 0;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<button class="btn  ripple-effect">点击波纹</button> 
+		<button class="btn  ripple-effect">点击波纹</button> 
+		<button class="btn  ripple-effect">点击波纹</button> 
+		<button class='mybutton ripple-effect'>1111111111</button>
+		<script name="code" class="javascript">function ripple(event, $this) {  
+        event = event || window.event;  
+        //  获取鼠标位置  
+        var x = event.pageX || document.documentElement.scrollLeft + document.body.scrollLeft + event.clientX;  
+        var y = event.pageY || document.documentElement.scrollTop + document.body.scrollTop + event.clientY;  
+        console.log(x+'  '+y)
+        var wx = $this.offsetWidth;  
+        console.log(wx);
+        x = x - $this.offsetLeft - wx / 2;  
+        y = y - $this.offsetTop - wx / 2;  
+        console.log($this.offsetLeft);
+        // 添加.ripple元素  
+        var ripple = document.createElement('span');  
+        ripple.className = 'ripple';  
+        var firstChild = $this.firstChild;  
+        if (firstChild) {  
+            $this.insertBefore(ripple, firstChild);  
+        } else {  
+            $this.appendChild(ripple);  
+        };  
+        ripple.style.cssText = 'width: ' + wx + 'px;height: ' + wx + 'px;top: ' + y + 'px;left: ' + x + 'px';  
+        ripple.classList.add('rippleEffect');  
+         
+    };  
+  
+    var btn = document.querySelectorAll('.ripple-effect');  
+    for (var i = 0; i < btn.length; i++) {  
+        /*addEvent(btn[i], 'click',  
+            function(e) {  
+                ripple(e, this);  
+            });*/  
+        /*btn[i].onclick = function(e) {  
+            ripple(e,this);  
+        }*/  
+  
+        btn[i].addEventListener('click', function(e){  
+            ripple(e,this);  
+        });  
+        btn[i].addEventListener('animationend', function(e){  
+            this.removeChild(this.querySelector('.ripple'));
+        });  
+         //  监听动画结束，删除波纹元素 有bug  
+//      animationEnd(ripple,
+//      	function() {
+//      		this.parentNode.removeChild(ripple);
+//      	});
+        };</script><br>
+		<p style="">我们来看看几段重要的代码：</p>
+		<p style=""><strong>（1）获取鼠标的位置</strong></p>
+		<pre style=""><code class="hljs cs" style="font-family:Consolas,"Liberation Mono",Menlo,Courier,monospace; display:inline; overflow:initial; color:rgb(77,77,76); padding:0px; word-break:break-all; line-height:inherit; max-width:100%; margin:0px; border:0px; font-size:13.6px; background:transparent"><span class="hljs-keyword" style="">var</span> x = <span class="hljs-keyword" style="">event</span>.pageX || document.documentElement.scrollLeft + document.body.scrollLeft + <span class="hljs-keyword" style="">event</span>.clientX;  
+<span class="hljs-keyword" style="">var</span> y = <span class="hljs-keyword" style="">event</span>.pageY || document.documentElement.scrollTop + document.body.scrollTop + <span class="hljs-keyword" style="">event</span>.clientY;</code></pre>
+		<p style=""><code style="font-family:Consolas,'Liberation Mono',Menlo,Courier,monospace; display:inline-block; padding:0px 0.4em; word-break:break-all; white-space:pre; line-height:1.3; background-color:rgb(247,247,247)">pageX/Y</code>获取到的是触发点相对文档区域左上角距离，会随着页面滚动而改变，<code style="font-family:Consolas,'Liberation Mono',Menlo,Courier,monospace; display:inline-block; padding:0px 0.4em; word-break:break-all; white-space:pre; line-height:1.3; background-color:rgb(247,247,247)">||</code>后面的代码是为了兼容IE。</p>
+		<p style=""><strong>（2）计算相对位置</strong></p>
+		<p style="">上面的x和y获取的是相对于文档的鼠标位置，而<code style="font-family:Consolas,'Liberation Mono',Menlo,Courier,monospace; display:inline-block; padding:0px 0.4em; word-break:break-all; white-space:pre; line-height:1.3; background-color:rgb(247,247,247)">transform</code>默认是以元素的中心点来转换的，所以我们需要获取相对位置，也就是波纹元素中心点相对于按钮中心点的位置。</p>
+		<pre style=""><code class="hljs scala" style="font-family:Consolas,"Liberation Mono",Menlo,Courier,monospace; display:inline; overflow:initial; color:rgb(77,77,76); padding:0px; word-break:break-all; line-height:inherit; max-width:100%; margin:0px; border:0px; font-size:13.6px; background:transparent">    <span class="hljs-keyword" style="">var</span> wx = $<span class="hljs-keyword" style="">this</span>.offsetWidth;  
+    x = x - $<span class="hljs-keyword" style="">this</span>.offsetLeft - wx / <span class="hljs-number" style="">2</span>;  
+    y = y - $<span class="hljs-keyword" style="">this</span>.offsetTop - wx / <span class="hljs-number" style="">2</span>;  
+    ripple.style.cssText = <span class="hljs-symbol" style="">'width</span>: ' + wx + <span class="hljs-symbol" style="">'px</span>;height: ' + wx + <span class="hljs-symbol" style="">'px</span>;top: ' + y + <span class="hljs-symbol" style="">'px</span>;left: ' + x + <span class="hljs-symbol" style="">'p</span>x';</code></pre>
+		<p style="">本身波纹元素<code style="font-family:Consolas,'Liberation Mono',Menlo,Courier,monospace; display:inline-block; padding:0px 0.4em; word-break:break-all; white-space:pre; line-height:1.3; background-color:rgb(247,247,247)">ripple</code>的中心点是在元素的中心，所以我们根据鼠标位置和元素的位置，计算应该偏移的位置。</p>
+		<br>
+		<pre></pre>
+		<pre name="code" class="css"><pre name="code" class="html"></pre>
+		<pre></pre>
+		<pre></pre>
+		<pre></pre>
+		<pre name="code" class="html"></pre><pre name="code" class="html"></pre><pre name="code" class="html"><span style="color: rgb(85, 85, 85); font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "WenQuanYi Micro Hei", "Microsoft Yahei", sans-serif; font-size: 14px;">著作权归作者所有。</span><br style="margin: 0px; padding: 0px; box-sizing: border-box; text-size-adjust: none; color: rgb(85, 85, 85); font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "WenQuanYi Micro Hei", "Microsoft Yahei", sans-serif; font-size: 14px;"><p><span style="color: rgb(85, 85, 85); font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "WenQuanYi Micro Hei", "Microsoft Yahei", sans-serif; font-size: 14px;">商业转载请联系作者获得授权,非商业转载请注明出处。http://ghmagical.com/</span></p>  
+</pre>
+
+		</pre>
+	</body>
+
+</html>

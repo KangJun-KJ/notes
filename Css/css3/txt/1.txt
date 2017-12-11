@@ -1,0 +1,13 @@
+用css画出一个三角形
+
+首先将元素的width和height都设置为0;
+在使用border:1px solid transparent;
+然后在使用border-top、border-bottom、border-left、border-right来设置三角形的方向、
+
+做一个圆形的圆环，直接先border-radius就有一个圆环出来，现在要在这个圆环上面再
+用border-top:15px solid green;就可以做出来一个向上的半圆环。不过是倾斜的。
+使用rotate(45deg)就可以摆正了。这就是一个简单的静态进度条
+
+做一个动态的进度条
+两个圆环，一个是左边看得见 一个是右边看得见，可以用overflow：hidden来隐藏
+右边先转，左边在接着转，就相当于一个进度条
