@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src='js/vue2.0.js'></script>
+		<script src='js/vue-router.js'></script>
+		<style>
+			.fade-enter-active ,.fade-leave-active{
+				transition:opacity .5s;
+			}
+			.fade-enter{
+				opacity: .5;
+			} ,.fade-leave-active{
+				opacity: 0;
+			}
+			.fade2-enter-active ,.fade2-leave-active{
+				transition:background .5s ease-in,color .3s ease-in;
+			}
+			.fade2-enter ,.fade2-leave-active{
+				background: #FF6666;
+				color:red;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<h1>This is Transition</h1>
+			<ul>
+				<li><router-link to='/'>/</router-link></li>
+				<li><router-link to='/parent'>/parent</router-link></li>
+				<li><router-link to='/xxx'>/Page404</router-link></li>
+			</ul>
+			<!--动画效果都要包裹在transition的标签里面-->	
+			<!--这里的name值跟上面css的第一个名字是一样的-->
+			<transition :name='aaa' mode='out-in'>
+				<router-view></router-view>
+			</transition>
+		</div>
+		<script>
+			const Home={
+				template:`
+					<div>
+					  <h2>Home</h2>
+					  <p>This is Home</p>
+					</div>
+				`
+			}
+			
+			const parent={
+				template:`
+					<div>
+					  <h2>Parent</h2>
+					  <p>This is Parent</p>
+					</div>
+				`
+			}
+			
+			const Page404={
+				template:`
+					<div>
+						<h2>Error:404</h2>
+					</div>
+				`
+			}
+			const router=new VueRouter({
+				mode:"history",
+//				base:__dirname
+				routes:[
+					{path:'/',component:Home},
+					{path:'/parent',component:parent},
+					{path:'*',component:Page404},
+				]
+			})
+			new Vue({
+				router,
+				data(){
+					return {
+						aaa:'fade'
+					}
+				},
+//				监听动画
+				watch:{
+					'$route'(to,from){
+						console.log(to);
+						console.log(from);
+						if(from.path=="/parent"){
+							this.aaa='fade';
+						}else{
+							this.aaa='fade2';
+						}
+					}
+				}
+			}).$mount("#app");
+		</script>
+	</body>
+</html>

@@ -1,0 +1,45 @@
+<html>
+
+	<head>
+		<title></title>
+		<meta charset="utf-8"/>
+		<script src='js/vue2.0.js'></script>
+	</head>
+
+	<body>
+		<div id="app">	
+			<my-item></my-item>
+		</div>
+		<script>
+			Vue.component('my-item', {
+				props: ['type', 'price'],
+				template: '<div>{{type}}价格：{{price}}<input type="button" name="" value="购买" @click="goumai">购买的数量：{{amount}}</div>',
+				data() {
+					return {
+						amount: 0
+					}
+				},
+				methods: {
+					goumai() {
+						this.amount++;
+					}
+				}
+			})
+
+			let vm = new Vue({
+				el: '#app',
+				computed: {
+					total() {
+						console.log(this.$children.length);
+						var sum = 0;
+						for(var i = 0; i < this.$children.length; i++) {
+							sum += this.$children[i].amount * this.$children[i].price;
+						}
+						return sum;
+					}
+				}
+			})
+		</script>
+	</body>
+
+</html>

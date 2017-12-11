@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src='js/vue2.0.js'></script>
+	</head>
+	<body>
+		
+		<div id="example">
+			<my-component></my-component>
+			<my-component2></my-component2>
+		</div>
+		<script>
+			/*
+			 * 组件 全局注册
+			 */
+			Vue.component("my-component",{
+				template:"<div>A custom component!</div>"
+			});
+			
+			var Child={
+				template:'<div>other custom component!</div>'
+			}
+			new Vue({
+				el:"#example",
+				/*
+				 * 组件局部注册
+				 */
+				components:{
+					'my-component2':{ //将子组件嵌套进父组件内
+						template: '<div>A Global component!<child></child></div>',
+						components: {
+							child: {
+								template: '<div>A local component!</div>',
+								
+							}
+						}
+					},
+				}
+			})
+		</script>
+	</body>
+</html>

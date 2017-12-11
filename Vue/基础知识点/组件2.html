@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Title</title>
+		<script src="https://unpkg.com/vue/dist/vue.js"></script>
+	</head>
+
+	<body>
+		<h4>Using Compenents（使用组件）</h4>
+		<div id="example">
+			<my-component></my-component>
+		</div>
+		<script>
+			//        Vue.component('my-component', {
+			//            template: '<div>A custom component!</div>',
+			//        });
+			new Vue({
+				el: '#example',
+				components: {
+					myComponent: {
+						template: '<div>A custom component!</div>',
+					}
+				}
+			})
+		</script>
+		<h4>Local Registration(局域注册)! data在模板组件？？</h4>
+		<div id="test"></div>
+		<div id="demo">
+			<parent></parent>
+		</div>
+		<script>
+			//        var Child = Vue.extend({
+			//            template: '<div>A local component!></div>'
+			//        });
+			//        var Parent = Vue.extend({//将子组件嵌套进父组件内
+			//            template: '<div>A Global component!<child></child></div>',
+			//            components: {
+			//                child: Child
+			//            }
+			//        });
+			new Vue({
+				el: '#demo',
+				data: {
+					msg: "hello"
+				},
+				components: {
+					'parent': { //将子组件嵌套进父组件内
+						template: '<div>A Global component!<child></child></div>',
+						components: {
+							child: {
+								template: '<div>A local component!</div>'
+							}
+						}
+					},
+				}
+			});
+		</script>
+		<h4>DOM Template Parsing Caveats</h4>
+		<div>
+			<p>一些 HTML 元素对什么元素可以放在它里面有限制。常见的限制： a 不能包含其它的交互元素（如按钮，链接） ul 和 ol 只能直接包含 li select 只能包含 option 和 optgroup table 只能直接包含 thead, tbody, tfoot, tr, caption, col, colgroup tr 只能直接包含 th 和 td</p>
+			<p>另一个结果是，自定义标签（包括自定义元素和特殊标签）不能用在 ul, select, table 等对内部元素有限制的标签内。放在这些元素内部的自定义标签将被 提到元素的外面，因而渲染不正确。
+			</p>
+			<p>prefer using string templates whenever possible. data Must Be a Function</p>
+		</div>
+		<h4>data MUST BE a Function</h4>
+		<div id="example-2">
+			<simple-counter></simple-counter>
+			<simple-counter></simple-counter>
+			<simple-counter></simple-counter>
+		</div>
+		<script>
+			//        data MUST BE a Function
+			Vue.component('simple-counter', {
+				template: '<button v-on:click="counter += 1">{{ counter }}</button>',
+				data: function() {
+					return {
+						counter: 0
+					}
+				}
+			});
+			new Vue({
+				el: '#example-2',
+			})
+		</script>
+		<h4>Composing Components 组件建构props down, events up</h4>
+		<p>Passing Data with Props（父到子）</p>
+		<hr>
+		<div id="demo2">
+			<child1 message="134a"></child1>
+		</div>
+		<script>
+			//组件实例的作用域是独立的
+			Vue.component('child1', {
+				props: {
+					message: {
+						type: String,
+						default: '13sd'
+					}
+				}, //“信使RNA”，把值父到子单向传递过去
+				template: '<p>{{message}}</p>'
+			});
+			let demo2 = new Vue({
+				el: '#demo2'
+			})
+		</script>
+		<h4>camelCase vs.kebab-case</h4>
+		<div id="demo20">
+			<!--html里边kebab-case-->
+			<child1 my-message="hello 20!"></child1>
+		</div>
+		<script>
+			Vue.component('child1', {
+				props: ['my-message'],
+				template: '<p>{{myMessage }}</p>'
+			});
+			let demo20 = new Vue({
+				el: '#demo20'
+			})
+		</script>
+		<h4> Dynamic Props </h4>
+		<div id="demo21">
+			<!--子组件自定义message值传递不到父组件，只对自己有用-->
+			<child2 message="child 自定义的 message，只对自己用!"></child2>
+			<div>
+				<input v-model="message">
+				<br>
+				<child2 message="'message'+freeDom"></child2><br />
+				<child2 :message="':message'+message"></child2><br />
+				<!--<child2 :message.once="':message.once'+message"></child2><br />
+				<child2 :message.sync="':message.sync'+message"></child2><br />-->
+				<!--直接引用引用父组件message
+<!--				<child2 v-text="'v-text'+{{message}}"></child2>-->
+			</div>
+		</div>
+		<script>
+			Vue.component('child2', {
+				props: ['message'], //听父级传递数据
+				template: '<p>{{message}}</p>'
+			});
+			let demo21 = new Vue({
+				el: '#demo21',
+				data() {
+					return {
+						message: 'parent message'
+					}
+				}
+			})
+		</script>
+		<h4>One-way Data Flow</h4>
+		<p>:msg(default),:msg.sync(double),:msg.once(once) 效果测试</p>
+		<p style="color:red">注意如果 prop 是一个对象或数组，是按引用传递。在子组件内修改它会影 响父组件的状态，不管是使用哪种绑定类型。
+		</p>

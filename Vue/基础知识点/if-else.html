@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src='js/vue2.0.js'></script>
+	</head>
+
+	<body>
+
+		<div v-if="Math.random() > 0.5">
+
+		</div>
+		<div v-else>
+			Not sorry
+		</div>
+
+		<div id='hello'>
+			<div v-if="type === 'A'">
+			A
+		</div>
+		<div v-else-if="type === 'B'">
+			B
+		</div>
+		<div v-else-if="type === 'C'">
+			C
+		</div>
+		<div v-else>
+			Not A/B/C
+		</div>
+		</div>
+		
+		<script>
+			var vm=new Vue({
+				el:"#hello",
+				data:{
+					type:"B"
+				}
+			})
+		</script>
+	</body>
+
+</html>

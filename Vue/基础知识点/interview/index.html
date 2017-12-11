@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>碰撞小游戏</title>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+
+	<body>
+		<div id='app'>
+			<blueball v-for="(item , index) in num" :options="item" :key='index'></blueball>
+		</div>
+
+		<script type="text/x-template" id="blueball-template">
+			<img src="blue.png" alt="" class="blueball" :width="options.size"  :height="options.size" :style='{left:options.startX,top:options.startY}' />
+		</script>
+		<script src='../js/vue2.0.js'></script>
+		<script>
+			var vue = Vue.component('blueball', {
+				name: "blueBall",
+				template: '#blueball-template',
+				props: {
+					options: {
+						type: Object,
+						default() {
+							return {
+								size: 23,
+								speed: 1,
+								startX: 328,
+								startY: 253,
+								direction: 2 * Math.PI
+							}
+						}
+					}
+				},
+				methods: {
+					setPos() {
+						this.$el.style.left = this.options.startX + "px";
+						this.$el.style.top = this.options.startY + "px";
+					}
+				},
+				mounted: function() {
+					this.setPos();
+				},
+				watch: {
+					options: {
+						handler: function(val, oldVal) {
+							this.setPos();
+						},
+						deep: true
+					}
+
+				}
+			})
+			new Vue({
+				el: "#app",
+				data: {
+					border:{
+						left:0,
+						right:700,
+						top:0,
+						bottom:400
+					},
+					timer:"",
+					allOut:false,
+					redball: {
+						startX: 0,
+						startY: 0,
+						speed: 111,
+						size: 40,
+						isBoss: false,
+						direction: 0
+					},
+					num: [], //存放小球的数组
+				},
+				methods: {
+					random() {
+						return {
+							visiable:true,
+							startX: parseInt(Math.random() * 700),
+							startY: parseInt(Math.random() * 400),
+							speed: parseInt(Math.random() * 10+1),
+							size: parseInt(Math.random() * 30 + 20),
+							direction: Math.random() * 360
+						}
+					},
+					add() {
+						this.num.push(this.random());
+						this.num.concat();
+					},
+					init() {
+						//刚开始的时候放10个蓝色球进去。
+						for(let i = 0; i < 10; i++) {
+							setTimeout(() => {
+								this.add();
+							}, 0)
+						}
+					},
+					junge(x,y,size){
+						if(x>this.border.right||x+size<this.border.left||y>this.border.bottom||y+size<this.border.top){
+							return false;
+						}
+						return true;
+					},
+					move() {
+						this.allOut=true;
+						for(let i = 0, len = this.num.length; i < len; i++) {
+							if(!this.num[i].visiable){
+								continue;
+							}
+							this.allOut=false;
+							let jiaodu = Math.sin(this.num[i].direction) == 0 ? 1 : Math.sin(this.num[i].direction);
+							let jiaodu2 = Math.cos(this.num[i].direction) == 0 ? 1 : Math.cos(this.num[i].direction);
+							var x = this.num[i].startX + parseInt(jiaodu * this.num[i].speed);
+							var y = this.num[i].startY + parseInt(jiaodu2 * this.num[i].speed);
+							this.num[i].startX = x;
+							this.num[i].startY = y;
+							if(!this.junge(x,y,this.num[i].size)){
+								this.num[i].visiable=false;
+							}
+						}
+						this.num.concat();
+					}
+				},
+				mounted() {
+					let self = this;
+					this.init();
+					this.timer=setInterval(function() {
+						if(self.allOut){
+							clearInterval(self.timer);
+							return ;
+						}
+						self.move();
+					}, 100);
+				},
+				watch: {
+					num: function(val, oldVal) {}
+				}
+			})
+		</script>
+	</body>
+
+</html>

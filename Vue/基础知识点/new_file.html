@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src='js/vue2.0.js'></script>
+	</head>
+	<body>
+		<!--slot插槽将父组件里面的内容显示在子组件当中。比如没有slot就没有父组件内容123-->
+		<div id="app">
+			<mycomponents>123</mycomponents>
+		</div>
+		
+		<script>
+			Vue.component('mycomponents',{
+				template:`
+					<div>
+						你好啊
+						<slot></slot>
+					</div>
+				`
+			})
+			new Vue({
+				el:"#app"
+			})
+		</script>
+	</body>
+</html>

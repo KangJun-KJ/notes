@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			* {
+				padding: 0;
+				margin: 0;
+			}
+			#app {
+				margin: 100px auto;
+				width: 500px;
+				height: 600px;
+				border: #333 1px solid;
+				position:relative;
+			}
+			.wrap {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				background-color: #000000;
+			}
+			.wrap2 {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				background-color:#AAAAAA;
+			}
+			.nextBtn {
+				position: absolute;
+				right: 10px;
+				top: 40%;
+				outline: none;
+				border: 0;
+				line-height: 40px;
+				width: 100px;
+				border-radius: 3px;
+				cursor: pointer;
+			}
+			.filpPages-enter-active{
+				transform-style: preserve-3d;
+				transform: perspective(2000px);
+				transform-origin: 100% 50%;
+				transition: all 1.5s .5s ease-in-out;
+			}
+			.filpPages-leave-active {
+				transform-style: preserve-3d;
+				transform: perspective(1000px);
+				transform-origin: left center;
+				transition: all 1s ease ;
+			}
+			.filpPages-enter{
+				transform:rotateY(-90deg) ;
+			}
+			.filpPages-leave-to{
+				transform:rotateY(90deg);
+				opacity: .75;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div id="app">
+			<transition name="filpPages" >
+				<div v-if="showWhichOne==1" class='wrap' key='one'>
+					<button class='nextBtn' @click="change">下一页</button>
+				</div>
+				<div v-else-if="showWhichOne==2" class='wrap2' key='two'>
+					<button class='nextBtn' @click="change2">下一页</button>
+				</div>
+			</transition>
+		</div>
+
+		<script src='js/vue.js'></script>
+		<script>
+			window.onload = function() {
+				var app = new Vue({
+					el: "#app",
+					data: function() {
+						return {
+							showWhichOne: 1
+						}
+					},
+					methods: {
+						change(e) {
+							this.showWhichOne=2;
+						},
+						change2(e) {
+							this.showWhichOne=1;
+						}
+					}
+				})
+			}
+		</script>
+	</body>
+
+</html>

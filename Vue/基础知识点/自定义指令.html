@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src='js/vue2.0.js'></script>
+	</head>
+
+	<body>
+
+		<div id="app">
+			<input type="text" v-focus="name" v-model="name" :data-name="name">
+			<button type="button" @click="name='zw'">click</button>
+
+			<!--当点击按钮的时候name改变，继而触发update中的方法-->
+		</div>
+		<script>
+			Vue.directive('focus', {　　　　
+				bind: function(el, binding) {　　　　
+					console.log('bind:', binding.value);　　
+				},
+				　　inserted: function(el, binding) {　　　　
+					console.log('insert:', binding.value);　　
+				},
+				　　update: function(el, binding, vnode, oldVnode) {　　　　
+					el.focus();　　　　
+					console.log(el.dataset.name); //这里的数据是可以动态绑定的
+					　　　　
+					console.table({　　　　　　
+						name: binding.name,
+						　　　　　　value: binding.value,
+						　　　　　　oldValue: binding.oldValue,
+						　　　　　　expression: binding.expression,
+						　　　　　　arg: binding.arg,
+						　　　　　　modifiers: binding.modifiers,
+						　　　　　　vnode: vnode,
+						　　　　　　oldVnode: oldVnode　　　　
+					});　　
+				},
+				　　componentUpdated: function(el, binding) {　　　　
+					console.log('componentUpdated:', binding.name);　　
+				}
+			});
+			new Vue({　　
+				el: '#app',
+				　　data: {　　　　
+					name: 'zwzhai'　　
+				}
+			});
+		</script>
+	</body>
+
+</html>

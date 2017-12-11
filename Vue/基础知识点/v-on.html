@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src='js/vue2.0.js'></script>
+	</head>
+	<body>
+		<div id="example-1">
+			<button @click="counter+=1">增加1</button>
+			<p>这个按钮被点击了{{counter}}次</p>
+		</div>
+		
+		<button id="example-2" v-on:click="warn('Form cannot be submitted yet.', $event)">
+		  Submit
+		</button>
+		<br />
+		<!--阻止事件冒泡-->
+		<a v-on:click.stop="doThis"></a>
+		<input id='example-3' @keyup="submit($event)" />
+		<!--
+			.enter
+			.tab
+			.delete
+			.esc
+			.space
+			.up
+			.down
+			.left
+			.right
+		-->
+		<script>
+			var vm=new Vue({
+				el:"#example-1",
+				data:{
+					counter:0
+				}
+			});
+			
+			var vm2=new Vue({
+				el:"#example-2",
+				methods:{
+					warn:function(message,event){
+						if(event)event.preventDefault();
+						alert(message);
+					}
+				}
+			});
+			
+			var vm3=new Vue({
+				el:"#example-3",
+				methods:{
+					submit:function(event){
+						console.log(event.keyCode)
+//						alert("你按了回车键！");
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

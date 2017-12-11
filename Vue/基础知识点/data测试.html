@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src='js/vue2.0.js'></script>
+	</head>
+
+	<body><span v-pre>
+		<div id="app">
+			<div v-pre>{{ this will not be compiled }}</span></div>
+		</div>
+		<script>
+			var data = {
+				a: 1
+			}
+			// 直接创建一个实例
+			var vm = new Vue({
+				el:"#app",
+				data:{
+					a:1
+				}
+			})
+			console.log(data);
+			console.log(vm.$data)
+		</script>
+	</body>
+
+</html>

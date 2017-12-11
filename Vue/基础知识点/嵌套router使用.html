@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src='js/vue2.0.js'></script>
+		<script src='js/vue-router.js'></script>
+		<style>
+			.fade-enter-active,
+			.fade-leave-active {
+				transition: opacity 11.5s
+			}
+			
+			.fade-enter,
+			.fade-leave-to
+			/* .fade-leave-active 在 <2.1.8 中 */
+			
+			{
+				opacity: 0
+			}
+			.fade2-enter-active,
+			.fade2-leave-active {
+				opacity: 0
+				transition: opacity .5s
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<p>{{$route.name}}</p>
+			<ol>
+				<li>
+					<router-link :to="{ name: 'Home', params: { id:123 }}">首页</router-link>
+				</li>
+				<li>
+					<router-link to="/first">first</router-link>
+				</li>
+				<ol>
+					<li>
+						<router-link to="/first/11123">firstFrist</router-link>
+					</li>
+					<li>
+						<router-link to="/first/11456">firstSecond</router-link>
+					</li>
+				</ol>
+				<li>
+					<router-link to="/second">second</router-link>
+				</li>
+			</ol>
+
+				<router-view ></router-view>
+
+		</div>
+
+		<script>
+			const first = {
+				template: '<div>first内容</div>'
+			}
+			const second = {
+				template: '<div>second内容</div>'
+			}
+			const Home = {
+				template: '<div>home内容{{$route.params.id}}</div>'
+			}
+
+			const firstFrist = {
+				template: "<div ref='test'>firstFrist内容{{$route.params.id}}</div>"
+			}
+			const firstSecond = {
+				template: '<div>firstSecond内容</div>'
+			}
+
+			const childFirst = {
+				template: `
+				<div class='asdf'>
+					<h2>组件</h2>
+					<transition name='fade'>
+						<router-view ></router-view>
+					</transition>
+					</div>
+				`
+			}
+
+			const router = new VueRouter({
+				//				mode: 'history',
+				routes: [{
+						path: '/Home',
+						name: "Home",
+						component: Home
+					},
+					{
+						path: '/first',
+						component: childFirst,
+						children: [{
+								path: '/',
+								component: first
+							},
+							{
+								path: '11:id',
+								name: "firstFrist",
+								component: firstFrist
+							}
+						]
+					},
+					{
+						path: '/second',
+						component: second
+					}
+				],
+
+			})
+			new Vue({
+				router,
+
+				data() {
+					return {
+						fade: "fade"
+					}
+				},
+				watch: {
+					"$route" (to, from) {
+						console.log(to.path);
+						this.fade="fade2";
+					}
+				},
+				mounted() {
+					console.log('asdasdsa')
+				},
+				methods: {
+					beforeEnter: function(el) {
+						// ...
+						
+					},
+					// 在与 CSS 结合使用时
+					// 此回调函数 done 是可选项
+					enter: function(el, done) {
+						// ...
+						console.log(22222);
+					},
+					afterEnter: function(el) {
+						// ...
+						console.log(33333);
+					},
+					enterCancelled: function(el) {
+						// ...
+						console.log(4444);
+					}
+				},beforeCreate:function(){//已经被显示出来了
+					console.log('1-beforeCreate初始化之后');					
+				},
+				created:function(){
+					console.log('2-created 创建完成');
+				},
+				beforeMount:function(){
+					console.log('3-beforeMount 挂载之前');
+				},
+				mounted:function(){
+					console.log('4-mounted 被创建');
+				},
+				beforeUpdate:function(){
+					
+					console.log("5-beforeUpdate 数据更新之前");
+				},
+				updated:function(){
+					console.log(this.$refs.test);
+					this.$refs.test.classList.push(["fade-enter-active","fade-enter-to"]);
+					console.log('6-updated 被更新之后');
+				},
+				activated:function(){
+					console.log('7-activated');
+				},
+				deactivated:function(){
+					console.log("8-deactivated");
+				},
+				beforeDestroy:function(){
+					console.log('9-beforeDestroy 被摧毁之前');
+				},
+				destroyed:function(){
+					console.log("10-destroyed 摧毁之后");
+				}
+			}).$mount('#app')
+		</script>
+	</body>
+
+</html>

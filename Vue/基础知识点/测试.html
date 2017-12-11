@@ -1,0 +1,45 @@
+<html>
+
+	<head>
+		<title></title>
+		<script src='js/vue2.0.js'></script>
+	</head>
+
+	<body>
+		<div id="projectCon">
+			<li v-for="(item,index) in projectObject" :data-scroll-reveal="item.rs" v-cloak>
+				<div class="listThumb js-listThumb">
+					<div class="listInfo fontSize14">
+						<p class="margin10">{{item.pi}}</p>
+					</div>
+					<img :src="item.iname" />
+				</div>
+				<div class="marginTop10">
+					<a class="psdA js-view" :data-info="item.di" :data-preview="item.dp" data-original="../uiImage/psd1OriginalImage1.png,../uiImage/psd1OriginalImage2.png,../uiImage/psd1OriginalImage3.png" :data-downAddress="item.dda">{{item.ln}}</a>
+				</div>
+				<div class="marginTop5 overflowHidden">
+					<span class="js-author">{{item.pa}}</span>
+				</div>
+			</li>
+		</div>
+		<script>
+			var projectObject = [{
+				"rs": "enter top",
+				"pi": "网络管理事业部",
+				"iname": "../images/slt1.png",
+				"di": "mobile",
+				"dp": '',
+				"dda": "file/mobile/testMobile.rar",
+				"ln": "性能日报",
+				"pa": "越程程"
+			}];
+			new Vue({
+				el: '#projectCon',
+				data: {
+					projectObject
+				}
+			});
+		</script>
+	</body>
+
+</html>

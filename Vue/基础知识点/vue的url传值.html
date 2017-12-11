@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src='js/vue2.0.js'></script>
+		<script src='js/vue-router.js'></script>
+		
+		<style>
+			a.router-link-active{
+				color:#f66;
+			}
+			a.router-link-active a{
+				color:#FF6666;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<h1>Good Morning</h1>
+			<ul>
+				<li><router-link to="/">/</router-link></li>
+				<li><router-link to="/params/111/222">/params/111/222</router-link></li>
+				<li><router-link to="/params-regex/222">/params/regex/222</router-link></li>
+				<li><router-link to="/params-regex/aaa">/params/regex/aaa</router-link></li>
+			</ul>
+			<p>show</p>
+			<pre>
+				<code>
+					{{JSON.stringify($route,null,2)}}
+					{{$route.params.aaa}}
+					{{$route.params.id}}
+				</code>
+			</pre>
+		</div>
+		<script>
+			
+			const router=new VueRouter({
+//				mode:"history",
+				routes:[
+					{path:"/"},
+					{path:"/params/:aaa/:bbb"},
+					{path:"/params-regex/:id(\\d+)"}
+				]
+			})
+			
+			new Vue({
+				router
+			}).$mount("#app");
+		</script>
+	</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src='js/vue2.0.js'></script>
+	</head>
+	<body>
+		<div id="app">
+			<p id='pp'>{{message}}</p>
+			<button @click="changeName">点击修改上面的名字</button>
+			<button @click="destoryName">点击删除上面的名字</button>
+		</div>
+		
+		<script type="text/javascript">
+			var app=new Vue({
+				el:"#app",
+				data(){
+					return {
+						message:"kangjun "
+					}
+				},
+				methods:{
+					changeName(){
+						this.message="kangshasha";
+					},
+					destoryName(){
+						this.destroy();
+					}
+				},
+				beforeCreate:function(){//已经被显示出来了
+					console.log('1-beforeCreate初始化之后');					
+				},
+				created:function(){
+					console.log('2-created 创建完成');
+				},
+				beforeMount:function(){
+					console.log('3-beforeMount 挂载之前');
+				},
+				mounted:function(){
+					console.log('4-mounted 被创建');
+				},
+				beforeUpdate:function(){
+					console.log("5-beforeUpdate 数据更新之前");
+				},
+				updated:function(){
+					console.log('6-updated 被更新之后');
+				},
+				activated:function(){
+					console.log('7-activated');
+				},
+				deactivated:function(){
+					console.log("8-deactivated");
+				},
+				beforeDestroy:function(){
+					console.log('9-beforeDestroy 被摧毁之前');
+				},
+				destroyed:function(){
+					console.log("10-destroyed 摧毁之后");
+				}
+				
+			})
+		</script>
+	</body>
+</html>

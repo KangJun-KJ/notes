@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src='https://unpkg.com/vue'></script>
+	</head>
+	<body>
+		<div id="app">
+			<button @click="btnClick(1)">按钮1</button>
+			<button @click="btnClick(2)">按钮2</button>
+			<button @click="btnClick(3)">按钮3</button>
+			<button @click="btnClick(4)">按钮4</button>
+			<child :message="message"></child>
+		</div>
+		
+		<script>
+			Vue.component('child',{
+				props:['message'],
+				template:"<span>{{message}}</span>"
+			})
+			new Vue({
+				el:"#app",
+				data(){
+					return{
+						message:"公共组件	"
+					}
+				},
+				methods:{
+					btnClick(index){
+						switch(index){
+							case 1:
+								this.message="我是数据1"
+								break;
+							case 2:
+								this.message="我是数据2"
+								break;
+							case 3:
+								this.message="我是数据3"
+								break;
+							case 4:
+								this.message="我是数据4"
+								break;
+						}
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

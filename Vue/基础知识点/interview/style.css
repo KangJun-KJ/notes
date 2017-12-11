@@ -1,0 +1,16 @@
+*{
+	padding:0;
+	margin:0;
+}
+#app{
+	width:700px;
+	height:400px;
+	margin:100px auto;
+	border:1px solid gray;
+	overflow: hidden;
+	position: relative;
+}
+.blueball{
+	position: absolute;
+	transition: all .1s linear;
+}
