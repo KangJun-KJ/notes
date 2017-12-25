@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+	<div id="main" style="width:600px;height:400px;"></div>
+
+
+	<script type="text/javascript" src='echart.js'></script>
+	<script type="text/javascript" src='../js/jQuery.js'></script>
+	<script type="text/javascript" >
+		
+
+		var myChart = echarts.init(document.getElementById('main'));
+		// 显示标题，图例和空的坐标轴
+		myChart.setOption({
+			title: {
+				text: '异步数据加载示例'
+			},
+			tooltip: {},
+			legend: {
+				data: ['销量']
+			},
+			xAxis: {
+				data: []
+			},
+			yAxis: {},
+			series: [{
+				name: '销量',
+				type: 'bar',
+				data: []
+			}]
+		});
+
+		// // 异步加载数据
+		// $.get('data.json').done(function(data) {
+		// 	// 填入数据
+		// 	myChart.setOption({
+		// 		xAxis: {
+		// 			data: data.categories
+		// 		},
+		// 		series: [{
+		// 			// 根据名字对应到相应的系列
+		// 			name: '销量',
+		// 			data: data.data
+		// 		}]
+		// 	});
+		// });
+		
+		
+	  	 
+		  var shuju = {
+		  	"categories": ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"],
+		  	"data": [5, 20, 36, 10, 10, 20]
+		  };
+	  	myChart.showLoading();
+	  	setTimeout(function(){
+	  		myChart.hideLoading();
+
+			myChart.setOption({
+				xAxis: {
+					data: shuju.categories
+				},
+				series: [{
+					// 根据名字对应到相应的系列
+					name: '销量',
+					data: shuju.data
+				}]
+			});
+	  	},2000);
+
+	  	myChart.on('click',function(params){
+	  		// window.open('https://www.baidu.com/s?wd=' + encodeURIComponent(params.name));
+	  		console.log(params);
+	  	})
+	</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+
+	<script type="text/javascript">
+		Array.prototype.shuffle = function() {
+			let m = this.length,
+				i;
+			while (m) {
+				i = (Math.random() * m--) >>> 0;
+				[this[m], this[i]] = [this[i], this[m]]
+			}
+			return this;
+		}
+		var num=[1, 2, 3, 4, 5, 6, 7].shuffle();
+		console.log(num);
+
+	</script>
+</body>
+</html>

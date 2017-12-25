@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+	.ticks {
+	  font: 10px sans-serif;
+	}
+
+	.track,
+	.track-inset,
+	.track-overlay {
+		/* 定义不同类型的开放路径的终结，将左右端点设置为圆角 */
+	  stroke-linecap: round;
+	}
+
+	.track {
+	  stroke: #000;
+	  stroke-opacity: 0.3;
+	  stroke-width: 10px;
+	}
+
+	.track-inset {
+	  stroke: #ddd;
+	  stroke-width: 8px;
+	}
+
+	.track-overlay {
+	/* 添加事件机制，鼠标移动到stroke上面捕获事件 */
+	  pointer-events: stroke;
+	  stroke-width: 50px;
+	  /* 设置鼠标移动到上面的样式 */
+	  cursor: crosshair;	
+	}
+
+	.handle {
+	  fill: #fff;
+	  stroke: #000;
+	  stroke-opacity: 0.5;
+	  stroke-width: 1.25px;
+	}
+
+</style>
+<svg width="960" height="500"></svg>
+<script src="../js/d3.v4.js"></script>
+<script>
+		var svg = d3.select("svg"),
+			margin = {
+				right: 50,
+				left: 50
+			},
+			width = +svg.attr("width") - margin.left - margin.right,
+			height = +svg.attr("height");
+			//定义了一个svg 设置长宽并且减去左右边距
+			//
+		var x = d3.scaleLinear()	//线性比例尺
+			.domain([0, 180])		//定义域范围：0-180
+			.range([0, width])		//值域范围:0-width 没有边距
+			.clamp(true);			//该值设值true的意思就是传进来的数字超过定义域的范围，也会返回值域范围内的值。
+									//为false的时候，他会根据计算返回一个符合比例尺但是超过值域的答案
+
+		var slider = svg.append("g")			//svg上面添加一个分组元素g
+			.attr("class", "slider")			//添加一个slider类属性
+			.attr("transform", "translate(" + margin.left + "," + height / 2 + ")");//把该元素向右和向下偏移，使其居中。
+
+		slider.append("line")			//在g分组元素中添加line标签
+			.attr("class", "track")		//给line添加track类属性：线宽10px 透明.3 颜色黑色。
+			.attr("x1", x.range()[0])	//line的起始位置为x比例尺的最小值
+			.attr("x2", x.range()[1])	//line的末尾位置为x比例尺的最大值。
+			.select(function() {		//select元素选择器：
+				//this.parentNode.appendChild:给父元素(g分组元素)添加一个子节点
+				//this.cloneNode:克隆一个line元素的所有属性及它们的值，true则是克隆所有后代
+				//cloneNode会复制这个元素的所有属性包括class和style.
+				//则这段的意思是在g中添加一个line的克隆，并且选择它。
+				return this.parentNode.appendChild(this.cloneNode(true));
+			})
+			.attr("class", "track-inset")//给克隆的元素添加类track-inset属性：描边8px,颜色#ddd
+			.select(function() {
+				//这次复制的不是第一个line而是第二个line元素
+				//并且将这个line添加到g分组中去。
+				return this.parentNode.appendChild(this.cloneNode(true));
+			})
+			//此时这个line是透明的。
+			.attr("class", "track-overlay")		//设置了鼠标移动到上面的颜色和形状
+			.call(d3.drag()		//d3.drag()创建一个拖拽行为。
+				
+				.on("start drag", function() {	//start监听开始，drag开始拖拽
+					//x.invert取得输出值对应的输入值。
+					//d3.event.x获得当前鼠标的x轴位置。
+					hue(x.invert(d3.event.x));
+				}));
+
+		console.log(x.ticks(10));
+		slider.insert("g", ".track-overlay")	//g分组中添加g,用来显示那么line下面的文字
+			.attr("class", "ticks")				//添加ticks类属性，里面是设置了字体样式
+			.attr("transform", "translate(0," + 18 + ")")	//把文本向下偏移18个单位。
+			.selectAll("text")								//选中所有的text文本
+			.data(x.ticks(10))								//ticks比例尺分组函数，将比例尺分成10份。
+			.enter().append("text")							//然后添加数据到text文本中。
+			.attr("x", x)									//设置他的坐标x位置
+			.attr("text-anchor", "middle")					//居中对齐
+			.text(function(d) {									
+				return d + "°";								//设置字体文本。
+			});
+
+		var handle = slider.insert("circle", ".track-overlay")
+			.attr("class", "handle")			
+			.attr("r", 9);
+
+		slider.transition() // Gratuitous intro! 刚开始进来的时候给circle添加一个动画，让它从0移到70
+			.duration(750)					//时间间隔750
+			.tween("hue1", function() {				//定义元素过渡动画
+				var i = d3.interpolate(0, 70);		//设置一个插值，输入参数范围0-1，返回0-70之间的数据
+				return function(t) {				//传进来一个0-1的数字从小到大递增的。
+					
+					hue(i(t));						//调用hue函数，并且传给一个当前的插值参数。
+				};
+			});
+
+		function hue(h) {
+			handle.attr("cx", x(h));			//根据传进来的参数的大小，来获取在比例尺上面对应的长度。
+			// d3.hsl(h,s,l)设置颜色。色相、整饱度、亮度
+			svg.style("background-color", d3.hsl(h, 0.8, 0.8));		//设置svg的背景颜色。
+		}
+
+</script>

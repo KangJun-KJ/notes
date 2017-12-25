@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body>
+<script src="../../js/d3.js"></script>
+<script>
+
+    var width = 960,                                        //定义svg的宽度
+      height = 500,                                         //定义svg的高度
+      outerRadius = Math.min(width, height) * .5 - 10,      //定义圆的外半径和内半径
+      innerRadius = outerRadius * .6;                   
+
+    var n = 10,   //随机出来10个不同的数字
+      data0 = d3.range(n).map(Math.random),               //range(start,end,step) 起点、终点、间隔 这个n是终点的意思，start默认起点   step默认是1
+      data1 = d3.range(n).map(Math.random),
+      data;
+
+    var color = d3.scale.category20();        //定义一个颜色的序数比例尺
+
+    var arc = d3.svg.arc();                   //定义一个弧生成器：将处理好的数据通过arc生成相应的布局。
+
+    var pie = d3.layout.pie()               //创建一个饼图布局:作用处理传进来的原始数据
+      .sort(null);                          //对数据不排序
+
+    var svg = d3.select("body").append("svg")     //在body里面添加一个svg
+      .attr("width", width)                       //设置宽高
+      .attr("height", height);                    
+
+    svg.selectAll(".arc")
+      .data(arcs(data0, data1))  //返回是pie(data0)
+      .enter().append("g")
+      .attr("class", "arc")
+      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+      .append("path")
+      .attr("fill", function(d, i) {
+        return color(i);
+      })
+      .attr("d", arc);
+
+    transition(1); 
+
+    function arcs(data0, data1) {
+      var arcs0 = pie(data0),
+        arcs1 = pie(data1),
+        i = -1,
+        arc;
+      // arc里面保存了arcs0的数据，并且保存圆的内半径和外半径呢data1转换pie的数据
+      while (++i < n) {
+        arc = arcs0[i];
+        arc.innerRadius = innerRadius;
+        arc.outerRadius = outerRadius;
+        arc.next = arcs1[i];
+      }
+      //返回的数据多了innerRadius和outerRadius这两数据还有pie(data1)的数据保存在next里面。
+      return arcs0;
+    }
+
+    function transition(state) {
+      //根据传进来的state等于1则设置path为pie(data0),否则为pie(data1)
+      var path = d3.selectAll(".arc > path")
+        .data(state ? arcs(data0, data1) : arcs(data1, data0));
+
+      // Wedges split into two rings.
+      var t0 = path.transition()
+        .duration(1000)
+        //attrTween在两个属性之间平滑的度过,更新弧的innerRadius和outerRadius
+        .attrTween("d", tweenArc(function(d, i) {
+          return {
+            // i&1按位与运算，奇数&1为1 偶数&1为0
+            // 奇数的时候内半径为(innerRadius+outerRadius)/2，外半径为(outerRadius)
+            // 偶数的时候内半径为inerRadius 外半径为(innerRadius+outerRadius)/2
+            // 这样就有了间隔的弧凸起和凹下去的交替样式。
+            // return回去的就是包含innerRadius和outerRadius的JSON格式数据
+            
+            innerRadius: i & 1 ? innerRadius : (innerRadius + outerRadius) / 2,
+            outerRadius: i & 1 ? (innerRadius + outerRadius) / 2 : outerRadius
+          };
+        }));
+      // Wedges translate to be centered on their final position.
+      // 旋转弧，到一定的角度
+      // 这一步先打乱弧嵌入的角度。
+        var t1 = t0.transition()
+          .attrTween("d", tweenArc(function(d, i) {
+            var a0 = d.next.startAngle + d.next.endAngle,
+              a1 = d.startAngle - d.endAngle;
+            return {
+              startAngle: (a0 + a1) / 2,
+              endAngle: (a0 - a1) / 2
+            };
+          }));
+
+      // Wedges then update their values, changing size.
+      // 然后使用第二组数据pie(data1)，
+      // 根据第二步骤生成的数据来更新弧的角度
+      var t2 = t1.transition()
+        .attrTween("d", tweenArc(function(d, i) {
+          return {
+            startAngle: d.next.startAngle,
+            endAngle: d.next.endAngle
+          };
+        }));
+
+      // Wedges reunite into a single ring.
+      // 最后将大小不一样的内外半径还原成原来的半径
+      var t3 = t2.transition()
+        .attrTween("d", tweenArc(function(d, i) {
+          return {
+            innerRadius: innerRadius,
+            outerRadius: outerRadius
+          };
+        }));
+
+      setTimeout(function() {
+        transition(!state);
+      }, 5000);
+    }
+
+    function tweenArc(b) {
+      // console.log(b);
+      // 传进来的是一个函数function
+      // b方法会返回一个json对象，即将要改变的值。
+      return function(a, i) {
+       
+        // a是pie(data0)的数据，i是下标
+        // 
+        var kk=i;
+        //调用b方法然后返回两个参数
+        //b.call(this,a,i)这种写法好不熟悉
+        //使用b(a,i)貌似也正确
+        var d = b.call(this, a, i),
+          i = d3.interpolate(a, d);
+          console.log(d);
+        // d里面保存的是a的每个数据i的innerRadius和outerRadius
+        // 
+        // update data 更新每个弧的innerRadius和outerRadius的值
+        // 不然等下一个动画进来的时候，就是调用他的元素的innerRadius
+        for (var k in d){
+          a[k]=d[k];
+        }
+        return function(t) {
+          return arc(i(t));
+        };
+      };
+    }
+
+</script>

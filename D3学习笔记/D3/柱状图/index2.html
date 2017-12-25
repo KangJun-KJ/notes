@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+
+	<style type="text/css">
+		
+		.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+
+			}
+	</style>
+</head>
+<body>
+	
+
+	<script type="text/javascript" src='../../js/d3.js'></script>
+	<script type="text/javascript">
+		var width=500,
+			height=500;
+
+		var svg=d3.select("body").append("svg")
+					.attr("width",width)
+					.attr("height",height);
+		var padding = {
+				left: 30,
+				right: 30,
+				top: 20,
+				bottom: 50
+			};
+		var dataset=[30,20,10,40,50,10,30,10,70,30,20,10,10];
+		var xScale = d3.scale.ordinal()
+				.domain(d3.range(dataset.length))
+				.rangeRoundBands([0, width - padding.left - padding.right])
+				;
+		
+		var yScale = d3.scale.linear()
+				.domain([0, d3.max(dataset)])
+				.range([height - padding.top - padding.bottom, 0]);
+
+
+		var xAxis=d3.svg.axis()
+				.scale(xScale)
+				.orient("bottom")
+				;
+		var yAxis = d3.svg.axis()
+				.scale(yScale)
+				.orient("left")
+				;
+
+		svg.selectAll("rect")
+			.data(dataset)
+			.enter()
+			.append("rect")
+			.attr("x",function(d,i){
+				return xScale(i);
+			})
+			.attr("y",function(d,i){
+				return yScale(d);
+			})
+			.attr("width",function(d,i){
+				return  xScale.rangeBand()-5;
+			})
+			.attr("height",function(d,i){
+					return height - padding.top - padding.bottom - yScale(d);
+			})
+			.attr("transform", "translate(" + padding.left + "," + padding.top + ")")
+			.style("fill","steelblue")
+
+		var xBar=svg.append("g")
+		.attr("transform", "translate(" + padding.left + "," + (height - padding.bottom) + ")")
+		.attr("class", "axis")
+			.call(xAxis);	
+
+		var tBar=svg.append("g")
+			.attr("transform", "translate(" + padding.left + "," + padding.top + ")")
+			.attr("class", "axis")
+			.call(yAxis);
+		xBar.selectAll("text")
+			.text(function(d){				//这边的d代表下标的意思
+				console.log(d);
+				if(d%4==0)
+					return "标签"+d;
+			}).
+			attr("transform","translate(20,20)  rotate(30)");
+	</script>
+</body>
+</html>

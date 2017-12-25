@@ -1,0 +1,239 @@
+﻿<html>  
+  <head>  
+        <meta charset="utf-8">  
+        <title>Treemap</title>  
+  </head> 
+  <style>
+  .nodeRect {
+	stroke: white;
+	stroke-width: 2px;
+  }
+  
+  .nodeName {
+	fill: white;
+	font-size: 12px;
+	font-family: simsun;
+  }
+  </style>
+<body>
+<script src="../../../js/d3.js" charset="utf-8"></script> 
+<script>
+
+	var width = 1000,
+		height = 500;
+
+	var svg = d3.select("body").append("svg")
+		.attr("width", width)
+		.attr("height", height);
+
+	var treemap = d3.layout.treemap()
+		.size([width, height])
+		.value(function(d) {
+			return d.size;
+		}); 	//根绝value来设置所占的大小
+	var cnt=0;
+	d3.json("city.json", function(error, root) {
+
+		
+		delete root['新疆']
+		draw(root)
+		function draw(source) {
+
+			d3.selectAll('g').remove();
+			treemap.value(function(d) {
+				console.log(cnt);
+					if(d.name=="吐鲁番"&&cnt==1)d.size=100;
+					return d.size;
+			});
+			var nodes = treemap.nodes(root);
+			var links = treemap.links(nodes);
+
+			cnt++;
+			console.log(nodes);
+			// console.log(links);
+
+			var color = d3.scale.category10();
+
+			// var groups = svg.selectAll("g")
+			// 	.data(nodes.filter(function(d) { //只返回没有子节点的data
+			// 		return !d.children;
+			// 	}))
+			// 	.enter()
+			// 	.append("g");
+
+			var nodeUpdate=svg.selectAll('.node')
+					.data(nodes.filter(function(d){return !d.children;}));
+			var nodeEnter=nodeUpdate.enter()
+			var nodeExit=nodeUpdate.exit()
+
+			var enterNodes = nodeEnter.append("g")
+                .attr("class", "node");
+               
+				enterNodes.append('rect')
+					.attr("class", "nodeRect")
+					.attr("x", function(d) {
+						return d.x;
+					})
+					.attr("y", function(d) {
+						return d.y
+					})
+					.attr("width", function(d) {
+						return d.dx
+					})
+					.attr("height", function(d) {
+						return d.dy
+					})
+					.style("fill", function(d, i) {
+						return color(d.parent.name); //根据是否同一个parent节点来写是否一个颜色
+					})
+					.on("mouseover",function(d){
+						d3.select(this).style("fill", "yellow");
+					})
+					.on("mouseout",function(d){
+						d3.select(this).transition().style("fill",color(d.parent.name));
+					})
+					.on("click",function(d){
+						draw(d);
+					})
+
+
+				enterNodes.append("text").attr("class", "nodeName")
+					.attr("x", function(d) {
+						return d.x;
+					})
+					.attr("y", function(d) {
+						return d.y;
+					})
+					.attr("dx", "0.5em")
+					.attr("dy", "1.5em")
+					.text(function(d) {
+						return d.name + " " + d.size;
+					});
+			var updateNodes = nodeUpdate.transition()
+				.duration(500)
+				.attr("x", function(d) {
+						return d.x;
+					})
+					.attr("y", function(d) {
+						return d.y
+					})
+					.attr("width", function(d) {
+						return d.dx
+					})
+					.attr("height", function(d) {
+						return d.dy
+					});
+			var exitNodes = nodeExit.transition()
+                .duration(500)
+                .remove();
+              exitNodes.select("rect")
+            	.attr("width", 0)
+                .attr("height", 0);
+
+              exitNodes.select("text")
+                .style("fill-opacity", 0);
+			// var rects = groups.append("rect")
+			// 	.attr("class", "nodeRect")
+			// 	.attr("x", function(d) {
+			// 		return d.x;
+			// 	})
+			// 	.attr("y", function(d) {
+			// 		return d.y;
+			// 	})
+			// 	.attr("width", function(d) {
+			// 		return d.dx;
+			// 	})
+			// 	.attr("height", function(d) {
+			// 		return d.dy;
+			// 	})
+			// 	.style("fill", function(d, i) {
+			// 		return color(d.parent.name); //根据是否同一个parent节点来写是否一个颜色
+			// 	})
+				// .on("mouseover",function(d){
+				// 	d3.select(this).attr("transform-origin","center").attr("transform","rotateX(180)")
+				// })
+				// .on("mouseout",function(d){
+				// 	d3.select(this).attr("transform","rotate(0)")
+				// })
+			;
+
+			// var texts = groups.append("text")
+			// 	.attr("class", "nodeName")
+			// 	.attr("x", function(d) {
+			// 		return d.x;
+			// 	})
+			// 	.attr("y", function(d) {
+			// 		return d.y;
+			// 	})
+			// 	.attr("dx", "0.5em")
+			// 	.attr("dy", "1.5em")
+			// 	.text(function(d) {
+			// 		return d.name + " " + d.size;
+			// 	});
+		}
+
+		// 给动态添加数据增加动画未成功
+		// setTimeout(function(){
+		// 	d3.selectAll("rect").remove();
+		// 	d3.selectAll("text").remove()
+		// 	treemap.value(function(d) {
+		// 			if(d.name=="吐鲁番")d.size=100;
+		// 			return d.size;
+		// 	});
+		// 	nodes = treemap.nodes(root);
+
+		// 	groups.data(nodes.filter(function(d) {		//只返回没有子节点的data
+		// 			return !d.children;
+		// 	})).append("rect").attr("class", "nodeRect").style("fill", function(d, i) {
+		// 			return color(d.parent.name); //根据是否同一个parent节点来写是否一个颜色
+		// 		}).attr("x", function(d) {
+		// 			return d.x;
+		// 		})
+		// 		.attr("y", function(d) {
+		// 			return d.y;
+		// 		})
+		// 		.attr("width", function(d) {
+		// 			return d.dx;
+		// 		})
+		// 		.attr("height", function(d) {
+		// 			return 0;
+		// 		})
+		// 		.transition()
+		// 		.duration(2000)
+		// 		.attr("x", function(d) {
+		// 			return d.x;
+		// 		})
+		// 		.attr("y", function(d) {
+		// 			return d.y;
+		// 		})
+		// 		.attr("width", function(d) {
+		// 			return d.dx;
+		// 		})
+		// 		.attr("height", function(d) {
+		// 			return d.dy;
+		// 		})
+		// 		;
+		// 	  groups.data(nodes.filter(function(d) {		//只返回没有子节点的data
+		// 			return !d.children;
+		// 	})).append("text")
+		// 	.attr("class", "nodeName")
+		// 	.attr("x", function(d) {
+		// 		return d.x;
+		// 	})
+		// 	.attr("y", function(d) {
+		// 		return d.y;
+		// 	})
+		// 	.attr("dx", "0.5em")
+		// 	.attr("dy", "1.5em")
+		// 	.text(function(d) {
+		// 		return d.name + " " + d.size;
+		// 	});
+		// },2000)
+
+	});
+
+	
+</script>
+		
+    </body>  
+</html>  

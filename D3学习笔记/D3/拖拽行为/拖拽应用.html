@@ -1,0 +1,57 @@
+<html>       
+        <head>
+        <meta charset="utf-8">  
+        <title>Drag</title>  
+	<style>
+
+	</style>		
+	</head> 
+    <body>  
+		<script src="../../js/d3.js" charset="utf-8"></script>  
+        <script>		   
+		var width = 400;
+		var height = 400;
+		var circles = [ { cx: 150, cy:200, r:30 },
+						{ cx: 250, cy:200, r:30 },];
+		
+		var svg = d3.select("body").append("svg")
+								.attr("width",width)
+								.attr("height",height);
+		var drag = d3.behavior.drag()			//使用drag事件，并且半丁相应的函数
+						.origin(function(d){		//设置拖动行为的原点，
+							return {x:d3.event.x,y:d3.event.y}
+						})
+						.on('dragstart',dragstart)
+						.on('dragend',dragend)
+						.on("drag",dragmove);
+		
+		svg.selectAll("circle")
+			.data(circles)
+			.enter()
+			.append("circle")
+			.attr("cx",function(d){ return d.cx; })
+			.attr("cy",function(d){ return d.cy; })
+			.attr("r",function(d){ return d.r; })
+			.attr("fill","black")
+			.call(drag);					//drag是函数，等于把前面定义的circle放到这个函数里面。
+		
+		var label=svg.append("g").append('text')				
+					.text('我来记录运动的状态')
+					.style('font-size',"30px")
+					.style('text-anchor',"middle")
+					.attr('transform',"translate("+width/2+","+100+")");
+		function dragstart(d){
+			label.text("准备开始移动了。");
+		}
+		function dragend(d){
+			label.text('移动已经结束了')
+		}
+		function dragmove(d) {	
+				d3.select(this)
+			  .attr("cx",  d3.event.x)			//获取当前鼠标移动到的位置从而给他重新设置坐标
+			  .attr("cy",  d3.event.y);	
+			  label.text('我正在移动中')
+		}
+        </script>  
+    </body>  
+</html>  

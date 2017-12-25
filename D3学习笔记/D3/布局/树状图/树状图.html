@@ -1,0 +1,132 @@
+<html>  
+  <head>  
+        <meta charset="utf-8">  
+        <title>树状图</title>  
+<style>
+
+.node circle {
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.node {
+  font: 12px sans-serif;
+}
+
+.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1.5px;
+}
+
+</style>
+  </head> 
+<body>
+<script src="../../../js/d3.js"></script>
+<script>
+
+var width = 500,
+height = 500;
+
+var tree = d3.layout.tree()
+	.size([width, height-200])
+	.separation(function(a, b) { return (a.parent == b.parent ? 1 : 2); });
+
+var diagonal = d3.svg.diagonal()
+	.projection(function(d) { return [d.y, d.x]; });
+
+var svg = d3.select("body").append("svg")
+	.attr("width", width)
+	.attr("height", height)
+	.append("g")
+	.attr("transform", "translate(40,0)");
+
+  			var line = d3.svg.line()
+  				.x(function(d){
+  					return d.x;
+  				})
+  				.y(function(d){
+  					return d.y;
+  				})
+  				.interpolate("step-after")
+
+
+d3.json("city_tree.json", function(error, root) {
+	console.log(root);
+	var nodes = tree.nodes(root);	
+	var links = tree.links(nodes);
+	
+	
+	console.log(links);
+	nodes.forEach(function(d,i){
+		d.id=i+1;	
+		// d.parentCode=(d.parent.parentCode?d.parent.parentCode:null)+","+(!d.parent?null:d.parent.id);
+		d.parentCode="";
+		if(d.parent){
+			if(d.parent.parentCode){
+				d.parentCode=d.parent.parentCode+","+d.parent.id;
+			}else{
+				d.parentCode=d.parent.id+"";
+			}
+		}
+	})
+	console.log(nodes);
+	var link = svg.selectAll(".link")
+	  .data(links)
+	  .enter()
+	  .append("path")
+	  .attr("class", "link")
+	  // .attr("d", diagonal);
+	  .attr("d", function(d){
+					var pos=[
+						{x:d.source.y,y:d.source.x},
+						{x:d.target.y,y:d.target.x}
+					];
+					console.log(pos)
+					return line(pos);
+				});
+	
+	var node = svg.selectAll(".node")
+	  .data(nodes)
+	  .enter()
+	  .append("g")
+	  .attr("class", "node")
+	  .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
+	  .on("mouseover",function(d){
+	  		var id=d.id;//获取当前的Id值
+	  		d3.selectAll('circle')
+	  			.style('fill',function(d,i){	
+	  				if(!i)return "#fff";
+	  				var flag=false;
+	  				console.log(d.parentCode)
+	  				d.parentCode.split(',').forEach(function(d2,i2){
+	  					if(id==d2){
+	  						flag=true;
+	  					}
+	  				})
+	  				if(id==i+1)flag=true;
+	  				if(flag) return "yellow";
+	  					return "#fff";
+	  				
+	  			})
+	  })
+	  .on("mouseout",function(d){
+	  		d3.selectAll('circle')
+	  			.style("fill","#fff")
+	  })
+	
+	node.append("circle")
+	  .attr("r", 4.5);
+	
+	node.append("text")
+	  .attr("dx", function(d) { return d.children ? -8 : 8; })
+	  .attr("dy", 3)
+	  .style("text-anchor", function(d) { return d.children ? "end" : "start"; })
+	  .text(function(d,i) { return d.name+i });
+	});
+
+</script>
+		
+    </body>  
+</html>  

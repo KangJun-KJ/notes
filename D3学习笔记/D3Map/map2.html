@@ -1,0 +1,268 @@
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>range</title>
+	</head>
+	<style>
+		.province {
+			stroke: black;
+			stroke-width: 1px;
+		}
+		
+		.southsea {
+			stroke: black;
+			stroke-width: 1px;
+			fill: #ccc;
+		}
+		
+		.valueText {
+			font-family: arial;
+			font-size: 12px;
+			text-anchor: middle;
+		}
+		
+		.tooltip {
+			display: none;
+			font-family: simsun;
+			font-size: 14px;
+			height: auto;
+			position: absolute;
+			text-align: center;
+			border-style: solid;
+			color: white;
+			border-width: 1px;
+			background-color: #000;
+			border-radius: 5px;
+			padding: 5px;
+		}
+		
+		.zhibiao {
+			display: none;
+		}
+		
+		svg {
+			border: 1px solid #ccc;
+			margin: 200px;
+		}
+	</style>
+
+	<body>
+		<script src="../js/d3.js" charset="utf-8"></script>
+		<script>
+			var width = 700,
+				height = 700;
+
+			var svg = d3.select("body").append("svg")
+				.attr("width", width)
+				.attr("height", height);
+
+			var paddingLeft = 50;
+
+			var projection = d3.geo.mercator()
+				.center([107, 31])
+				.scale(600)
+				.translate([width / 2 + paddingLeft, height / 2]);
+
+			var path = d3.geo.path()
+				.projection(projection);
+
+			var tooltip = d3.select("body")
+				.append("div")
+				.attr("class", "tooltip")
+				.style("opacity", 0.8);
+
+			d3.json("json/china_simplify.json", function(error, toporoot) {
+				if(error)
+					return console.error(error);
+
+				//输出china.topojson的对象
+				// console.log(toporoot);
+
+				//将TopoJSON对象转换成GeoJSON，保存在georoot中
+				// var georoot = topojson.feature(toporoot, toporoot.objects.china);
+				var georoot = toporoot;
+				//输出GeoJSON对象
+				// console.log(georoot);
+
+				//包含中国各省路径的分组元素
+				var china = svg.append("g");
+				//添加中国各种的路径元素
+				var provinces = china.selectAll("path")
+					.data(georoot.features)
+					.enter()
+					.append("path")
+					.attr("class", "province")
+					.style("fill", "#ccc")
+					.attr("transform", "translateX(" + paddingLeft + ")")
+					.attr("d", path);
+
+				svg.selectAll("text")
+					.data(georoot.features)
+					.enter()
+					.append("text")
+					//设置各个文本（省份名称）显示的文字
+					.attr("transform", function(d, i) {
+						if(d.properties.id == "20") //河北
+						{
+							return "translate(" + (path.centroid(d)[0] - 20) + "," + (path.centroid(d)[1] + 20) + ")";
+						} else if(d.properties.id == "31") {
+							return "translate(" + (path.centroid(d)[0] - 20) + "," + (path.centroid(d)[1] + 30) + ")";
+						} else if(d.properties.id == "30") {
+							return "translate(" + (path.centroid(d)[0] - 20) + "," + (path.centroid(d)[1] + 20) + ")";
+						}
+						return "translate(" + (path.centroid(d)[0] - 10) + "," + path.centroid(d)[1] + ")";
+					})
+					/* 	.attr("x", function(d) { 
+
+							       		return (path.centroid(d)[0]-10);
+							       	
+						       	})
+						         .attr("y", function(d) { 
+						         
+						         	if(d.properties.id =="20") //河北
+							       	{
+							       		return (path.centroid(d)[1]+30);
+							       	}
+						       		  return (path.centroid(d)[1]);
+						         
+						          })   */
+					//显示省名
+					.text(function(d) {
+						return d.properties.name;
+					})
+					.attr("font-size", 12);
+				d3.json("json/tourism.json", function(error, valuedata) {
+					console.log(valuedata);
+					//将读取到的数据存到数组values，令其索引号为各省的名称
+					var values = [];
+					for(var i = 0; i < valuedata.provinces.length; i++) {
+						var name = valuedata.provinces[i].name;
+						var value = valuedata.provinces[i].value;
+						values[name] = value;
+					}
+					console.log(values);
+					//求最大值和最小值
+					var maxvalue = d3.max(valuedata.provinces, function(d) {
+						return d.value;
+					});
+					var minvalue = 0;
+
+					//定义一个线性比例尺，将最小值和最大值之间的值映射到[0, 1]
+					var linear = d3.scale.linear()
+						.domain([minvalue, maxvalue])
+						.range([0, 1]);
+
+					var xScale = d3.scale.linear()
+						.domain([minvalue, maxvalue])
+						.range([450, 590]);
+					// linear.domain([minvalue,maxvalue/2]);
+					//定义最小值和最大值对应的颜色
+					var a = d3.rgb(0, 255, 255); //浅蓝色
+					var b = d3.rgb(0, 0, 255); //蓝色
+
+					//颜色插值函数
+					var computeColor = d3.interpolate(a, b);
+
+					//设定各省份的填充色
+					provinces.style("fill", function(d, i) {
+							var t = linear(values[d.properties.name]);
+							var color = computeColor(t);
+							return color.toString();
+						}).on("mouseover", function(d, i) { //添加移动到某个省份的颜色和提示
+							d3.select(this).style("fill", "yellow");
+							tooltip.html(d.properties.name + "：" + values[d.properties.name])
+								.style("left", (d3.event.pageX) + "px")
+								.style("top", (d3.event.pageY + 20) + "px")
+								.style("display", "block");
+
+							var X = xScale(values[d.properties.name]);
+							var str = "55," + Math.round(X - 5) + " 55," + Math.round(X + 5) + " 50," + Math.round(X);
+							sanjiao.attr("points", str)
+								.style("display", "block");
+						})
+						.on("mousemove", function(d, i) {
+							tooltip.style("left", (d3.event.pageX) + "px")
+								.style("top", (d3.event.pageY + 20) + "px");
+						})
+						.on("mouseout", function(d, i) {
+							var t = linear(values[d.properties.name]);
+							var color = computeColor(t);
+							d3.select(this).style("fill", color.toString());
+							tooltip.style("display", "none");
+							sanjiao.style("display", "none");
+						}).style("cursor", "pointer");;
+
+					//定义一个线性渐变
+					var defs = svg.append("defs");
+
+					var linearGradient = defs.append("linearGradient")
+						.attr("id", "linearColor")
+						.attr("x1", "0%")
+						.attr("y1", "100%")
+						.attr("x2", "0%")
+						.attr("y2", "0%");
+
+					var stop1 = linearGradient.append("stop")
+						.attr("offset", "0%")
+						.style("stop-color", a.toString());
+
+					var stop2 = linearGradient.append("stop")
+						.attr("offset", "100%")
+						.style("stop-color", b.toString());
+
+					//添加一个小三角
+					var sanjiao = svg.append('polygon')
+						.attr({
+							"points": '55,585 55,595 50,590 '
+						})
+						.attr("class", "zhibiao");
+					// 设置移到那个省份的位置的时候，显示出对应的长条位置。
+					// d3.select("polygon")
+					// 		.attr("display","blcok")
+
+					//添加一个矩形，并应用线性渐变
+					var colorRect = svg.append("rect")
+						.attr("x", 20)
+						.attr("y", 450)
+						.attr("width", 30)
+						.attr("height", 140)
+						.style("fill", "url(#" + linearGradient.attr("id") + ")");
+
+					//添加文字
+					var minValueText = svg.append("text")
+						.attr("class", "valueText")
+						.attr("x", 20)
+						.attr("y", 610)
+						.attr("dy", "-0.3em")
+						.text(function() {
+							return minvalue;
+						});
+
+					var maxValueText = svg.append("text")
+						.attr("class", "valueText")
+						.attr("x", 20)
+						.attr("y", 450)
+						.attr("dx", "1em")
+						.text(function() {
+							return maxvalue;
+						});
+				})
+			});
+
+			// d3.xml("json/southchinasea.svg", function(error, xmlDocument) {
+			// 	svg.html(function(d) {
+			// 		return d3.select(this).html() + xmlDocument.getElementsByTagName("g")[0].outerHTML;
+			// 	});
+
+			// 	var gSouthSea = d3.select("#southsea");
+
+			// 	gSouthSea.attr("transform", "translate(540,410)scale(0.5)")
+			// 		.attr("class", "southsea");
+
+			// });
+		</script>
+
+	</body>
+
+</html>

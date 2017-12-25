@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+</head>
+<body>
+	<div id="tag"
+    style="width: 300px; height: 300px; border: 1px solid #000"></div>
+
+	<script type="text/javascript" src='js/d3.js'></script>
+	<script type="text/javascript" src="js/d3.layout.cloud.js"></script>
+	<script type="text/javascript">
+				 var fill = d3.scale.category20();
+				 //要顯示於標籤雲的資料內容，為一個JSON物件的陣列
+				 var data = [{
+				 	text: "透視C語言",
+				 	size: 37,
+				 }, {
+				 	text: "超圖解 Arduino",
+				 	size: 35,
+				 }, {
+				 	text: "Linux Shell 程式設計",
+				 	size: 25,
+				 }, {
+				 	text: "無瑕的程式碼",
+				 	size: 40,
+				 }, {
+				 	text: "挑戰大數據",
+				 	size: 23,
+				 }, {
+				 	text: "Android 大螢幕手機",
+				 	size: 23,
+				 }];
+				 d3.layout.cloud().size([300, 300]).words(data).padding(3).rotate(
+				 	function(d,i){
+				 		// return i%2?30:-30
+				 		return  0
+				 	}).font('"微軟正黑體",Impact').fontSize(function(d) {
+				 	return d.size;
+				 }).on("end", draw).start();
+
+					function draw(words) {
+						d3.select("#tag") //要插入標籤雲的tag id
+							.append("svg").attr("width", 300).attr("height", 300)
+							.append("g").attr("transform", "translate(150,150)") //這裡的值要對應到繪圖區域的寬、高的一半，針對不同的瀏覽器要設可以使用的值，如Chrome為-webkit-transform
+							.selectAll("text").data(words).enter().append("text")
+							.style("font-size", function(d) {
+								return d.size + "px";
+							})
+							.style("font-family", '"微軟正黑體",Impact')
+							.style("cursor", 'pointer') //當滑鼠移上去時，變換cursor
+							.style("fill", function(d, i) {
+								return fill(i);
+							}).attr("text-anchor", "middle")
+							.attr("transform", //跟上面的transform一樣，需依不同的瀏覽器設定對應的值
+								function(d) {
+									return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+								})
+							.text(function(d) {
+								return d.text;
+							});
+					}
+	</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">  
+ *{ margin:0; padding:0;}  
+  
+.con{
+	overflow: hidden;
+}
+.l{
+	width: 30%;
+	background-color: bisque;
+}
+.r{
+	width: 70%;
+	background-color: green;
+}
+.l,.r{
+	float: left;
+	padding-bottom: 99999px;
+	margin-bottom: -99999px;
+}
+</style>  
+</head>
+<body>
+	<div>  
+  
+   <div class='con'>  
+  
+         <div class='l'>llllllllllllllllllllll<br>llllllllllllllllllllll<br>llllllllllllllllllllll<br>llllllllllllllllllllll<br>llllllllllllllllllllll<br>llllllllllllllllllllll<br></div>  
+  
+         <div class='r'>rrrrrrrrrrrrrrrrrrr</div>  
+  
+  </div>  
+  
+</div>  
+
+
+
+	<script type="text/javascript">
+		function chuLi(a,b,c){
+			console.log("arguments.length="+arguments.length)
+			console.log(a,b,c);
+		}
+		chuLi(1,2,3);	//1 2 3
+		chuLi(1);		//1 undefine undefine
+		chuLi(2,3);		// 2 3 undefine
+		console.log(chuLi.length);// 3
+
+		var a = 123;
+		var b = 999;
+
+		function func(a) {
+			var b;　　
+			console.log(a); //?????? 结果是什么？？？？留着分析
+			var a = 888;　　
+			c = 1111;
+
+			　　function a() {　　}
+			console.log(a); //?????? 结果是什么？？？？留着分析
+			　　
+			console.log(b); //?????? 结果是什么？？？？留着分析
+			　　
+			console.log(c); //?????? 结果是什么？？？？留着分析
+		}
+		func(456);
+
+		var escape=function(){
+			console.log(321);
+		}
+
+		var b={a:"Happend space",escape:function(){console.log(123);}};
+		//with语句中把对象b里面的属性的优先级高于该with所在作用域中其他同名变量。
+		with(b){
+			escape(a);
+		}
+	</script>
+</body>
+</html>

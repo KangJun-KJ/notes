@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>data和dataum</title>
+</head>
+<body>
+	<p></p>
+	<p></p>
+	<p></p>
+
+	<script src='../js/d3.js'type="text/javascript"></script>
+	<script type="text/javascript">
+		var persons = [{
+			id: 3,
+			name: "张三"
+		}, {
+			id: 6,
+			name: "李四"
+		}, {
+			id: 9,
+			name: "王五"
+		}];
+
+		//选择body中的所有的p元素  
+		var p = d3.select("body").selectAll("p");
+
+		//绑定数据，并修改p元素的内容  
+		p.data(persons)
+			.text(function(d) {
+				return d.id + " : " + d.name;
+			});
+
+
+		//更新persons里的数据  
+		persons = [{
+			id: 6,
+			name: "张三"
+		}, {
+			id: 9,
+			name: "李四"
+		}, {
+			id: 3,
+			name: "王五"
+		}];
+
+		//根据键函数的规则绑定数据，并修改内容  
+		p.data(persons, function(d) {
+				return d.id;
+			})
+			.text(function(d) {
+				return d.id + " : " + d.name;
+			});
+	</script>
+</body>
+</html>

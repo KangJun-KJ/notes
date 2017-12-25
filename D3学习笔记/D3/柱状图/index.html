@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style type="text/css">
+    .axis line,
+    .axis path{
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+  </style>
+</head>
+<body>
+  
+    <script type="text/javascript" src='../../js/d3.js'></script>
+    <script type="text/javascript">
+        var width = 600,
+          height = 400,
+          margin = {
+            top: 30,
+            bottom: 30,
+            left: 50,
+            right: 50
+          };
+          var dataset=[];
+          var id=0;
+       function push1() {
+         dataset.push({
+           id: ++id,
+           data: Math.round(Math.random() *10)
+         });
+       }
+        
+        for (var i = 0; i < 20; i++) push1();
+        // console.log(dataset);
+        var svg = d3.select('body').append('svg')
+          .attr('width', width)
+          .attr('height', height);
+
+        var xScale = d3.scale.ordinal()
+          .domain(d3.range(dataset.length))
+          .rangeRoundBands([0, width - margin.left - margin.right]);
+        var yScale = d3.scale.linear()
+          .domain([0, 10])
+          .range([height - margin.top - margin.bottom, 0]);
+
+        var xAxis = d3.svg.axis()
+          .scale(xScale)
+          .orient('bottom');
+
+        var yAxis = d3.svg.axis()
+          .scale(yScale)
+          .orient('left');
+
+        svg.append('g')
+          .attr('class', 'axis')
+          .attr("transform", "translate(" + margin.left + "," + (height - margin.top) + ")")
+          .call(xAxis);
+
+        svg.append('g')
+          .attr('class', 'axis')
+          .attr('transform', 'translate(' + margin.left + "," + margin.top + ")")
+          .call(yAxis);
+
+        function render() {
+          var update = svg.selectAll('rect')
+            .data(dataset, function(d) {
+              return d.id;
+            })
+
+          var enter = update.enter();
+          var exit = update.exit();
+
+          enter.append('rect')
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+            .attr("x", function(d, i) {
+              return xScale(i) + 5 / 2;
+            })
+            .attr("y", function(d) {
+              return yScale(d.data);
+            })
+            .attr("width", xScale.rangeBand() - 5)
+            .attr("height", function(d) {
+              return height - margin.top - margin.bottom - yScale(d.data);
+            })
+            .attr('fill', 'steelblue');
+
+            exit.transition().duration(2000)
+              .remove();
+        }
+
+       
+        render();
+        setInterval(function() {
+          dataset.shift();
+          push1(dataset);
+          render(dataset);
+        }, 2000);
+    </script>
+</body>
+</html>

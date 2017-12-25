@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<style type="text/css">
+		.chord path {
+	fill-opacity: 0.5;
+	stroke: #000;
+	stroke-width: 0.5px;
+	}
+</style>
+<body>
+	
+
+
+
+	<script type="text/javascript" src='../../../js/d3.js'></script>
+	<script type="text/javascript">
+		var city_name = [ "北京" , "上海" , "广州" , "深圳" , "香港"  ];
+        
+        var population = [
+          [ 1000,  3045　 , 4567　, 1234 , 3714 ],
+          [ 3214,  2000　 , 2060　, 124  , 3234 ],
+          [ 8761,  6545　 , 3000　, 8045 , 647  ],
+          [ 3211,  1067  , 3214 , 4000  , 1006 ],
+          [ 2146,  1034　 , 6745 , 4764  , 5000 ]
+        ];
+
+
+        var chord_layout=d3.layout.chord()
+        		.padding(0.03)
+        		.sortSubgroups(d3.descending)
+        		.matrix(population);
+        var groups=chord_layout.groups();
+        var chords=chord_layout.chords();
+
+        //groups里面参数angle endAngle index name startAngle value
+        console.log(groups);	
+
+        //chords里面的参数 ：source:{endAngle、startAnle、index、subindex、value}
+        //					target:{endAngle、index、startAngle、subindex、value}
+        console.log(chords);
+        var width=500,height=500,innerRadius=width/2*0.7
+        		,outerRadius=innerRadius*1.2;
+        var color20=d3.scale.category20();
+
+        var svg=d3.select("body").append('svg')
+        		.attr('width',width)
+        		.attr("height",height)
+        		.append('g')
+        		.attr("transform","translate("+width/2+","+height/2+")");
+
+
+        var outer_arc=d3.svg.arc()
+        			.innerRadius(innerRadius)
+        			.outerRadius(outerRadius)
+
+        var g_outer=svg.append('g')
+
+        g_outer.selectAll("path")
+        	.data(groups)
+        	.enter()
+        	.append("path")
+        	 .style("fill", function(d) { return color20(d.index); })
+        	.style("stroke",function(d){return color20(d.index)})
+        	.attr("d",outer_arc)
+          ;
+
+       	g_outer.selectAll("text")
+       		.data(groups)
+       		.enter()
+       		.append("text")
+       		.each(function(d,i){
+       			d.angle=(d.startAngle+d.endAngle)/2;
+       			d.name=city_name[i];
+       		})
+       		.attr("dy",".35em")
+       		.attr("transform",function(d){
+       			// console.log(d);		
+       			// return "rotate("+(d.angle*180/Math.PI)+")"+
+       			// 			"translate(0,"+ -1.0*(outerRadius+10)+")"+
+       			// 			( ( d.angle > Math.PI*3/4 && d.angle < Math.PI*5/4 ) ? "rotate(180)" : "");
+       			// 			
+       			// 	
+       			// 由于之前给整个svg设置了radius的偏移量。所有现在所有的文字都在中心位置
+       			// 先rotate先旋转文字的位置，然后再做translate的偏移。	
+       			
+       			  return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")"
+			            + "translate(" + (innerRadius ) + ")"
+			            + (d.angle > Math.PI ? "rotate(180)": "");
+       		})
+       		//把右边的字的设为向右对齐
+       		 .style("text-anchor", function(d) { return d.angle > Math.PI ? "end" : null; })
+       		 .text(function(d){
+       					return d.name;
+   			 });
+
+       		 d3.select(self.frameElement).style("height", outerRadius * 2 + "px");
+
+
+
+
+
+       		var inner_chord=d3.svg.chord()
+       					.radius(innerRadius)
+       					;
+
+       		svg.append("g")
+       			.attr("class", "chord")
+       			.selectAll("path")
+       			.data(chords)
+       			.enter()
+       			.append("path")
+       			.attr("d", inner_chord)
+       			.style("fill", function(d) {
+       				return color20(d.source.index);
+       			})
+       			.on("mouseover", function(d, i) {
+       				d3.select(this)
+       					.style("fill", "yellow");
+       			})
+       			.on("mouseout", function(d, i) {
+       					d3.select(this)
+       						.transition()
+       						.duration(1000)
+       						.style("fill", color20(d.source.index));
+    });
+	</script>
+</body>
+</html>

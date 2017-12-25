@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<style type="text/css">
+			.axis path,
+	.axis line{
+		fill: none;
+		stroke: black;
+		shape-rendering: crispEdges;
+	}
+
+	.axis text {
+		font-family: sans-serif;
+		font-size: 11px;
+	}
+	svg{
+		border: 1px solid #000;
+	}
+</style>
+<body>
+	
+	<script type="text/javascript" src="../../js/d3.js"></script>
+	<script type="text/javascript">
+		var margin = {
+				top: 20,
+				right: 20,
+				bottom: 30,
+				left: 40
+			},
+			width = 960 - margin.left - margin.right,
+			height = 500 - margin.top - margin.bottom;
+
+		var svg=d3.select('body')
+				.append('svg')
+				.attr("width",width+margin.left+margin.right)
+				.attr('height',height+margin.top+margin.bottom);
+
+		var num=new Array();
+		random(40);
+		var xScale=d3.scale.linear()
+				.domain([0,num.length-1])
+				.range([0,width]);
+
+
+		var yScale=d3.scale.linear()
+				.domain([0,80])
+				.range([height-margin.top,0]);
+
+		var xAxis=d3.svg.axis()
+				.scale(xScale)
+				.orient('bottom')
+
+		var yAxis=d3.svg.axis()
+				.scale(yScale)
+				.orient('left');
+
+
+		var xbar=svg.append('g')
+			.attr("class","axis")
+			.attr('transform',"translate("+margin.left+","+height+")")
+			.call(xAxis)
+
+		var s=svg.append("g")
+			.attr('class',"axis")
+			.attr('transform',"translate("+margin.left+","+margin.top+")")
+			.call(yAxis	)
+
+			console.log(num)
+
+		var line = d3.svg.line().interpolate("basis")
+			.x(function(d,i){return xScale(i);})
+			.y(function(d){return yScale(d);})
+
+     	svg.append("defs").append("clipPath")
+      .attr("id", "clippath")
+      .append("rect")
+      .attr("width", width+margin.right)
+      .attr("height", height) 
+		draw();
+		function draw(){
+			// var updateCircle=svg.selectAll('circle')
+			// 		.data(num);
+			// var enterCircle=updateCircle.enter();
+
+			// xScale.domain([0,num.length-1]);
+			// xAxis.scale(xScale);
+			// xbar.transition().duration(1000).call(xAxis)
+			// enterCircle.append('circle')
+			// 	.attr('r',5)
+			// 	.attr('cx',function(d,i){
+			// 		return xScale(i);
+			// 	})
+			// 	.attr('cy',function(d,i){
+			// 		return yScale(d);
+			// 	})
+			// 	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+			// updateCircle.attr('r',5).transition().duration(1000)
+			// 	.attr('cx',function(d,i){
+			// 		return xScale(i);
+			// 	})
+			// 	.attr('cy',function(d,i){
+			// 		return yScale(d);
+			// 	})
+			// 	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+			// svg.selectAll('.line').remove();
+			// var updateLine = svg.selectAll('.line ')
+			// 	.data(num);
+
+			// var enterLine = updateLine.enter();
+			// enterLine.append('path')
+			// 	.attr('class', "line")
+				// .style("fill", "none")
+				// .style("stroke-width", 3).attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+				// .style('stroke', "blue")
+			// 	.attr("d", line(num))
+			var path=svg.append('g').attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+				.attr("clip-path","url(#clippath)")
+				.selectAll('path')
+				.data(num)
+				.enter()
+				.append('path')
+				.style("fill", "none")
+				.style("stroke-width", 1)
+				.style('stroke', "blue")
+
+
+			function tick(){
+				console.log(num)
+				random(1);	
+				
+				path
+					.attr("d", line(num))
+					.attr("transform", null);
+
+				path.transition().duration(500)
+					.attr("transform", "translate(" + xScale(-1) + ",0)")
+				// xScale.domain([0,num.length-1])
+				// xAxis.scale(xScale);
+				// xbar.transition().duration(1000).call(xAxis)
+				// .attr('transform',"translate("+(margin.left+xScale(-1))+","+height+")");
+				num.shift()
+
+			}
+			// tick();
+			// setTimeout(tick,1000)
+			setInterval(tick,500);
+			
+			// updateLine.attr('class', "line")
+			// 	.style("fill", "none")
+			// 	.style("stroke-width", 3)
+			// 	.style('stroke', "blue").attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+			// 	.transition().duration(1000)
+			// 	.attr("d", line(num))
+				
+
+			// random(1);
+		}
+		// setTimeout(draw,1000)
+			// setInterval(draw,1000);	
+		function random(n){
+			while(n--)
+				num.push(Math.round(Math.random()*40));
+		}
+	</script>
+</body>
+</html>

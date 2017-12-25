@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+
+	<script type="text/javascript" src='../../js/d3.js'></script>
+	<script type="text/javascript">
+		var svg=d3.select('body')
+			.append('svg')
+			.attr('width',960)
+			.attr('height',500)
+			.append('g')
+			.attr("transform","translate(480,250)");
+
+		// var g=svg.append('g')
+		// 	.call(xuanzhuan,2000);
+
+		// var path=g.append('path')
+		// 	.attr('d',d3.svg.symbol().type('cross').size(50000));
+		// function xuanzhuan(selection,duration){
+		// 	selection.transition()
+		// 		.duration(duration)
+		// 		.attrTween('transform',function(){
+		// 			return d3.interpolateString("rotate(0)","rotate(720)");
+		// 		});
+
+		// 	setTimeout(function(){xuanzhuan(selection,duration);},duration);
+		// }
+		
+		//第二种写法，上面的是自己的一种写法。
+		svg.append("path")
+			.attr("d", d3.svg.symbol().type("cross").size(10000))
+			.each(cycle);
+
+		function cycle() {
+			d3.select(this).transition()
+				.duration(10000)
+				.attrTween("transform", function() {
+					return d3.interpolateString("rotate(0)", "rotate(720)");
+				})
+				.each("end", cycle);
+		}
+
+	</script>
+</body>
+</html>

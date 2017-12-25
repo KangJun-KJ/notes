@@ -1,0 +1,92 @@
+<html>
+  <head>
+        <meta charset="utf-8">  
+        <title>Drag Pie</title>  
+  </head> 
+
+<style>
+
+
+</style>
+    <body>  
+		<script src="../../../js/d3.js" charset="utf-8"></script>  
+        <script>
+		
+		
+		var width = 500;
+		var height = 500;
+		var dataset = [ 30 , 10 , 43 , 55 , 13 ];
+		
+		var svg = d3.select("body").append("svg")
+								.attr("width",width)
+								.attr("height",height);
+		
+		var pie = d3.layout.pie();
+		
+		var outerRadius = width / 4;
+		var innerRadius = width / 8;
+		var arc = d3.svg.arc()
+						.innerRadius(innerRadius)
+						.outerRadius(outerRadius);
+		
+		var color = d3.scale.category10();
+		
+		var drag = d3.behavior.drag()
+					.origin(function(d) { return d; })
+					.on("drag", dragmove);
+		
+		var gAll = svg.append("g")
+					  .attr("transform","translate("+outerRadius+","+outerRadius+")");
+					  
+		var arcs = gAll.selectAll(".arcs_g")
+					  .data(pie(dataset))
+					  .enter()
+					  .append("g")
+					  .each(function(d){
+							d.dx = 0;
+							d.dy = 0;
+					  })
+					  .call(drag)
+					  .on("mouseup mouseout",function(d,i){
+					  	d3.select(this).transition()
+						.duration(500)
+						.ease("linear")
+						.attr("transform", function(d, i) {
+							var midAngle=(d.startAngle+d.endAngle)/2;
+					return "translate("+(1*Math.sin(midAngle))+","+(-1*Math.cos(midAngle))+")";
+						})
+					  })
+					  ;
+				  
+		arcs.append("path")
+			.attr("fill",function(d,i){
+				return color(i);
+			})
+			.attr("d",function(d){
+				return arc(d);
+			});
+		
+		arcs.append("text")
+			.attr("transform",function(d){
+				return "translate(" + arc.centroid(d) + ")";
+			})
+			.attr("text-anchor","middle")
+			.text(function(d){
+				return d.value;
+			});
+		
+		console.log(dataset);
+		console.log(pie(dataset));
+		 
+		
+		function dragmove(d) {
+			d.dx += d3.event.dx;
+			d.dy += d3.event.dy;
+			d3.select(this)
+				.attr("transform","translate("+d.dx+","+d.dy+")");
+		}
+		 
+        </script>  
+		
+    </body>  
+</html>  

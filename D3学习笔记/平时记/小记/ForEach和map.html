@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		var num=new Array();
+		for(var i=0;i<10;i++) num.push(Math.round(Math.random()*10));
+
+		var num2=num.forEach(function(d,i){
+			 return 10
+		})
+		console.log(num);		//还是原数组
+		console.log(num2);		//未定义  forEach没有返回值 只是在数组中遍历
+
+		var num3=num.map(function(d,i){
+			 return 10;
+		})
+
+		console.log(num);		//还是原数组
+		console.log(num3);  	//一个数组，全部是10 map会有返回对象。
+
+
+		var num4=num.filter(function(d,i){	//filter():返回一个符合func条件的元素数组
+
+			return d>=5;
+		})
+		console.log(num4);			//返回的是所有大于5的元素的一个数组
+
+		some():返回一个boolean，判断是否有元素是否符合func条件
+
+		every():返回一个boolean，判断每个元素是否符合func条件
+	</script>
+</body>
+</html>

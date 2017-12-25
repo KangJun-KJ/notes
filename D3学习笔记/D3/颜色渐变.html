@@ -1,0 +1,102 @@
+<html>  
+  <head>  
+        <meta charset="utf-8">  
+        <title>颜色插值</title>  
+  </head> 
+  <style>
+
+  </style>
+<body>
+<script src="../js/d3.js" charset="utf-8"></script>
+<script>
+
+	var width = 400,
+		height = 400;
+
+	var svg = d3.select("body").append("svg")		//添加一个svg	
+		.attr("width", width)
+		.attr("height", height);
+
+	var a = d3.rgb(0, 0, 255); //红色				设置渐变颜色的起始
+	var b = d3.rgb(0, 255, 0); //绿色
+	var c=d3.rgb(255,0,0);
+	var compute = d3.interpolate(a, c,b);				//d3.interpolate颜色插值，用于计算两个颜色之间的色彩，参数范围【0，1】
+
+	var linear = d3.scale.linear()					//通过线性比例尺来计算插值。
+		.domain([0, 150])
+		.range([0, 1]);
+	var rects = svg.selectAll("rect")
+		.data(d3.range(150))
+		.enter()
+		.append("rect")
+		.attr("x", function(d, i) {
+			return i % 15 * 15;
+		})
+		.attr("y", function(d, i) {
+			return Math.floor(i / 15) * 15;
+		})
+		.attr("width", 15)
+		.attr("height", 15)
+		.style("fill", function(d) {
+			return compute(linear(d));			//通过上面的比例尺转换0-1之间的数值从而得到颜色。
+		})
+		.on("mouseover", function(d) {
+			
+			d3.select(this)
+				.style("fill", "yellow");
+		})
+		.on("mouseout", function(d) {
+			d3.select(this)
+				.style("fill", compute(linear(d)).toString());
+		});
+
+	// tips ：上面的一个rect就代表一个完整的颜色。而下面的是一个rect里面就显示出来所有颜色的渐变。
+
+	//定义一个线性渐变 一个rect然后指定一个颜色渐变的ID
+	var defs = svg.append("defs");
+
+	var linearGradient = defs.append("linearGradient")
+		.attr("id", "linearColor")
+		.attr("x1", "0%")
+		.attr("y1", "0%")
+		.attr("x2", "100%")
+		.attr("y2", "0%");
+
+	var stop1 = linearGradient.append("stop")
+		.attr("offset", "0%")			//设置开始渐变的起始位置
+		.style("stop-color", a.toString());		//渐变开始颜色	
+
+	var stop2 = linearGradient.append("stop")
+		.attr("offset", "100%")			//设置结束的渐变的位置
+		.style("stop-color", b.toString());		//渐变末尾的颜色
+
+	var stop3 = linearGradient.append("stop")
+		.attr("offset", "100%")			//设置结束的渐变的位置
+		.style("stop-color", c.toString());		//渐变末尾的颜色
+	//添加一个矩形，并应用线性渐变
+	var colorRect = svg.append("rect")
+		.attr("x", 15)
+		.attr("y", 200)
+		.attr("width", 200)
+		.attr("height", 30)
+		.style("fill", "url(#" + linearGradient.attr("id") + ")")		//通过fill属性来引用上面定义的颜色渐变。
+		.on("mouseover", function(d) {
+			d3.select(this)
+				.style("fill", "yellow");
+		})
+		.on("mouseout", function(d) {
+			d3.select(this)
+				.style("fill", "url(#" + linearGradient.attr("id") + ")");
+		});
+
+	svg.append("circle")
+		.attr("r",105)
+		.attr("cx",300)
+		.attr("cy",300)
+		.attr("fill","none")
+		.attr("stroke-width",16)
+		.attr("stroke","url(#"+linearGradient.attr("id")+")");
+</script>
+		
+    </body>  
+</html>  

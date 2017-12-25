@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		body{
+			position: relative;
+			width: 960px;
+			height: 500px;
+		}
+
+		button{
+			position: absolute;
+			cursor: pointer;
+			top: 50%;
+			left: 50%;
+			margin-top: -1.75em;
+			margin-left: -6em;
+			width: 12em;
+			padding: 1em 2em;
+			color: #fff;
+			border-radius: 8px;
+			border: solid 2px #fff;
+			font: 16px "Microsoft YaHei";
+		}
+
+	button:focus{
+		outline: none;
+	}
+	/* 鼠标移动到上面的时候 */
+	button:hover{
+		text-shadow: 0 1px 0 #000;
+		background: #444;
+	}
+	/* 点击之后到松开这段时间 */
+	button:active{
+		background: #222;
+	}
+	</style>
+</head>
+<body>
+	
+	<button>Stop The Music</button>
+	<input onclick="con()" type="button" name="" value="继续">
+	<script type="text/javascript" src='../../js/d3.js'></script>
+	<script type="text/javascript">
+		var width=960,height=500,size=80;
+
+		// var color=d3.scale.ordinal()
+		// 	.range(["#333","brown","white","green","steelblue"]);
+		var color=d3.scale.category20();
+
+		var button=d3.select('button')
+			.on('click',click);
+
+		var svg=d3.select('body').append('svg')
+				.attr('width',width)
+				.attr('height',height)
+				.append('g')
+				.attr('transform',"translate(-40,-30)");
+		//d3.merge 合并多个数组为一个数组
+		//d3.range(start,stop,step);返回一个长度为(stop-start)/step长度的数组。每一组数据间隔间隔step.start默认值是0 step默认值是1
+		//通过map来返回一个数组长度是(width+size)/size*(height+size)/size的一维数组，值是[x,y]
+		//如果没有是用merge,则返回的是一个二维数组，(width+size)/size个长度为size*(height+size)/size的一维数组。
+		var dataset = d3.merge(d3.range(0, width + size, size).map(function(x) {
+			return d3.range(0, height + size, size).map(function(y) {
+				return [x, y];
+			})
+		}));
+		var rect=svg.selectAll('rect')
+				.data(dataset)
+				.enter()
+				.append('rect')
+				.attr('transform',function(d){
+					return "translate("+d+")";
+				})
+				.attr('width',size)
+				.attr('height',size)
+				.style('stroke','#000')
+				.style('stroke-width',"2px")
+				.style('fill',"#000")
+				.on('click',pulse);
+		rect.transition()
+			.duration(0)
+			.delay(function(d,i){
+				return i*5;
+			})
+			.each(pulse);
+
+		function click(){
+			rect.transition()
+				.duration(750)
+				.delay(function(d,i){return i*5})
+				.style('fill',"#333");
+		}
+		function con(){
+			rect.transition()
+			.duration(0)
+			.delay(function(d,i){
+				return i*5;
+			})
+			.each(pulse);
+		}
+		function pulse() {
+			var rect = d3.select(this);
+			(function loop() {
+
+				rect = rect.transition()
+					.duration(750)
+					.style("fill", color(Math.random() * 20 | 0))
+					.each("end", function() {
+						if (this.__transition__.count < 10) loop();
+					});
+			})();
+		}
+	</script>
+</body>
+</html>

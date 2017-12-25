@@ -1,0 +1,93 @@
+1、查找、选择元素
+//jQuery
+var els=$(".el"); 
+//JS
+var els=document.querySelectorAll(".el");
+
+
+2、创建元素
+//jQuery
+var newEl=$("<div/>");
+//JS
+var newEl=document.createElement('div");
+
+3、事件、监听操作
+//jQuery
+$(".el").on("event",function(){});
+//JS
+[].forEach.call(document.querySelectorAll('.el'), function (el) {
+  el.addEventListener('event', function() {
+
+  }, false);
+});
+
+4、设置、修改和获取属性值
+//jQuery
+$(".el").filter(":first").attr("key","value");
+$(".el").filter(":first").attr("key");
+//JS
+document.querySelector('.el').setAttribute('key','value');
+document.querySelector('.el').getAttribute('key')
+
+
+
+
+5、添加、修改、删除、反转、类操作
+//jQuery
+$('.el').addClass('class');
+$('.el').removeClass('class');
+$('.el').toggleClass('class');
+//JS
+document.querySelector('.el').classList.add('class');
+document.querySelector('.el').classList.remove('class');
+document.querySelectot('.el').classList.toggle('class');
+
+
+
+
+6、追加元素
+//jQuery
+$('.el').append($('<div/>'));
+//JS
+document.querySelector('.el').appendChild(document.createElement('div'));
+
+
+
+
+7、复制、克隆元素
+//jQuery
+var clonedEl=$('.el').clone();
+//JS
+var clonedEl=document.querySelector(',el').cloneNode(true);
+
+
+
+8、删除元素
+//jQuery
+$('.el').remove();
+//JS
+var toRemove=document.querySelector('.el');
+toRemove.parentNode.removeChild(toRemove);
+
+
+8、复制、克隆元素
+//jQuery
+var clonedEl=$('.el').clone();
+//JS
+var clonedEl=document.querySelector(',el').cloneNode(true);
+
+
+
+8、前一个、下一个、临近同辈元素
+//jQuery
+$('.el').prev();
+$(".el").next()
+//JS
+document.querySelector('.el').previousElementSibling;
+document.querySelector('.el').nextElementSibling;
+	
+
+
+
+
+9、AJAX的写法。

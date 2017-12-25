@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+    body {
+        margin: 0;
+        background: #222;
+        min-width: 960px;
+    }
+
+    rect {
+        fill: none;
+        pointer-events: all;
+    }
+
+</style>
+<body>
+<script src="js/d3.v3.js"></script>
+<script>
+
+    //������ֻ�ṩһ��Բ�ν��䶯����˼·
+    //��Ч��ο�����https://bl.ocks.org/mbostock/1062544
+    //��Ч��Ӧ���и�õ�ʵ�ַ�ʽ
+
+    var width = Math.max(960, innerWidth),
+            height = Math.max(500, innerHeight);
+
+    var i = 0;
+
+    var svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+    svg.append("rect")
+            .attr("width", width)
+            .attr("height", height);
+
+    //���ƾ�̬Բ
+    var cirlce=svg.append("circle")
+            .attr("cx",400)
+            .attr("cy",400)
+            .attr("r",20)
+            .attr("stroke","white")
+            .attr("fill","white");
+
+    //���ƶ�̬Բ��
+    function dynamic_circle () {
+
+        svg.append("circle")
+                .attr("cx", 400)
+                .attr("cy", 400)
+                .attr("r", 20)
+                .attr("fill", "none")
+                .attr("stroke", "white")
+                .attr("stroke-opacity", 1)
+                .transition()
+                .duration(3000)
+                .ease(Math.sqrt)
+                .attr("r", 50)
+                .attr("stroke-opacity", 1e-6)
+                .remove();
+    }
+
+    var timer=setInterval(dynamic_circle,1000);
+
+
+</script>

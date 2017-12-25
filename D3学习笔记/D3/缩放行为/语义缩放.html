@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script type="text/javascript" src="../../js/d3.js"></script>
+	<style type="text/css">
+				
+		svg {
+		  font: 10px sans-serif;
+		}
+
+		.overlay {
+		  fill: none;
+		  pointer-events: all;
+		}
+
+		.axis path,
+		.axis line {
+		  fill: none;
+		  stroke: #000;
+		  shape-rendering: crispEdges;
+		}
+	</style>
+</head>
+<body>
+
+	<script type="text/javascript">
+		var width = 960,
+			height = 500;
+
+		var randomX = d3.random.normal(width / 2, 80),
+			randomY = d3.random.normal(height / 2, 80);
+
+		var data = d3.range(2000).map(function() {
+			return [
+				randomX(),
+				randomY()
+			];
+		});
+
+		var x = d3.scale.linear()
+			.domain([0, width])
+			.range([0, width]).clamp(true);
+
+		var y = d3.scale.linear()
+			.domain([0, height])
+			.range([height, 0]).clamp(true);
+
+		var svg = d3.select("body").append("svg")
+			.attr("width", width)
+			.attr("height", height)
+			.append("g")
+			.call(d3.behavior.zoom().x(x).y(y).scaleExtent([1, 18]).on("zoom", zoom));
+
+		svg.append("rect")
+			.attr("class", "overlay")
+			.attr("width", width)
+			.attr("height", height);
+
+		var circle = svg.selectAll("circle")
+			.data(data)
+			.enter().append("circle")
+			.attr("r", 2.5)
+			.attr("transform", transform);
+
+		function zoom() {
+			circle.attr("transform", transform);
+		}
+
+		function transform(d,i) {
+			
+			return "translate(" + x(d[0]) + "," + y(d[1]) + ")";
+		}
+
+	</script>
+</body>
+</html>

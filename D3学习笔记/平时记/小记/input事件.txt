@@ -1,0 +1,17 @@
+1.onfocus  当input 获取到焦点时触发
+
+2.onblur  当input失去焦点时触发，注意：这个事件触发的前提是已经获取了焦点再失去焦点的时候会触发相应的js
+
+3.onchange 当input失去焦点并且它的value值发生变化时触发
+
+4.onkeydown 在 input中有键按住的时候执行一些代码
+
+5.onkeyup 在input中有键抬起的时候触发的事件，在此事件触发之前一定触发了onkeydown事件
+
+6.onclick  主要是用于 input type=button，当被点击时触发此事件
+
+7.onselect  当input里的内容文本被选中后执行一段，只要选择了就会触发，不是非得全部选中
+
+8.oninput  当input的value值发生变化时就会触发，不用等到失去焦点（与onchange的区别）
+
+以上事件可以直接放到input的属性里，例如：<input type="text" onfocus="a();" onblur="b()" onchange="c();" onkeydown="d();" />，也可以通过js给input dom元素添加相应的事件，如：document.getElementByTagName('input').onfocus = function();

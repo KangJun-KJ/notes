@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			h1 {
+				text-align: center;
+				font-size: 80px;
+			}
+			
+			.text1 {
+				-webkit-text-stroke: 1px red;
+			}
+			
+			.text2 {
+				background-color: #000;
+				-webkit-text-fill-color: transparent;
+				-webkit-text-stroke: 1px #fff;
+			}
+			
+			.text3 {
+				background: linear-gradient(to bottom, 	#FF0000,#FF7F24,#C0FF3E, #FFFF00,#00F5FF,	#68228B);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+			}
+			
+			.clip {
+				margin-left: auto;
+				margin-right: auto;
+				width: 400px;
+				background: url("4.jpg") no-repeat ;
+				/*background-size: cover;*/
+				-webkit-text-fill-color: transparent;
+				-webkit-background-clip: text;
+				background-position: center left;
+				animation: guodu 5s ease infinite;
+			}
+			
+			.clip h1 {
+				font-size: 150px;
+				font-family: "微软雅黑";
+			}
+			@keyframes guodu{
+				0{
+					background-position: center left;
+				}
+				50%{
+					background-position:center right;
+				}
+				100%{
+					background-position:center left;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<h1 class="text1">前端</h1>
+		<h1 class="text2">前端</h1>
+		<h1 class="text3">前端</h1>
+		<div class="clip">
+			<h1>前端</h1>
+		</div>
+
+	</body>
+
+</html>

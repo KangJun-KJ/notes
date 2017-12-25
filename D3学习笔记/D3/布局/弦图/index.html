@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+		<meta charset="utf-8">
+		<title>testD3-25-chord.html</title>
+		<script type="text/javascript" src="../../../js/d3.js"></script>
+	<style>
+
+    body {
+        font: 10px sans-serif;
+    }
+
+    .chord path {
+        fill-opacity: .67;
+        stroke: #000;
+        stroke-width: .5px;
+    }
+
+
+</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+//(1)指定圆环和玄的数值
+    var matrix = [
+        [0,  5871, 8916, 2868],//每组是一个部分圆环，数值是其中的玄的大小
+        [ 1951, 10048, 2060, 6171],
+        [ 8010, 16145,  0, 8045],
+        [ 1013,   990,  940, 6907]
+    ];
+
+
+    var width = 960,
+            height = 500,
+            innerRadius = Math.min(width, height) * .41,
+            outerRadius = innerRadius * 1.1;
+//颜色数组
+    var fill =["#000000", "#FFDD89", "#957244", "#F26223"];
+
+    var svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .append("g")
+            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");//因为圆形绘制的时候是以原点为中心绘制的，而我们的图形原点现在在左上角，所以会出现一个问题就是左边跟上边的图表部分会看不到。因此我们使用translate属性来位移一下即可
+//(2)初始化玄
+    var chord = d3.layout.chord()//chord使用后可以返回两个东东:chord.groups跟chord.chords
+            .padding(.05)//padding是圆环上每个部分之间的距离
+            .sortSubgroups(d3.descending)//sortSubgroups 传入一个function，这个function规定了每一行中的元素的排列顺序。同样也有sortGroups 这个是规定行的排列顺序
+            .matrix(matrix);//可以给chord绑定数据，并根据数据进行分割
+
+            console.log(chord);
+//(3)为部分圆环添加path并添加鼠标事件(注意之后加上玄后也会被此事件覆盖)
+    svg.append("g").selectAll("path")
+            .data(chord.groups)//通过chord.groups可以把圆环按照数据分组,即一个圆环一组
+            .enter().append("path")
+            .style("fill", function(d) { return fill[d.index] })//圆环中第几个玄
+            .style("stroke", function(d) { return fill[d.index]; })
+            .attr("d", d3.svg.arc().innerRadius(innerRadius).outerRadius(outerRadius))//画圆环
+            .on("mouseover", fade(.1))//为path添加鼠标事件
+            .on("mouseout", fade(1));
+// 阴影函数
+    function fade(opacity) {
+        return function(g, i) {
+            svg.selectAll(".chord path")
+                    .filter(function(d) { //过滤器，过滤掉没选中的
+                    	return d.source.index != i && d.target.index != i; 
+                    })
+                    .transition()//过渡
+                    .style("opacity", opacity);//不透明度
+        };
+    }
+    
+//(4)弦生成器 
+    svg.append("g")
+            .attr("class", "chord")
+            .selectAll("path")
+            .data(chord.chords)//创造“弦”de参数
+            .enter().append("path")
+            .attr("d", d3.svg.chord()//弦生成器，他通过接受一系列的参数来创造“弦”也就是图形的条带。而这些参数又可以利用chord.chords生成
+            		.radius(innerRadius))//指定内径
+            .style("fill", function(d) { return fill[d.target.index]; })//玄链接两个圆环节点，得到她的编号
+            .style("opacity", 1);//不透明度
+//(6)刻度
+var ticks = svg.append("g").selectAll("g")
+            .data(chord.groups)////第一次分组,依据是chord.groups 圆环分组
+            .enter().append("g").selectAll("g")
+            .data(groupTicks)//第二次分组，依据是刻度对象
+            .enter().append("g")
+            .attr("transform", function(d) {//对刻度进行旋转变换 这里标记一下以后研究
+                return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")"
+                        + "translate(" + outerRadius + ",0)";
+            });
+
+    ticks.append("line")//加刻度线
+            .attr("x1", 1)
+            .attr("y1", 0)
+            .attr("x2", 5)
+            .attr("y2", 0)
+            .style("stroke", "#000");
+//(7)添加刻度文字  这里标记一下以后研究
+    ticks.append("text")
+            .attr("x", 8)
+            .attr("dy", ".35em")
+            .attr("transform", function(d) { return d.angle > Math.PI ? "rotate(180)translate(-16)" : null; })
+            .style("text-anchor", function(d) { return d.angle > Math.PI ? "end" : null; })
+            .text(function(d) { return d.label; });
+   
+    //(5)刻度函数
+    function groupTicks(d) {
+        var k = (d.endAngle - d.startAngle) / d.value;//把圆环平均化，以便于后面乘上每个
+        console.log(k);
+        return d3.range(0, d.value, 1000).//起点 终点 分隔段大小
+        	map(function(v, i) {//首先创建一个刻度的数组，map遍历之
+            return {
+                angle: v * k //一刻度的长度 上面的v
+                + d.startAngle,//加完上面偏移量得到最终坐标
+                label: i % 5 ? null : v / 1000 + "k"//每个5个刻度标记一下
+            };
+        });
+    }
+</script>
+
+	</body>
+</html>

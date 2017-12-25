@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body {
+				padding: 100px 150px;
+			}
+			
+			@-webkit-keyframes loading-multiple {
+				0% {
+					-webkit-transform: scale(0);
+					transform: scale(0);
+					opacity: 0;
+				}
+				5% {
+					opacity: 1;
+				}
+				100% {
+					-webkit-transform: scale(1);
+					transform: scale(1);
+					opacity: 0;
+				}
+			}
+			
+			@keyframes loading-multiple {
+				0% {
+					-webkit-transform: scale(0);
+					transform: scale(0);
+					opacity: 0;
+				}
+				5% {
+					opacity: 1;
+				}
+				100% {
+					-webkit-transform: scale(1);
+					transform: scale(1);
+					opacity: 0;
+				}
+			}
+			
+			.loading {
+				position: relative;
+				/*-webkit-transform: translateY(-30px);*/
+				/*transform: translateY(-30px);*/
+			}
+			
+			.loading> div:nth-child(2) {
+				-webkit-animation-delay: -0.4s;
+				animation-delay: -0.4s;
+			}
+			
+			.loading> div:nth-child(3) {
+				-webkit-animation-delay: -0.2s;
+				animation-delay: -0.2s;
+			}
+			
+			.loading> div {
+				background-color: #ed5565;
+
+
+				position: absolute;
+				left: -30px;
+				top: 0px;
+				opacity: 0;
+				margin: 0;
+				width: 60px;
+				height: 60px;
+				border-radius:50%;
+				-webkit-animation: loading-multiple 1s 0s linear infinite;
+				animation: loading-multiple 1s 0s linear infinite;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div class="loading">
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+	</body>
+
+</html>

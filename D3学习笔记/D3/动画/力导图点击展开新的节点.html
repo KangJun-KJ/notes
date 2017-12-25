@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<script type="text/javascript" src="../../js/d3.js"></script>
+		<style type="text/css">
+
+		</style>
+	</head>
+
+	<body>
+		<script type="text/javascript">
+			var nodes = [{
+				name: "GuiLin"
+			}, {
+				name: "Beijing"
+			}, {
+				name: "XiaMen"
+			}, {
+				name: "HangZhou"
+			}, {
+				name: "ShangHai"
+			}, {
+				name: "QingDao"
+			}, {
+				name: "TianJin"
+			}, {
+				name: "Shijiazhuang"
+			}, {
+				name: "ChangChun"
+			}, {
+				name: "XiAn"
+			}, {
+				name: "WuluMuQi"
+			}, {
+				name: "LaSa"
+			}, {
+				name: "ChengDu"
+			}];
+
+			var edges = [{
+				source: 0,
+				target: 1
+			}, {
+				source: 0,
+				target: 2
+			}, {
+				source: 0,
+				target: 3
+			}, {
+				source: 0,
+				target: 4
+			}, {
+				source: 0,
+				target: 5
+			}, {
+				source: 0,
+				target: 6
+			}, {
+				source: 0,
+				target: 7
+			}, {
+				source: 0,
+				target: 8
+			}, {
+				source: 0,
+				target: 9
+			}, {
+				source: 0,
+				target: 10
+			}, {
+				source: 0,
+				target: 11
+			}, {
+				source: 0,
+				target: 12
+			}];
+			var childNodes = [{
+				name: "Haidian"
+			}, {
+				name: "Shunyi"
+			}, {
+				name: "Fengtai"
+			}, {
+				name: "Xierqi"
+			}]
+			var allNodes = [];
+			var allEdges = [];
+			var childEdges = [{
+				source: 1,
+				target: 13
+			}, {
+				source: 1,
+				target: 14
+			}, {
+				source: 1,
+				target: 15
+			}, {
+				source: 1,
+				target: 16
+			}];
+
+			var width = 1000;
+			var height = 600;
+
+			var svg = d3.select("body").append("svg")
+				.attr("width", width)
+				.attr("height", height);
+			var edges_line = svg.selectAll("line");
+			var nodeEnter = svg.selectAll("circle.node");
+			var svg_texts = svg.selectAll("text");
+			var force = d3.layout.force()
+				.nodes(allNodes)
+				.links(allEdges)
+				.size([width, height])
+				.linkDistance(200)
+				.charge([-900]);
+			var color = d3.scale.category20();
+			var isDevelop = true; //判断节点是否展开过了。
+			function forceUpdate() {
+				//更新force上面的所有nodes和links
+				force.nodes(allNodes).links(allEdges);
+
+				edges_line = edges_line
+					.data(allEdges);
+				//添加多余的lines
+				edges_line.enter()
+					.append("line")
+					.style("stroke", "#004F89")
+					.style("stroke-width", 2)
+					.attr("id", function(d, i) {
+						return "line" + i
+					});
+				//更新之后减去不存在的line
+				edges_line.exit().remove();
+
+				var svg_nodes = svg.selectAll("circle.node")
+					.data(allNodes);
+				nodeEnter = svg_nodes.enter()
+					.append("circle")
+					.attr("r", 10)
+					.attr("class", "node")
+					.style("fill", function(d, i) {
+						return color(i);
+					})
+					.call(force.drag)
+					.on("click", function(d, i) {
+						//如果是北京这个节点并且没有展开过几句添加节点，并且更新动画。
+						if(i == 1 && isDevelop == true) {
+							addChildNodes(childNodes, childEdges)
+							isDevelop = false;
+						} else if(i == 1 && isDevelop == false) {
+							delateChildNOdes(childNodes, childEdges);
+							isDevelop = true;
+						}
+					});
+				svg_nodes.exit().remove();
+				svg_texts = svg.selectAll("text").data(allNodes);
+				textEnter = svg_texts.enter()
+					.append("text")
+					.style("fill", "black")
+					.attr("dx", 20)
+					.attr("dy", 8)
+					.text(function(d) {
+						return d.name;
+					});
+				svg_texts.exit().remove();
+				force.on("tick", function() {
+					//更新每个时刻的line的位置
+					edges_line.attr("x1", function(d) {
+							return d.source.x;
+						})
+						.attr("y1", function(d) {
+							return d.source.y;
+						})
+						.attr("x2", function(d) {
+							return d.target.x;
+						})
+						.attr("y2", function(d) {
+							return d.target.y;
+						});
+
+					//更新每一个nodes节点。
+					svg_nodes.attr("cx", function(d) {
+							return d.x;
+						})
+						.attr("cy", function(d) {
+							return d.y;
+						});
+					svg_texts.attr("x", function(d) {
+							return d.x;
+						})
+						.attr("y",
+							function(d) {
+								return d.y;
+							});
+
+				});
+				force.start();
+			}
+
+			function addChildNodes(childNodes, childEdges) {
+				childNodes.forEach(function(node) {
+					allNodes.push(node);
+				});
+
+				childEdges.forEach(function(link) {
+					allEdges.push(link);
+				});
+
+				forceUpdate();
+			}
+
+			function delateChildNOdes(childNodes, childEdges) {
+				childNodes.forEach(function(node) {
+					var index = allNodes.indexOf(node);
+					allNodes.splice(index, 1);
+				});
+				childEdges.forEach(function(link) {
+					var index = allEdges.indexOf(link);
+					console.log(index);
+					allEdges.splice(index, 1);
+				});
+
+				forceUpdate();
+			}
+			//��ʼ�����������ͼ	
+			addChildNodes(nodes, edges);
+		</script>
+	</body>
+
+</html>

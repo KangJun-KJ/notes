@@ -1,0 +1,120 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+    .axis path,
+    .axis line{
+        fill:none;
+        stroke:black;
+        shape-rendering:crispEdges;        /* //设置线条的样式 */
+    }
+    </style>
+</head>
+
+
+<body>
+    <script src="../../../js/d3.js"></script>
+    <script >
+    var width=500;
+    var height=500;
+
+    var dataset=[
+    {
+        country:"china",
+        gdp:[[2000,11920],[2001,13170],[2002,14550],
+            [2003,16500],[2004,19440],[2005,22870],
+            [2006,27930],[2007,35040],[2008,45470],
+            [2009,51050],[2010,59490],[2011,73140],
+            [2012,83860],[2013,103550]]
+    }
+		];
+
+        var padding={top:70, right:70, bottom: 70, left:70};
+        var gdpmax=0;
+        for(var i=0;i<dataset.length;i++){
+            var currGdp=d3.max(dataset[i].gdp,function(d){
+                return d[1];
+            });
+            if(currGdp>gdpmax)
+                gdpmax=currGdp;
+        }
+        console.log(gdpmax);
+
+        var xScale=d3.scale.linear()
+                    .domain([2000,2013])
+                    .range([0,width-padding.left-padding.right]);
+
+        var yScale=d3.scale.linear()
+                    .domain([0,gdpmax*1.1])
+                    .range([height-padding.bottom-padding.top,0]);
+
+        var areaPath=d3.svg.area()//创建一个直线生成器
+                        .x(function(d){
+                            return xScale(d[0]);
+                        })
+                        .y0(function(d){return height-padding.bottom-padding.top;}) 
+                        .y1(function(d){
+                            return yScale(d[1]);
+                        })
+                        .interpolate("basis")//插值模式,让线段变得更加圆滑 basis cardinal
+                        ;
+
+        //定义两个颜色
+        var colors=[d3.rgb(0,0,255),d3.rgb(0,255,0)];
+
+        var svg=d3.select("body")
+                        .append("svg")
+                        .attr("width",width)
+                        .attr("height",height);
+
+        svg.selectAll("path")
+            .data(dataset)
+            .enter()
+            .append("path")
+            .attr("transform","translate("+padding.left+","+padding.top+")")
+            .attr("class","line")
+            .attr("fill","steelblue")
+            // .attr("stroke-width",3)
+            .attr("stroke",function(d,i){
+                return colors[i];
+            })
+             .attr("d",function(d){
+                console.log(d);
+                return areaPath(d.gdp);
+                //返回线段生成器得到的路径
+            });
+
+                
+             
+            
+
+        var xAxis=d3.svg.axis()
+                    .scale(xScale)
+                    .ticks(5)
+                    .tickFormat(d3.format("d"))
+                    .orient("bottom");
+
+        var yAxis=d3.svg.axis()
+                    .scale(yScale)
+                    .orient("left");
+
+        //添加一个g用于放x轴
+        svg.append("g")
+            .attr("class","axis")
+            .attr("transform","translate("+padding.left+","+(height-padding.top)+")")
+            .call(xAxis);
+
+        svg.append("g")
+            .attr("class","axis")
+            .attr("transform","translate("+padding.left+","+padding.top+")")
+            .call(yAxis);
+
+
+
+        
+    </script>
+</body>
+    
+</html>

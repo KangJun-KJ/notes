@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			#wangyixitaishuaile {
+				position: absolute;
+				left: 0;
+				bottom: 0;
+				top: 0;
+				right: 0;
+				background-color: #000;
+				display: flex;
+				display: none;
+			}
+			
+			#kangjun {
+				background-color: yellow;
+			}
+			
+			#wangyixitaishuaile img {
+				display: block;
+				margin: auto;
+			}
+			
+			#guanbi {
+				color: white;
+				position: absolute;
+				right: 20px;
+				top: 20px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<img src="person.png" alt="" />
+		<a id="kangjun" kj_href="https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/bd_logo1_31bdc765.png" target="_self">111</a>
+		<div id='wangyixitaishuaile'>
+			<img id="showImg" src="https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/bd_logo1_31bdc765.png" alt="" />
+			<button id="guanbi">关闭</button>
+		</div>
+		<script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+		<script>
+			$(document).ready(function() {
+				$("#kangjun").on('click', function() {
+					$("#wangyixitaishuaile").css({
+						"display": "flex"
+					});
+				})
+				$("#guanbi").on('click', function() {
+					$("#wangyixitaishuaile").css({
+						"display": "none"
+					});
+				})
+			})
+		</script>
+	</body>
+
+</html>

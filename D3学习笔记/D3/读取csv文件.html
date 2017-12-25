@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		
+		
+		<script src='../js/d3.js'></script>
+		<script>
+		//设置读取文件的格式
+		var csv = d3.dsv(",", "text/csv;charset=gb2312");
+			csv("tt.csv",function(error,csvdata){
+				if(error){
+					console.log(error);
+				}
+				console.log(csvdata);
+			})
+			
+//		读取tsv文件:  d3.dsv("  ", "text/tsv;charset=gb2312");
+//		读取 dsv文件：d3.dsv(";", "text/plain");  
+		</script>
+	</body>
+</html>

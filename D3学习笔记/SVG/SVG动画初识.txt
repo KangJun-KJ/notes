@@ -1,0 +1,26 @@
+<set>		：没有动画效果 可以设置延迟然后变换属性
+<animate>	：简单的动画过渡效果
+<animateColor>	：颜色过渡动画，animate也可以实现跟她相同得的效果，所以被放弃了。
+<animateTransform>
+<animateMotion> ：让SVG图形沿着特定的path移动
+
+SVG animation参数详解；
+
+1.attributeName 要变化的元素属性名称
+2.attributeType 表明attributeName属性值的
+3.from to by values 
+from="<value>"动画起始值
+to   	     动画结束值
+by		动画的相对变化值
+values="<list>"	分号分隔的一个或多个值，可以看出动画的多个关键点。
+
+4 begin end
+begin指开始时间  end动画结束时间
+
+5.dur
+动画执行时间 有两个值：时间值|indefinite(永久动画)
+
+6 calcMode keyTimes keySplines
+
+calcMode属性支持4个值：discrete | linear | paced | spline. 中文意思分别是：“离散”|“线性”|“踏步”|“样条”。13:43 2016/12/9
+

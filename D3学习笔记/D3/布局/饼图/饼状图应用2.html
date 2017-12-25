@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="../../../js/d3.js"></script>
+</head>
+<body>
+
+<script>
+    var margin = {
+        top: 20,
+        left: 20,
+        right: 20,
+        bottom: 20
+    };
+    var width = 400;
+    var height = 400;
+    var svg = d3.select("body").append("svg")
+        .attr("width", width).attr("height", height)
+        .style("background", "#ccc")
+        .append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var bgArc = d3.svg.arc().outerRadius(150).innerRadius(50)
+        .startAngle((-70 / 360) * 2 * Math.PI).endAngle((70 / 360) * 2 * Math.PI);
+        
+    var end_angle = getEndAngle(20, 100);
+    var needlePositon = getNeedlePosition(20, 100);
+    var frArc = d3.svg.arc().outerRadius(150).innerRadius(50).startAngle((-70 / 360) * 2 * Math.PI);
+    var wrap = svg.append("g")
+        .attr("class", "wrap")
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+    wrap.append("path").attr("d", bgArc).attr("fill", "green");
+    wrap.append("circle").attr("cx", 0).attr("cy", 0).attr("r", 10).attr("fill", "red");
+    var front = wrap.append("path").attr("class", "front").attr("d", frArc.endAngle(end_angle)).attr("fill", "yellow");
+    wrap.append("path").attr("class", "needle").attr("d", needlePositon).attr("fill", "red");
+    front.datum(50).transition().duration(1000)
+        .attrTween("d", function(d, i) {
+            var end_angle = getEndAngle(d, 100);
+            return function(t) {
+                frArc.endAngle(end_angle * t + getEndAngle(20, 100) * (1 - t));
+                return frArc();
+            };
+        });
+    d3.select(".needle").datum(50).transition().duration(1000).attrTween("d", function(d, i) {
+        return function(t) {
+            return getNeedlePosition(t * d + (1 - t) * 20, 100);
+        };
+    }).each("end", function(d) {
+        needlePositon = getNeedlePosition(d, 100);
+    });
+
+    function getNeedlePosition(data, max) {
+        var angle = data / max * (140 / 360) * 2 * Math.PI + 20 / 360 * 2 * Math.PI;
+        var x_one = -150 * Math.cos(angle);
+        var y_one = -150 * Math.sin(angle);
+        var x_two = -10 * Math.cos(Math.PI / 2 - angle);
+        var y_two = 10 * Math.sin(Math.PI / 2 - angle);
+        var x_three = 10 * Math.cos(Math.PI / 2 - angle);
+        var y_three = -10 * Math.sin(Math.PI / 2 - angle);
+        return "M" + [x_one, y_one].join(" ") + "L" + [x_two, y_two].join(" ") + "L" + [x_three, y_three].join(" ");
+    }
+
+    function getEndAngle(data, max) {
+        return data / max * 140 / 360 * 2 * Math.PI + (-70 / 360) * 2 * Math.PI;
+    }
+</script>
+</body>
+</html>

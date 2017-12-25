@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>缩放操作</title>
+</head>
+<body>
+<script src = "../../js/d3.js"></script>
+<script>
+        var width = 400,
+            height = 400;
+        var circles = [{
+            cx: 150,
+            cy: 200,
+            r: 30
+        }, {
+            cx: 250,
+            cy: 200,
+            r: 30
+        }]
+        var svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height)
+
+
+        //定义缩放函数        
+        var zoom = d3.behavior.zoom()
+            // .scaleExtent([1, 10]) //用于设置最小和最大的缩放比例
+            .on("zoom", zoomed)     //缩放的时候执行的函数
+
+        //绘制
+        var g = svg.append("g")
+            .call(zoom).append('g');
+
+        g.selectAll("circle")
+            .data(circles)
+            .enter()
+            .append("circle")
+            .attr("cx", function(d) {
+                return d.cx
+            })
+            .attr("cy", function(d) {
+                return d.cy
+            })
+            .attr("r", function(d) {
+                return d.r
+            })
+            .attr("fill", "black")
+
+        g.selectAll("text")
+            .data(circles)
+            .enter()
+            .append("text")
+            .attr({
+                "x": function(d) {
+                    return d.cx;
+                },
+                "y": function(d) {
+                    return d.cy;
+                }
+            })
+            .text(function(d, i) {
+                return "你好" + i;
+            })
+            .style("fill", "white")
+            .style('text-anchor','middle')
+
+        function zoomed() {
+            //扩大的g倍数和调整的位移。
+            g.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")")
+        } //d3.event.translate 是平移的坐标值，d3.event.scale 是缩放的值。
+</script>
+</body>
+</html>

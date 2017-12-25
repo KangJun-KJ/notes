@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+
+	<script type="text/javascript">
+		var a={a:1,b:2}
+		var b={};
+		console.log(a.a)
+		b.a=a.a;
+		b.b=a.b;
+		b.a=2;
+		console.log(a.a);
+
+
+		var num=[];
+		for(var i=0;i<15;i++){
+			num.push([Math.round(Math.random()*100),i])
+		}
+		num.sort(function(x,y){return x[0]<y[0]})
+		for(var i=0;i<15;i++){
+			console.log(num[i][0]+" "+num[i][1]);
+		}
+	</script>
+</body>
+</html>

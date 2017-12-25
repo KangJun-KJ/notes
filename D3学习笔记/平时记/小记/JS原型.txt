@@ -1,0 +1,32 @@
+prototype和_proto_
+prototype只有函数才有的属性
+_proto_对象有的属性：可以理解为构造器原型
+_proto_===constructor.prototype
+
+var a = {};
+console.log(a.prototype); //undefined
+console.log(a.__proto__);  //Object {}
+
+var b = function(){}
+console.log(b.prototype); //b {}
+console.log(b.__proto__);  //function() {}
+
+
+
+
+原型链：由于_proto_是任何对象都有的属性、
+而JS里万物皆对象，所以会形成一条_proto_连起来的
+链条，递归访问_proto_必须最终到头，并且值null
+
+当JS引擎查找对象的属性时，先查找对象本身是否存在该属性，
+如果不存在，会在原型链上查找，但不会查找自身的prototype
+
+
+var A = function(){};
+var a = new A();
+console.log(a.__proto__); //Object {}（即构造器function A 的原型对象）
+console.log(a.__proto__.__proto__); //Object {}（即构造器function Object 的原型对象）
+console.log(a.__proto__.__proto__.__proto__); //null
+
+
+借鉴：http://gold.xitu.io/post/5835853f570c35005e413b19?utm_medium=hao.caibaojian.com&utm_source=hao.caibaojian.com

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		*{
+			padding: 0px;
+			margin: 0px;
+		}
+		.node circle {
+			fill: #fff;
+			stroke: gray;
+			stroke-width: 1.5px;
+		}
+		
+		.node {
+			font: 12px sans-serif;
+		}
+		
+		.link {
+			fill: none;
+			stroke: #000;
+			stroke-width: 1.5px;
+		}
+		svg{
+			border: 1px solid #000;
+			background-image: url("1.jpg") ;
+			 background-repeat: no-repeat;
+		}
+	</style>
+
+	<body>
+		<svg>
+		<defs>
+			    <filter id="f4" x="0" y="0" width="100%" height="100%">
+			      <feOffset result="offOut" in="SourceAlpha" dx="20" 
+			dy="20" />
+			      <feGaussianBlur result="blurOut" in="offOut" 
+			stdDeviation="10" />
+			      <feBlend in="SourceGraphic" in2="blurOut" 
+			mode="normal" />
+			    </filter>
+		  </defs>
+		</svg> 
+		<script src='../../../js/d3.js'></script>
+		<script>
+			var width = 800,
+				height = 600;
+
+
+			var tree = d3.layout.tree()
+				.size([width-200, height-100 ])
+				.separation(function(a, b) {
+					return(a.parent == b.parent ? 1 : 2);
+				});
+
+			var diagonal = d3.svg.diagonal()
+				.projection(function(d) {
+					return [d.y, d.x];
+				});
+
+		var linePath=d3.svg.line()//创建一个直线生成器
+                        .x(function(d){
+                            return d.source.x;
+                        })
+                        .y(function(d){
+                            return d.source.y;
+                        });
+
+			var svg = d3.select("svg")
+				.attr("width", width)
+				.attr("height", height)
+				.append("g")
+				.attr("transform", "translate(40,0)");
+
+			d3.json("test.json", function(error, root) {
+
+				var nodes = tree.nodes(root);
+				var links = tree.links(nodes);
+				console.log(root);
+				console.log(nodes);
+				console.log(links);
+				nodes.forEach(function(d) {
+             	   d.y = d.depth * 200;
+             	 });
+				var link = svg.selectAll(".link")
+					.data(links)
+					.enter()
+					.append("path")
+					.attr("class", "link")
+					.attr("d", diagonal
+					);
+
+				var node = svg.selectAll(".node")
+					.data(nodes)
+					.enter()
+					.append("g")
+					.attr("class", "node")
+					.attr("transform", function(d) {
+						return "translate(" + d.y + "," + d.x + ")";
+					})
+
+				node.append("rect")
+					.attr("x",function(d,i){
+						return 0;
+					})
+					.attr('y',function(d,i){
+						return 0;
+					})
+					.attr("height",function(d,i){
+						if(d.depth==3)
+						return 20;
+					})
+					.attr("width",function(d,i){
+						if(d.depth==3)
+							return 100;
+					})
+					.attr('fill',"black")
+					.attr("transform","translate(0,-10)")
+					.attr("opacity",.6)
+					.attr("stroke","gray")
+					.attr("stroke-width","3px")
+					;
+
+				node.append("circle")
+					.attr('r',function(d,i){
+						if(d.depth==3)return ;
+						switch(d.depth){
+							case 0:
+								return 40;
+								break;
+							case 1:
+								return 30;
+								break;
+							case 2:
+								return 20
+								break;
+							default:
+								return 0;
+								break;
+						}
+					})
+					.style("stroke-width",function(d,i){
+						if(d.depth==0)
+						return "10px";
+						return "3px"
+					})
+					// .style("opacity",.5)
+					
+					 
+					
+					
+				node.append("text")
+					.style("font-size",function(d,i){
+						if(d.depth==0){
+							return "30px";
+						}
+						if(d.depth==2)return "8px";
+					})
+					.attr("dx", function(d) {
+						//坐标的基点在circle的中心
+						if(d.depth==3)
+						return 20;
+					})
+					.attr('transform',function(d,i){
+						if(d.depth==0)
+						return "translate(0,10)"
+						return "translate(0,5)";
+					})
+					.style("text-anchor", function(d) {
+						if(d.depth==3)return "start";
+						return "middle";
+					})
+					.text(function(d) {
+						return d.name;
+					})
+					.attr('fill',function(d,i){
+						if(d.depth==3)
+							return "white";
+						if(d.depth==1)return "steelblue";
+						return "#000"
+					})
+					.attr("filter","url(#f4)")
+					.style("font-weight","bold")
+					;
+			});
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+	<title></title>
+</head>
+<style type="text/css">
+	 path:hover{
+        stroke-opacity: 0.9;
+    }
+</style>
+<body>
+	
+	<script type="text/javascript" src='../../../js/d3.js'></script>
+	<script type="text/javascript" src='../../../js/sankey.js'></script>
+	<script type="text/javascript">
+			var data = {
+			  'nodes': [
+			    {name: "0"},
+			    {name: "1"},
+			    {name: "2"},
+			    {name: "3"},
+			    {name: "4"},
+			    {name: "5"},
+			    {name: "6"},
+			    {name: "7"},
+			    {name: "8"}
+			  ],
+			  'links': [
+			    {source: 0, target: 3, value: 10},
+			    {source: 1, target: 4, value: 10},
+			    {source: 2, target: 4, value: 5},
+			    {source: 1, target: 5, value: 5},
+			    {source: 3, target: 6, value: 5},
+			    {source: 3, target: 7, value: 5},
+			    {source: 4, target: 7, value: 10},
+			    {source: 4, target: 8, value: 5},
+			    {source: 5, target: 8, value: 5}
+			  ]
+			};
+		var width=800,height=500;
+		var svg=d3.select("body").append("svg")
+				.attr("width",width)
+				.attr("height",height)
+				.attr("transform","translate(50,0)");
+				;
+		var color=d3.scale.category20()
+		var sankey = d3.sankey()
+	        .nodeWidth(80) 
+	        .nodePadding(40) 
+	        .size([width-100, height/2]) 
+	        .nodes(data.nodes)  
+	        .links(data.links)
+	        .layout(3);
+	    var path = sankey.link();
+
+	    var links = svg.append("g").selectAll("path")
+	    	.data(data.links)
+	    	.enter()
+
+	    // 绑定节点数据
+	    var nodes = svg.append("g").selectAll(".node")
+	    	.data(data.nodes)
+	    	.enter();
+
+	    // 绘制连接线
+	    var paths=links.append("path")
+	    	.attr({
+	    		fill: "none", //填充色
+	    		stroke: function(d, i) {
+	    			return color(i);
+	    		}, //描边色
+	    		"stroke-opacity": 0.5, //描边透明度
+	    		d: path, //路径数据
+	    		id: function(d, i) {
+	    				return 'link' + i
+	    			} //ID
+	    	})
+	    	.style("stroke-width", function(d) { //连线的宽度
+	    		return Math.max(1, d.dy);
+	    	});
+
+	    // // 绘制圆形节点   
+	    // nodes.append("circle")
+	    // 	.attr("transform", function(d) {
+	    // 		return "translate(" + d.x + "," + d.y + ")";
+	    // 	})
+	    // 	.attr("r", function(d) {
+	    // 		return d.dy / 2;
+	    // 	})
+	    // 	.attr("cx", function(d) {
+	    // 		return d.dx / 2;
+	    // 	})
+	    // 	.attr("cy", function(d) {
+	    // 		return d.dy / 2;
+	    // 	})
+	    // 	.style("fill", "tomato")
+	    // 	.style("stroke", "gray");
+
+	    	nodes.append("rect")
+	    		.attr({
+	    			x: function(d) {
+	    				return d.x;
+	    			},
+	    			y: function(d) {
+	    				return d.y;
+	    			},
+	    			height: function(d) {
+	    				return d.dy;
+	    			},
+	    			width: sankey.nodeWidth(),
+	    			fill: "tomato"
+	    		})
+	    		.call(d3.behavior.drag()
+	    			.origin(function(d) {
+	    				return d;
+	    			})
+	    			.on("drag", dragmove)
+	    		);
+
+	    		function dragmove(d) {
+	    			d3.select(this).attr({
+	    				"x": (d.x = Math.max(0, Math.min(width - d.dx, d3.event.x))),
+	    				"y": (d.y = Math.max(0, Math.min(height - d.dy, d3.event.y)))
+	    			});
+
+	    			sankey.relayout();
+	    			paths.attr('d', path);
+
+	    		}
+	    nodes.append("text")
+        .attr({
+            x: function (d) { return d.x+sankey.nodeWidth() / 2; },
+            y: function (d) { return d.y+d.dy / 2; }
+        })
+        .text(function (d) { return d.name; }); 
+
+         links.append('text')
+        .append('textPath')
+        .attr('xlink:href', function (d,i) { return '#link' + i; })
+        .attr('startOffset','50%')
+        .text(function (d) { return '流量:' + d.value; })
+	</script>
+</body>
+</html>

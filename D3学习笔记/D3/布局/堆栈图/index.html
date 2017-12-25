@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		.axis line,
+		.axis path{
+			fill: none;
+			stroke: #000;
+			shape-rendering: crispEdges;
+		}
+	</style>
+</head>
+<body>
+	
+
+	<script type="text/javascript" src='../../../js/d3.js'></script>
+	<script type="text/javascript">
+		var width=600,height=400,
+			margin={
+				top:30,
+				bottom:30,
+				left:50,
+				right:50
+			};
+		var n = 21, // number of samples  
+     	   m = 3; // number of series
+     	 
+		var dataset=d3.range(m).map(function(){  
+            return d3.range(n).map(function(d){
+            	return {
+            		data:Math.round(Math.random()*100),
+            		sum:0
+            	};
+            });  
+        });
+		for(let i=0;i<n;i++){
+			for(let j=0;j<m;j++){
+				if(j==0){
+					dataset[j][i].sum=dataset[j][i].data;
+				}else{
+					dataset[j][i].sum=dataset[j][i].data+dataset[j-1][i].sum;
+				}
+					
+			}
+		}
+		console.log(dataset[0]);
+		console.log(dataset[1]);
+		console.log(dataset[2]);
+		var svg=d3.select('body').append('svg')
+			.attr('width',width)
+			.attr('height',height);
+
+		var xScale=d3.scale.linear()
+			.domain([0,n-1])
+			.range([0,width-margin.left-margin.right]);
+
+		var yScale=d3.scale.linear()
+			.domain([0,100*m])
+			.range([height-margin.top-margin.bottom,0]);
+
+		var yScale2=d3.scale.linear()
+			.domain([0,100*m])
+			.range([0,height-margin.top-margin.bottom]);
+
+		var xAxis=d3.svg.axis()
+			.scale(xScale)
+			.orient('bottom')
+
+		var yAxis=d3.svg.axis()
+			.scale(yScale)
+			.orient('left');
+
+		svg.append('g')
+			.attr('class','axis')
+			.attr("transform","translate("+margin.left+","+(height-margin.top)+")")
+			.call(xAxis);
+		svg.append('g')
+			.attr('class','axis')
+			.attr('transform','translate('+margin.left+","+margin.top+")")
+			.call(yAxis);
+
+		var areaPath=d3.svg.area()//创建一个直线生成器
+                        .x(function(d,i){
+                            return xScale(i);
+                        })
+                        .y0(function(d){
+                        	return height-margin.bottom-margin.top-yScale2(d.sum-d.data);
+                        })
+                        .y1(function(d){
+                            return yScale(d.sum);
+                        })
+                         .interpolate("bundle")
+                        ;
+         var color=d3.scale.category20();
+		 svg.selectAll(".area path")
+            .data(dataset)
+            .enter()
+            .append("path")
+            .attr('class','.area')
+            .attr("transform","translate("+margin.left+","+margin.top+")")
+            .attr("class","line")
+            .attr("fill",function(d,i){
+            	return color(i);
+            })
+            // .attr("stroke-width",3)
+             .attr("d",function(d,i){
+                return areaPath(d);
+                //返回线段生成器得到的路径
+            });
+
+	</script>
+</body>
+</html>

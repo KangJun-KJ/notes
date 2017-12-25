@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		svg{
+			/* border: 1px solid #000; */
+		}
+	</style>
+</head>
+<body>
+	<svg ></svg>
+	<script type="text/javascript" src='../../../js/d3.js'></script>
+	<script type="text/javascript">
+		var width=500,height=500;
+		var svg=d3.select("svg")
+			.attr({"width":width,"height":height});
+		var radius=200;
+
+		var defs=svg.append('defs')
+
+		var linearGradient=defs.append("linearGradient")
+			.attr("id","linearColor")
+			.attr("x1","0%")
+			.attr("y1","0%")
+			.attr("x2","100%")
+			.attr("y2","0%");
+
+		var stop0=linearGradient.append("stop")
+				.attr("offset","0%")
+				.attr("stop-color","rgb(255,255,0)");
+		// var stop1=linearGradient.append("stop")
+		// 		.attr("offset","25%")
+		// 		.attr("stop-color","rgb(0,255,0)");
+		var stop2=linearGradient.append("stop")
+				.attr("offset","50%")
+				.attr("stop-color","rgb(255,0,0)");
+		// var stop3=linearGradient.append("stop")
+		// 		.attr("offset","75%")
+		// 		.attr("stop-color","rgb(255,0,255)");
+		var stop4=linearGradient.append("stop")
+				.attr("offset","100%")
+				.attr("stop-color","rgb(0,255,255)");		
+
+		// var circle=svg.append("circle")
+		// 		.attr("r",radius)
+		// 		.attr("cx",width/2)
+		// 		.attr("cy",height/2)
+		// 		.attr("fill",'none')
+		// 		.attr('stroke',"url(#linearColor)")
+		// 		.attr("stroke-width",5);
+		var arc=d3.svg.arc()
+				.innerRadius(0)
+				.outerRadius(radius);
+		var dataset=[1];
+		var pie = d3.layout.pie();
+		var piedata=pie(dataset);
+
+		
+		var arcs = svg.selectAll("g")
+					  .data(piedata)		//绑定转换后的数据piedata
+					  .enter()
+					  .append("g")
+					  .attr("transform","translate("+( width/2 )+","+ ( height/2 ) +")");
+		arcs.append("path")
+			.attr("id","mypath")
+			.attr("fill","none")
+			.attr("stroke-width",10)
+			.attr('stroke',"url(#linearColor)")
+			.attr("transform","rotate(90)")
+			.attr("d",function(d){
+				return arc(d);	//使用弧生成器
+			});
+		var n=0;
+		for(var i=0;i<10;i++){
+			svg.append("circle")
+			.attr({
+				"r":i+15,
+				"cx":width/2,
+				"cy":height/2,
+				"fill":"steelblue",
+				"transform":"translate("+radius*Math.sin(Math.PI*i*0.1-Math.PI*0.1)+","+radius*Math.cos(Math.PI*i*0.1-Math.PI*0.1)+")"
+			})
+			.style('stroke',"#fff")
+			.style("stroke-width","5")
+			;
+
+			svg.append("text")
+				.text(i+1)
+				.attr({
+					"x":width/2,
+					"y":height/2
+					,"dy":4
+					,"transform":"translate("+radius*Math.sin(Math.PI*i*0.1-Math.PI*0.1)+","+radius*Math.cos(Math.PI*i*0.1-Math.PI*0.1)+")"
+					,"text-anchor":"middle"
+					,"fill":"white"
+				})
+		}
+		svg.append('text')
+			.attr("transform","translate("+( width/2 -4)+","+ ( height/2-5 ) +")")
+			.style('fill', 'steelblue')
+			.style('font-size', '24px')
+			.style('font-weight', 'bold')
+			.append('textPath').attr({ //引用路径
+				'xlink:href': '#mypath'
+			})
+			.text('13310320622')
+			;
+		svg.append('text')
+			.attr("transform","translate("+( width/2 +20)+","+ ( height/2+11 ) +")")
+			.style('fill', 'steelblue')
+			.style('font-size', '24px')
+			.style('font-weight', 'bold')
+			.append('textPath').attr({ //引用路径
+				'xlink:href': '#mypath'
+			})
+			.attr("text-anchor","center")
+			.text('频频信息有限公司')
+			;
+		svg.append("text")
+			.text("Hello World")
+			.attr("transform","translate("+width/2+","+height/2+")")
+			.attr("text-anchor","middle")
+	</script>
+</body>
+</html>

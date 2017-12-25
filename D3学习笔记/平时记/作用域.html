@@ -1,0 +1,30 @@
+	<!DOCTYPE html>  
+<html>  
+    <head>  
+        <meta charset="utf-8" />  
+        <title>深入理解Javascript</title>  
+        <script type="text/javascript" charset="utf-8">  
+            var a1 = 'a1';  
+            var f1 = (function() {  
+                var a2 = 'a2';  
+                a3 = 'a3';  
+                window.a4 = 'a444444';  
+  
+                function getA2() {  
+                    return a2;  
+                };  
+  
+                return getA2;  
+            })();  
+            function f2() {  
+                console.log("a1 = ", a1);  
+                console.log('a2 = ', f1())  
+            };  
+            f2();  
+            console.log(window.a4);
+        </script>  
+    </head>  
+    <body>  
+        <h1>深入理解Javascript</h1>  
+    </body>  
+</html>  

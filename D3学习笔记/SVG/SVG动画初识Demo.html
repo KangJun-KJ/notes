@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+	</head>
+
+	<body>
+		<h1>Set</h1>
+		<svg width="320" height="320">
+			<g>
+				<text font-family="microsoft yahei" font-size='120' y="160" x=" 160 ">
+					马
+					<set attributeName="x " attribute="XML " to="60 " begin="1s "></set>
+				</text>
+			</g>
+		</svg>
+
+		<h1>animate</h1>
+		<svg width="320 " height="320 ">
+			<g>
+				<text font-family="microsoft yahei " font-size='120' y="160" x="160"> 马
+				<animate attributeName="x" from="160" to="60" begin="0s" dur="3s" repeatcount="indefinite"></animate>
+				</text>
+			</g>
+		</svg>
+
+		<h1>animateTransform</h1>
+		<svg width="320 " height="320 ">
+			<g>
+				<text font-family="microsoft yahei " font-size='120' y="180" x="80"> 马
+					<animateTransform attributeName="transform" begin="0s" dur="3s"  type="scale" from="1" to="1.5" repeatCount="indefinite"/>
+				</text>
+			</g>
+		</svg>
+
+		<h1>animateMotion</h1>
+		<svg width="360" height="200" xmlns="http://www.w3.org/2000/svg">
+			<!--添加一个text文本然后添加一个animateMotion的动画-->
+			<text font-family="microsoft yahei" font-size="40" x="0" y="0" fill="#cd0000">马
+   			 <animateMotion path="M10,80 q100,120 120,20 q140,-50 160,0" begin="0s" dur="3s" repeatCount="indefinite" rotate="auto"/>
+  			</text>
+			<path d="M10,80 q100,120 120,20 q140,-50 160,0" stroke="#cd0000" stroke-width="2" fill="none" />
+		</svg>
+
+		<h1>自由组合动画</h1>
+		<svg width="320" height="200">
+			<text font-family="microsoft yahei" font-size="120" y="160" x="160">马
+       			 <animate attributeName="x" from="160" to="60" begin="0s" dur="3s" repeatCount="indefinite" />
+       			 <animate attributeName="opacity" from="1" to="0" begin="0s" dur="3s" repeatCount="indefinite" />
+   			 </text>
+		</svg>
+
+		<h1>使用value属性</h1>
+		<svg width="320" height="200" xmlns="http://www.w3.org/2000/svg">
+				<text font-family="microsoft yahei" font-size="120" y="150" x="160">
+       			 马
+       			 <animate attributeName="x" values="160;40;160" dur="3s" repeatCount="indefinite" />
+  			  </text>
+		</svg>
+		
+		<script>
+//			停止动画:
+			var svg=document.querySelectorAll('svg')[1];
+				svg.pauseAnimations();		//暂停动画
+			setTimeout(function(){		
+				svg.unpauseAnimations()		//开始动画
+			},1000)
+		</script>
+	</body>
+
+</html>

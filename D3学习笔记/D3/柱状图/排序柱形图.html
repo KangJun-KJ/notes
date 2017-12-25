@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+
+	<style type="text/css">
+		.axis path,
+		.axis line{
+			fill: none;
+			stroke: #000;
+			shape-rendering: crispEdges;
+		}
+		svg{
+			border: 1px solid #000;
+		}
+	</style>
+</head>
+<body>
+	<button onclick="sort1()">Sor</button>
+	<script type="text/javascript" src="../../js/d3.js"></script>	
+	<script type="text/javascript">
+		var width = 700,
+			height = 500;
+		var margin = {
+			top: 20,
+			bottom: 30,
+			left: 40,
+			right: 40
+		}
+		var dataset = [],
+			len = 30,
+			maxn = 100,
+			minn = 0;
+		for (var i = 0; i < len; i++) {
+			dataset.push([Math.round(Math.random() * maxn), i]);
+		}
+		var g = d3.select('body').append('svg')
+			.attr('width', width)
+			.attr('height', height);
+
+		var x = d3.scale.ordinal()
+			.domain(d3.range(len))
+			.rangeRoundBands([0, width - margin.left - margin.right]);
+
+		var y = d3.scale.linear()
+			.domain([0, maxn])
+			.range([height - margin.top - margin.bottom, 0]);
+
+		var xAxis = d3.svg.axis()
+			.scale(x)
+			.orient("bottom")
+			.ticks(len);
+
+		var yAxis = d3.svg.axis()
+			.scale(y)
+			.orient('left');
+
+		g.append('g')
+			.attr('class', "axis")
+			.attr("transform", "translate(" + (margin.left) + "," + (height - margin.bottom) + ")")
+			.call(xAxis);
+		g.append('g')
+			.attr('class', 'axis')
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+			.call(yAxis);
+
+		var Rect = g.append('g')
+		Rect.selectAll("rect")
+			.data(dataset)
+			.enter()
+			.append('rect')
+			.attr("x", function(d, i) {
+				return margin.left + x(i);
+			})
+			.attr("y", function(d, i) {
+				return height - y(d[0]) - margin.bottom;
+			})
+			.attr("width", function(d, i) {
+				return x.rangeBand() - 5;
+			})
+			.attr('height', function(d, i) {
+				return y(d[0]);
+			})
+			.attr('fill', "steelblue");
+
+		function sort1() {
+			var num = dataset;
+			for (var i = 0; i < len; i++) {
+				for (var j = i; j < len; j++) {
+					if (num[i][0] < num[j][0]) {
+						var t = dataset[i][0];
+						num[i][0] = num[j][0];
+						num[j][0] = t;
+						t = num[i][1];
+						num[i][1] = num[j][1];
+						num[j][1] = t;
+					}
+				}
+			}
+
+			Rect.selectAll('rect')
+				.data(dataset)
+				.transition()
+				.duration(1000)
+				.attr("x", function(d, i) {
+					for (var j = 0; j < num.length; j++) {
+						if (num[j][1] == i)
+							return x(j) + margin.left;
+					}
+				})
+		}
+	</script>
+</body>
+</html>

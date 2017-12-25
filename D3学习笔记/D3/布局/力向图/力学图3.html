@@ -1,0 +1,116 @@
+<!DOCTYPE html>  
+<html>  
+  <head>  
+        <meta charset="utf-8">  
+        <title>testD3-29-Molecule.html</title>  	
+        <script type="text/javascript" src="../../../js/d3.js"></script>  
+    <style type="text/css">  
+    .link line {
+  stroke: #696969;
+}
+/* 分隔线的格式 透明的 */
+.link line.separator {
+  stroke: #fff;
+  stroke-width: 2px;
+}
+
+.node circle {
+  stroke: #000;
+  stroke-width: 1.5px;
+}
+
+.node text {
+  font: 10px sans-serif;
+  pointer-events: none;
+}
+</style>  
+    </head>  
+    <body>  
+        <script type="text/javascript">
+        var width = 960,
+          height = 500;
+
+          var color = d3.scale.category20();
+          //(1)平方根比例尺
+          var radius = d3.scale.sqrt()
+            .range([0, 6]); //值域
+
+          var svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+          var force = d3.layout.force()
+            .size([width, height])
+            .charge(-400)
+            .linkDistance(function(d) { //(2)连线是两个圆半径之和+20那么长 
+              return radius(d.source.size) //数据源里的size就是半径
+                + radius(d.target.size) + 20;
+            });
+
+          d3.json("graph.json", function(graph) {
+            force
+              .nodes(graph.nodes)
+              .links(graph.links)
+              .on("tick", tick)
+              .start();
+
+            var link = svg.selectAll(".link")
+              .data(graph.links)
+              .enter().append("g")
+              .attr("class", "link");
+
+            link.append("line")
+              .style("stroke-width", function(d) {
+                return (d.bond * 2 - 1) * 2 + "px";
+              });
+            //(3)只要连线大于2就加一条分隔线
+            //怎么添加多条分隔线呢？
+            link.filter(function(d) { //基于数据过滤的选择。
+                return d.bond > 1;
+              }).append("line")
+              .attr("class", "separator"); //添加一条分隔线
+            //常规的添加节点
+            var node = svg.selectAll(".node")
+              .data(graph.nodes)
+              .enter().append("g")
+              .attr("class", "node")
+              .call(force.drag);
+            //常规的添加圆点
+            node.append("circle")
+              .attr("r", function(d) {
+                return radius(d.size); //(4)根据圆圈的种类的大小设置大小 
+              })
+              .style("fill", function(d) {
+                return color(d.atom); //根据圆圈的种类设置颜色
+              });
+            node.append("text")
+              .attr("dy", ".35em")
+              .attr("text-anchor", "middle") //在圆圈中加上数据
+              .text(function(d) {
+                return d.atom;
+              });
+            //常规的打点
+            function tick() {
+              link.selectAll("line")
+                .attr("x1", function(d) {
+                  return d.source.x;
+                })
+                .attr("y1", function(d) {
+                  return d.source.y;
+                })
+                .attr("x2", function(d) {
+                  return d.target.x;
+                })
+                .attr("y2", function(d) {
+                  return d.target.y;
+                });
+
+              node.attr("transform", function(d) {
+                return "translate(" + d.x + "," + d.y + ")";
+              });
+            }
+          });
+        </script>  
+  
+    </body>  
+</html> 

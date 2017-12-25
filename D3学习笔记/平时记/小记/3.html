@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+
+	<script type="text/javascript" src="../js/d3.js"></script>
+	<script type="text/javascript">
+		// alert(a);	undefinded
+		// alert(b);	is not defined
+		// b=10;
+		// var a=20;	
+		
+		//没有用var声明的变量，不可以使用delete
+		//window的属性可以直接删除
+			 a = 10;
+			 alert(window.a); // 10
+			 alert(delete a); // true
+			 alert(window.a); // undefined
+			 //变量不能被删除
+			 var b = 20;
+			 alert(window.b); // 20
+			 alert(delete b); // false
+			 alert(window.b); // still 20
+	</script>
+</body>
+</html>

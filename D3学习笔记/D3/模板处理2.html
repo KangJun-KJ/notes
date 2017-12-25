@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+	<p>1</p>
+	<p>2</p>
+	<p>3</p>
+	<p>4</p>
+	<p>5</p>
+	<script type="text/javascript" src="../js/d3.js"></script>
+	<script type="text/javascript">
+		
+		var dataset=[];
+
+		function redraw(){
+
+			var update=d3.select('body').selectAll('p')
+				.data(dataset);
+
+			var enter=update.enter();
+			var exit=update.exit();
+
+			exit.remove();
+
+			enter.append('p')
+				.text(function(d){return d.id});
+
+			update.text(function(d){return d.id});
+		}
+		var cnt=0;
+		setInterval(function(){
+
+			for(var i=0;i<5&&dataset.length;i++){
+				dataset.pop();
+			}
+			for(var i=0;i<(~~(Math.random()*5));i++){
+				dataset.push({
+					id:++cnt
+				});
+			};
+			redraw();
+		},1000)
+	</script>
+
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+
+	<script type="text/javascript">
+		// 量化比例尺
+		var q=d3.scale.quantize()
+				.domain([0,1])
+				.range(["你好","他好","大家好"]);
+			console.log(q(0.3))		//你好
+			console.log(q(0.4))		//他好
+			console.log(q(0.6))		//他好
+			console.log(q(0.7))		//大家好
+
+			console.log(q.invertExtent('你好'));//[0, 0.3333333333333333]
+			console.log(q.invertExtent('他好'));//[0.3333333333333333, 0.6666666666666666]
+			console.log(q.invertExtent('大家好'));//[0.6666666666666666, 1]
+	</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="animate.css" />
+
+		<style>
+			#nihao {
+				line-height: 200px;
+				text-align: center;
+				width: 300px;
+				margin: auto;
+				border: 1px solid saddlebrown;
+				background-color: cornflowerblue;
+				font-size: 30px;
+				color: white;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div id="nihao">
+			KJBU2
+		</div>
+
+		<button id="dianwo">点我 </button>
+		<script src="../../../../js/jQuery.js"></script>
+		<script>
+			$(document).ready(function() {
+				$("#dianwo").on("click", function() {
+					$("#nihao").addClass("animated  hinge");
+				})
+				$('#nihao').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+					$(this).removeClass("animated  hinge").addClass("animated swing");
+				});
+			})
+		</script>
+	</body>
+
+</html>

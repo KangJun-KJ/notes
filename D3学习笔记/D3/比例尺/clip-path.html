@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<style type="text/css">
+	
+svg{
+	border: 1px solid  #000;
+}
+</style>
+<body>
+	
+	<script type="text/javascript" src="../../js/d3.js"></script>
+	<script type="text/javascript">
+		var g=d3.select('body')
+				.append('svg')
+				.attr("width",500)
+				.attr('height',500)
+				.style('fill','yellow')
+				.attr('transform',"translate(20)");
+
+		// defs>clipPath>要显示的内容区域的形状或者文字。
+		//然后再给要引用的元素添加clip-path:url(#clipPathId)
+		//这样的效果就是添加clipPath的元素只会显示内容在上面之前定义过的内容区域。
+		//比如这里定义的内容区域是一个高宽都是200的rect,所以引用的clip属性的rect
+		//只会将自己内容显示上面定义的高宽200的rect里面。
+		//tips:即使clipPath覆盖的地方，有其他元素，只要这个元素没有引用clipPath,
+		//那么他都不会被隐藏。
+		g.append('defs')
+			.append('clipPath')
+			.attr("id",'clip2')
+			.append('text')
+			.text("kangjunbu2")
+			.attr('x',0)
+			.attr('y',100)
+			.style('font-family',"Vollkorn")
+			.style("font-size","100")
+
+		g.append("defs")
+			.append('clipPath')
+			.attr('id',"clip")
+			.append('rect')
+			.attr("width",200)
+			.attr('height',200);
+		g.append('rect')
+			.attr("clip-path", "url(#clip2)")
+			.attr('width',500)
+			.attr('height',500)
+			.style('fill',"yellow");
+
+		g.append('g') 	//添加的小圆球在cilpPath之中但是没有被隐藏，clipPath只针对引用他的元素。
+			.append('circle')
+			.attr('r',20)
+			.attr('cx',250)
+			.attr('cy',250)
+			.attr('fill','#fcc');
+	</script>
+</body>
+</html>

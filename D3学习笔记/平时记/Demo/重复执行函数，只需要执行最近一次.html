@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+
+	<input id="input" type="text" name="">
+	<script>
+		
+
+
+		document.addEventListener("DOMContentLoaded",function(){
+
+			var input =document.getElementById('input');
+
+			function throttle(fn,time){
+				time=time||200;
+				var runId=null;
+				return function(){
+					var args=arguments;
+					clearTimeout(runId);
+					runId=setTimeout(function(){
+						console.log(args);
+						fn.apply(fn,args);
+					},time);
+				}
+			}
+
+			var search=function(val){
+				console.log(val);
+			};
+			//调用一个闭包，返回的是一个函数。里面的变量一直不变，传入一个time或者没有time为200.
+			//chuli被赋值成了function(){
+			// 	var args=arguments;
+			// 	clearTimeout(runId);    每次都会清空计时器。只要有输入，就会清空在time时间内的上一个计时器
+			// 	直到没有新的内容输入，就会执行完最新的一次输入的数据的计时器。
+			// 	runId=setTimeout(function(){
+			// 		fn.apply(fn,args);
+			// 	},time);
+			// }
+			var chuli=throttle(search,500);
+
+			input.onkeyup=function(){
+				chuli(input.value);
+			}
+		})
+
+	</script>
+</body>
+</html>

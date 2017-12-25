@@ -1,0 +1,11 @@
+function transition() {
+  gAxis.transition().duration(8500).tween("axis", function(d, i) {
+    var i = d3.interpolate(domain0, domain1);
+    return function(t) {
+      x.domain(i(t));
+      gAxis.call(xAxis);
+    }
+  });
+
+
+

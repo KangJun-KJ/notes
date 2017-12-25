@@ -1,0 +1,61 @@
+{
+"name":"中国",
+"children":
+[
+	{ 
+	  "name":"浙江" , 
+  	  "children":
+  	  [
+	  	  	{"name":"杭州","size":500},
+	  	  	{"name":"宁波","size":500},
+	  	  	{"name":"温州","size":500},
+	  	  	{"name":"绍兴","size":500}
+  	  ]
+  	  ,"value":"3" 
+  	},
+  	
+	{ 
+		"name":"广西" , 
+		"children":
+		[
+			{"name":"桂林","children":[
+				{"name":"地址1","size":100},
+				{"name":"地址2","size":100},
+				{"name":"地址3","size":100,"children":
+						[
+							{"name":"地点4","size":500},
+							{"name":"地点5","size":500},
+							{"name":"地点6","size":500},
+							{"name":"地点7","size":500}
+						]
+				}
+			],"size":1000},
+			{"name":"南宁","size":500},
+			{"name":"柳州","size":500},
+			{"name":"防城港","size":500}
+		] ,"value":"3" 
+	},
+	
+	{ 
+		"name":"黑龙江",
+		"children":
+		[
+			{"name":"哈尔滨","size":500},
+			{"name":"齐齐哈尔","size":500},
+			{"name":"牡丹江","size":500},
+			{"name":"大庆","size":500}
+		] ,"value":"3" 
+	},
+	
+	{ 
+		"name":"新疆" , 
+		"children":
+		[
+			{"name":"乌鲁木齐","size":500},
+			{"name":"克拉玛依","size":500},
+			{"name":"吐鲁番","size":500},
+			{"name":"哈密","size":500}
+		],"value":"3" 
+	}
+]
+}

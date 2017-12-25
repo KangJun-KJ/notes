@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+
+		<script src="js/d3.v3.js"></script>
+		<script>
+			var svg = d3.select('body').append('svg')
+				.attr({
+					width: 500,
+					height: 500
+				});
+
+			var radialGradient = svg.append('defs')
+				.append('radialGradient')
+				.attr('id', "radialGradient")
+				.attr("fx", 0.5)
+				.attr("fy", 0.5)
+				.attr("cx", 0.5)
+				.attr("cy", 0.5);
+			var stop1 = radialGradient.append("stop")
+				.attr("offset", "0%")
+				.attr("stop-color", "#F00")
+				.attr("stop-opacity", 0);
+
+			var stop2 = radialGradient.append("stop")
+				.attr("offset", "100%")
+				.attr("stop-color", "#0FF")
+				.attr("stop-opacity", 0.7);
+			var dataset = d3.range(10).map(function(i) {
+				return i;
+			});
+			console.log(dataset);
+			var circle = svg
+				.selectAll("circle")
+				.data(dataset)
+				.enter()
+				.append("circle")
+				.attr("stroke", "none")
+				.attr("cx", function(i){
+					return 50*i+50;
+				})
+				.attr("cy", function(i){
+					return 50*i+50;
+				})
+				.call(trans);
+
+			function trans(d) {
+				d3.selectAll('circle')
+					.transition()
+					.duration(2000)
+					.delay(function(i){
+
+						return i*100;
+					})
+					.attrTween("r", function() {
+						var interpolate = d3.interpolate(0, 20);
+						var _this = this;
+						return function(t) {
+							_this._current = interpolate(t);
+							return _this._current;
+						};
+					})
+					.style("fill", "url(#" + radialGradient.attr("id") + ")")
+
+				.each('end', function() {
+					d3.select(this).call(trans);
+				})
+			}
+		</script>
+	</body>
+
+</html>

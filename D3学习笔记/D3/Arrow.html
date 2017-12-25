@@ -1,0 +1,61 @@
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+
+	<style>
+
+	</style>
+
+	<body>
+		<script src="../js/d3.js" charset="utf-8"></script>
+		<script>
+			var height = 500;
+			width = 500;
+			var svg = d3.select("body").append("svg")
+				.attr("width", width)
+				.attr("height", height);
+
+			var defs = svg.append("defs");
+			//添加marker标签及其属性  
+			var arrowMarker = defs.append("marker")
+				.attr("id", "arrow")
+				.attr("markerUnits", "strokeWidth")//标识大小的基准，strokeWidth和userSpaceOnUse
+				.attr("markerWidth", 12)			//标识的大小
+				.attr("markerHeight", 12)			//标识的大小
+				.attr("viewBox", "0 0 12 12")		//坐标系的区域
+				.attr("refX", 6)					//在viewBox的基准点
+				.attr("refY", 6)					//在viewBox的基准点
+				.attr("orient", "auto");			//绘制方向
+			//绘制直线箭头  MoveTo  lineTo绘制箭头的路径。
+			var arrow_path = "M2,2 L10,6 L2,10 L6,6 L2,2";
+			arrowMarker.append("path")  	//给上面的marker添加路径
+				.attr("d", arrow_path)		//
+				.attr("fill", "#000");
+			// 绘制/直线  
+			var line = svg.append("line")
+				.attr("x1", 50)
+				.attr("y1", 50)
+				.attr("x2", 200)
+				.attr("y2", 400)
+				.attr("stroke", "red")
+				.attr("stroke-width", 2)
+				.attr("marker-start", "url(#arrow)")	//将上面绘制好的箭头添加到这line的开始和结局
+				.attr("marker-end", "url(#arrow)");
+
+			var curve_path = "M20,70 T80,100  T160,80 T200,90";
+			var curve = svg.append("path")
+				.attr("d", curve_path)
+				.attr("fill", "white")
+				.attr("stroke", "red")
+				.attr("stroke-width", 2)
+				.attr("marker-start", "url(#arrow)")
+				.attr("marker-mid", "url(#arrow)")
+				.attr("marker-end", "url(#arrow)");
+		</script>
+
+	</body>
+
+</html>

@@ -1,0 +1,97 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Orbits 3</title>
+  <meta charset="utf-8" />
+</head>
+<style>
+
+  #viz, svg {
+    width: 1500px;
+    height: 1500px;
+  }
+  
+</style>
+<script>
+
+
+function makeViz() {
+nodes = [];
+
+///All of this is just to fake some nested data
+  randomCountry = d3.scale.quantize().domain([0,1]).range(["USA", "FRA", "MEX", "GBR", "CAN"])
+  randomStatus = d3.scale.quantize().domain([0,1]).range(["amazing","okay", "cool", "boss", "dope", "lame"])
+  randomRole = d3.scale.quantize().domain([0,1]).range(["capital","metropole", "port"])
+  trafficCategories = ["high","medium","low","fargo"];
+  quantizeTraffic = d3.scale.quantize().domain([0,500]).range(trafficCategories);
+
+  //200 random things with random categorical attributes
+  nodes = d3.range(200).map(function(d,i) {return {i: i} })
+
+  nodes.forEach(function (node) {
+    node.country = randomCountry(Math.random());
+    node.status = randomStatus(Math.random());
+    node.traffic = parseInt(Math.random() * 500);
+    node.trafficRank = quantizeTraffic(node.traffic);
+    node.role = randomRole(Math.random())
+  })
+
+  var nest = d3.nest()
+  .key(function(d) {return d.country})
+  .key(function(d) {return d.trafficRank})
+  .key(function(d) {return d.status})
+  .key(function(d) {return d.role})
+
+  var awesomeFakeNestedData = nest.entries(nodes);
+
+//If you already have some nested data, just send it to drawOrbit
+
+  drawOrbit(awesomeFakeNestedData)
+}
+
+function drawOrbit(_data) {
+
+  //down with category20a()!!
+  colors = d3.scale.category20b();
+
+  orbit = d3.layout.orbit().size([500,500]).nodes(_data);
+
+  d3.select("svg").selectAll("circle").data(orbit.nodes())
+  .enter()
+  .append("circle")
+  .attr("r", function(d) {return Math.max(1, 5 - d.depth)})
+  .attr("cx", function(d) {return d.x})
+  .attr("cy", function(d) {return d.y})
+  .style("fill", function(d) {return colors(d.depth)})
+
+  d3.select("svg").selectAll("circle.orbits")
+  .data(orbit.orbitalRings())
+  .enter()
+  .insert("circle", "circle")
+  .attr("r", function(d) {return d.r})
+  .attr("cx", function(d) {return d.x})
+  .attr("cy", function(d) {return d.y})
+  .style("fill", "none")
+  .style("stroke", "black")
+  .style("stroke-width", "1px")
+  .style("stroke-opacity", .15)
+
+  orbit.on("tick", function() {
+    d3.selectAll("circle")
+    .attr("cx", function(d) {return d.x})
+    .attr("cy", function(d) {return d.y})
+  });
+
+  orbit.start();
+
+
+}
+
+</script>
+<body onload="makeViz()">
+<div id="viz"><svg></svg></div>
+<footer>
+<script src="../js/d3.js"></script>
+<script src="d3.layout.orbit.js" charset="utf-8" type="text/javascript"></script>
+</footer>
+</body>
+</html>

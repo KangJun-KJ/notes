@@ -1,0 +1,9 @@
++new Date()=new Date().getTime() 第一种写法效率更好
+Math.round(FloatNumber)=FloatNumber|0 后者写法更好
+		判断奇偶，与偶&1 为0 与奇&1为1；
+
+将一个数组赋值给另一个变量
+	var a1=[1,1,1,1,1];
+	var a2=a1.slice(0);
+	a1[0]=2;
+	console.log(a2);

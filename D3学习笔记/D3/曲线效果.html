@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../js/d3.js"></script>
+    <style>
+        svg {
+            background-color: #363636;
+        }
+
+        body {
+            background-color: #363636;
+        }
+
+        #chart {
+            width: 800px;
+            margin: 0 auto;
+        }
+
+        .xBar text{
+              fill:none
+        }
+        .xBar path{
+            fill:none;
+            stroke:#DB912E;
+        }
+
+        .curvePath {
+
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+           /* animation: dash 5s linear infinite;*/
+            animation: dash 5s linear forwards;
+            stroke-opacity:0.3;
+
+        }
+
+        @keyframes dash {
+
+            to {
+
+                stroke-dashoffset: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="chart"></div>
+
+<script>
+
+
+    var width = 800;
+    var height = 800;
+
+    var dataset=[];
+
+    var svg = d3.select("#chart")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+    var xScale=d3.scale.linear()
+            .domain([0,108])
+            .range([10,790]);
+
+
+
+    addData();
+
+    var color=d3.scale.category10()
+            .range(["#DB912E","#DB4400","#AF7114"]);
+
+
+    var path = svg.selectAll("path")
+            .data(dataset);
+
+    path.enter()
+            .append("path")
+            .attr("d", function (d) {
+                return curve(d)
+            })
+            .attr("class","curvePath")
+            .attr("stroke", function(d,i){return color(i)})
+            .attr("fill", "none")
+            .attr("style", function (d, i) {
+                if (i == 0) {
+                    return "animation-delay:" + "0s"
+                }
+                else {
+                    return "animation-delay:4s";
+                }
+
+            });
+
+    var xAxis=d3.svg.axis()
+            .scale(xScale)
+            .orient("bottom");
+
+    var xBar=svg.append("g")
+            .attr("transform","translate(0,300)")
+            .attr("class","xBar")
+            .call(xAxis);
+
+
+
+    function curve(d) {
+        var str = "M";
+
+        function path(d) {
+            var x1 = d.source.x;
+            var y1 = d.source.y;
+            var x2 = d.target.x;
+            var y2 = d.target.y;
+            var cx = (x1 + x2) / 2;
+            var cy = y1 - Math.abs(x2 - x1)/2 < 0 ? 0 : y1 - Math.abs(x2 - x1)/2;
+            str = str + x1 + " " + y1 + " Q" + cx + " " + cy + " " + x2 + " " + y2;
+        }
+
+        path(d);
+        return str;
+    }
+
+    function addData(){
+
+        for(var i=0;i<50;i++){
+            var rand=Math.ceil(Math.random()*108);
+            var obj={source: {x: 10, y: 300}, target: {x: xScale(rand), y: 300}};
+            dataset.push(obj);
+        }
+    }
+
+
+</script>
+</body>
+</html>

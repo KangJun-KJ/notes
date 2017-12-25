@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		
+		<script>
+			(function(){
+				var i=0;
+
+				setTimeout(function(){
+					console.log(i);
+					i++;
+					if(i<10){
+						setTimeout(arguments.callee,500);
+					}
+				},500);
+			}())
+		</script>
+	</body>
+</html>

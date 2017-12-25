@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html xmlns:xlink="http://www.w3.org/1999/xlink">
+<meta charset="utf-8">
+    <head>
+        <title>SVG Test</title>
+    <style>
+
+        body {
+          font: 10px sans-serif;
+        }
+
+        .axis path,
+        .axis line {
+          fill: none;
+          stroke: #000;
+          shape-rendering: crispEdges;
+        }
+
+        .x.axis path {
+          display: none;
+        }
+
+        .line {
+          fill: none;
+          stroke: steelblue;
+          stroke-width: 2px;
+        }
+
+        .circle {
+            fill: white;
+            stroke: steelblue;
+            stroke-width: 2px;
+        }
+
+        .area {
+            stroke: none;
+            opacity: 0.1;
+        }
+
+        .zeroline {
+            fill: none;
+            stroke: red;
+            stroke-width: 0.5px;
+            stroke-dasharray: 5 5;
+        }
+
+        .zerolinetext {
+            fill: red;
+        }
+
+        .overlay {
+            fill: none;
+            stroke: none;
+            pointer-events: all;
+        }
+        /* 不填充，描边宽0.5px颜色为蓝色 */
+        .focusLine {
+            fill: none;
+            stroke: steelblue;
+            stroke-width: 0.5px;
+        }
+
+        .focusCircle {
+            fill: red;
+        }
+
+    </style>
+    </head>
+    <body>
+    </body>
+    <script src="../../../js/d3.js"></script>
+    <script>
+
+        // generate some awesomeness data
+
+        var data = [];
+        var currentValue = 100;
+        var random = d3.random.normal(0, 20.0);
+        for(var i=0; i<10; i++) {
+            var currentDate = new Date();
+            currentDate.setDate(currentDate.getDate() + i);
+            
+            data.push([currentDate, currentValue]);
+            currentValue = currentValue + random();
+        }
+
+        var drawLineGraph = function(containerHeight, containerWidth, data, yLabel, warnLine) {
+            //添加一个svg 设置宽高，根据传进来的数据
+            var svg = d3.select("body").append("svg")
+                .attr("width", containerWidth)
+                .attr("height", containerHeight);
+            //定义上下左右的边距值。
+            var margin = { top: 50, left: 50, right: 50, bottom: 50 };
+            
+            //定义去除边距之后真实的图像真实的宽高
+            var height = containerHeight - margin.top - margin.bottom;
+            var width = containerWidth - margin.left - margin.right;
+
+            //d3.extent找数组中的最大值和最小值
+            var xDomain = d3.extent(data, function(d) { return d[0]; })
+            var yDomain = d3.extent(data, function(d) { return d[1]; });
+            console.log(xDomain);
+           //d3.time.scale()不知道，先不管~
+            var xScale = d3.time.scale().range([0, width]).domain(xDomain);
+            var yScale = d3.scale.linear().range([height, 0]).domain(yDomain);
+            //定义坐标系在里面添加比例尺。
+            var xAxis = d3.svg.axis().scale(xScale).orient('bottom');
+            var yAxis = d3.svg.axis().scale(yScale).orient('left').ticks(10);
+
+            //定义线布局
+            var line = d3.svg.line()
+                .x(function(d) { return xScale(d[0]); })
+                .y(function(d) { return yScale(d[1]); });
+            //定义区域图布局
+            var area = d3.svg.area()
+                .x(function(d) { return xScale(d[0]); })
+                .y0(function(d) { return yScale(d[1]); })
+                .y1(height);
+            //定义一个g：svg里面添加一个g分组，并且偏移一定的边距
+            var g = svg.append('g').attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+           
+            //定义一个渐变的颜色。
+            var defs = svg.append("defs");
+            var linearGradient = defs.append("linearGradient")
+                .attr("id", "linearColor")
+                .attr("x1", "0%")
+                .attr("y1", "0%")
+                .attr("x2", "0%")
+                .attr("y2", "100%");
+            var stop1 = linearGradient.append("stop")
+                .attr("offset", "0%") //设置开始渐变的起始位置
+                .style("stop-color","blue"); //渐变开始颜色    
+
+            var stop2 = linearGradient.append("stop")
+                .attr("offset", "100%") //设置结束的渐变的位置
+                .style("stop-color", "yellow"); //渐变末尾的颜色
+            //添加区域图布局到g中去
+            g.append('path')
+                .datum(data)
+                .attr('class', 'area')
+                .attr('d', area)
+                .style('fill',"url(#linearColor)");
+
+
+            //将上面的定义的x坐标系放在g中去----------------------------------------
+            g.append('g')
+                .attr('class', 'x axis')
+                .attr('transform', 'translate(0, ' + height + ')')
+                .call(xAxis);
+
+            d3.selectAll('g.x g.tick')
+                .append('line')
+                .attr({
+                    x1:0,
+                    y1:0,
+                    x2:0,
+                    y2:-height
+                })
+                .style('stroke','#ccc')
+
+             //将上面的定义的y坐标系放在g中区    
+            
+            g.append('g')
+                .attr('class', 'y axis')
+                .call(yAxis)
+                .append('text') //添加一个文本文字，
+                    .attr('transform', 'rotate(-90)')//逆时针旋转90度。
+                    .attr('y', 6)
+                    .attr('dy', '.71em')
+                    .attr('text-anchor', 'end')
+                    .text(yLabel);
+
+
+             d3.selectAll('g.y g.tick')
+                .append('line')
+                .attr({
+                    x1:0,
+                    y1:0,
+                    x2:width,
+                    y2:0
+                })
+                .style('stroke','#ccc');
+
+
+
+            //区域图上面边缘的线。
+            g.append('path')
+                .datum(data)
+                .attr('class', 'line')
+                .attr('d', line);
+
+            g.selectAll('circle').data(data).enter().append('circle')
+                .attr('cx', function(d) { return xScale(d[0]); })
+                .attr('cy', function(d) { return yScale(d[1]); })
+                .attr('r', 5)
+                .attr('class', 'circle');
+
+            // focus tracking
+            //在分组g中添加一个g,定义focus,并且设置为不可见
+            var focus = g.append('g').style('display', 'none');
+            
+            //在focus分组里面添加了一个xline和yline和一个circle
+            focus.append('line')
+                .attr('id', 'focusLineX')
+                .attr('class', 'focusLine');
+            focus.append('line')
+                .attr('id', 'focusLineY')
+                .attr('class', 'focusLine');
+            focus.append('circle')
+                .attr('id', 'focusCircle')
+                .attr('r', 5)
+                .attr('class', 'circle focusCircle');
+            //二分查找函数，
+            var bisectDate = d3.bisector(function(d) { return d[0]; }).left;
+            g.append('rect')
+                .attr('class', 'overlay')	
+                .attr('width', width)
+                .attr('height', height)
+                .on('mouseover', function() { focus.style('display', null); })      //鼠标移入的时候将focus的display设为null,即可见。
+                .on('mouseout', function() { focus.style('display', 'none'); })     //鼠标移出的时候将focus设置为不可见。
+                .on('mousemove', function() {
+                    //----------------------------------------------------设置十字架的主要代码----------------------------------
+                    //d3.mouse获取容器相对定位的位置。
+                    var mouse = d3.mouse(this);
+                    //invert根据传入一个值，找到对应定义域的值。通过获取的鼠标当前在g上面的x轴相对位置。从而获取
+                    var mouseDate = xScale.invert(mouse[0]);
+                    // console.log("获取比较精确的值"+mouseDate);
+                    //通过一个对象data,和一个
+                    var i = bisectDate(data, mouseDate); // returns the index to the current data item
+                    // console.log("二分查找到一个接近值："+i);
+                    var d0 = data[i - 1];
+                    var d1 = data[i];
+                    // work out which date value is closest to the mouse
+                    // 比较当前中间点更加靠近哪边。
+                    var d = mouseDate - d0[0] > d1[0] - mouseDate ? d1 : d0;
+                    // console.log("两个点跟靠近哪一个点："+d);
+
+                    //通过上面找到离得最近的一个点。然后获取他的点。
+                    var x = xScale(d[0]);
+                    var y = yScale(d[1]);
+                    //选中之前定义的circle然后给他设置x,y坐标
+                    focus.select('#focusCircle')
+                        .attr('cx', x)
+                        .attr('cy', y);
+                    //根据上面得到的x y来设置当前的显示line的位置。
+                    focus.select('#focusLineX')
+                        .attr('x1', x).attr('y1', yScale(yDomain[0]))
+                        .attr('x2', x).attr('y2', yScale(yDomain[1]));
+                    focus.select('#focusLineY')
+                        .attr('x1', xScale(xDomain[0])).attr('y1', y)
+                        .attr('x2', xScale(xDomain[1])).attr('y2', y);
+                });
+
+            // warn line
+            //添加一个警戒线，根据传进来的数据。在判断所有的数据是不是都在自己数据的范围内。
+            if(warnLine && yDomain[0] < warnLine.lineValue && yDomain[1] > warnLine.lineValue) {
+                g.append('line')
+                    .attr('x1', xScale(xDomain[0]))
+                    .attr('y1', yScale(warnLine.lineValue))
+                    .attr('x2', xScale(xDomain[1]))
+                    .attr('y2', yScale(warnLine.lineValue))
+                    .attr('class', 'zeroline');
+                g.append('text')
+                    .attr('x', xScale(xDomain[1]))
+                    .attr('y', yScale(warnLine.lineValue))
+                    .attr('dy', '1em')
+                    .attr('text-anchor', 'end')
+                    .text(warnLine.label)
+                    .attr('class', 'zerolinetext');
+            }
+        };
+        //            高   宽   数据   y轴最上面的标注        未知对象。
+        drawLineGraph(400, 800, data, "Intensity", { lineValue: 80, label: "OMG!" });
+    </script>
+</html>

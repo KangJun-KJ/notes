@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+	</head>
+
+	<body>
+
+		<script type="text/javascript" src='../../js/d3.js'></script>
+		<script type="text/javascript">
+			var nodes = [{
+				name: "GuiLin"
+			}, {
+				name: "GuangZhou"
+			}, {
+				name: "XiaMen"
+			}, {
+				name: "HangZhou"
+			}, {
+				name: "ShangHai"
+			}, {
+				name: "QingDao"
+			}, {
+				name: "TianJin"
+			}, {
+				name: "BeiJing"
+			}, {
+				name: "ChangChun"
+			}, {
+				name: "XiAn"
+			}, {
+				name: "WuluMuQi"
+			}, {
+				name: "LaSa"
+			}, {
+				name: "ChengDu"
+			}];
+
+			var edges = [{
+				source: 0,
+				target: 1
+			}, {
+				source: 0,
+				target: 2
+			}, {
+				source: 0,
+				target: 3
+			}, {
+				source: 0,
+				target: 4
+			}, {
+				source: 0,
+				target: 5
+			}, {
+				source: 0,
+				target: 6
+			}, {
+				source: 0,
+				target: 7
+			}, {
+				source: 0,
+				target: 8
+			}, {
+				source: 0,
+				target: 9
+			}, {
+				source: 0,
+				target: 10
+			}, {
+				source: 0,
+				target: 11
+			}, {
+				source: 0,
+				target: 12
+			}];
+
+			var width = 1000,
+				height = 600;
+
+			var svg = d3.select('body').append('svg')
+				.attr('width', width)
+				.attr('height', height);
+
+			var force = d3.layout.force()
+				.nodes(nodes)
+				.links(edges)
+				.size([width, height])
+				.linkDistance(200)
+				.charge([-100])
+				.start();
+
+			var color = d3.scale.category20();
+
+			var svg_nodes = svg.selectAll("circle.node")
+				.data(nodes)
+				.enter()
+				.append("circle")
+				.attr("r", 10)
+				.attr("class", "node")
+				.style("fill", function(d, i) {
+					return color(i);
+				})
+				.call(force.drag);
+
+			var svg_edges = svg.selectAll('path.line')
+				.data(edges)
+				.enter()
+				.append('path')
+				.style('stroke', function(d, i) {
+					return color(i + 1);
+				})
+				.attr('class', 'line')
+				.style('stroke-width', 1);
+
+			//这是从中间点移动到其他地方的点 
+			var svg_mark = svg.selectAll('circle.mark')
+				.data(edges)
+				.enter()
+				.append("circle")
+				.attr("r", 5)
+				.attr('class', "mark")
+				.style('fill', function(d, i) {
+					return color(i + 1);
+				});
+			
+			//然后给移动的circle里面添加animateMotion动画，配置动画的一些属性
+			//animateMotion在特定的path上移动。
+			var mpath = svg_mark.append('animateMotion').attr('path', function(d) {
+					return "M0,0L" + (d.target.x - d.source.x) + "," + (d.target.x - d.source.y);
+				})
+				.attr('dur', '3s')
+				.attr('begin', '0s')
+				.attr('repeatCount', 'indefinite');
+
+			force.on('tick', function() {
+				//将移动的圆平移到中心点。
+				svg_mark.attr("transform", function(d) {
+					return "translate(" + d.source.x + "," + d.source.y + ")";
+				});
+				//然后更新每个圆的动画path的值，因为是从0，0开始的所以M m都一样，M相对定位  m绝对定位。
+				mpath.attr("path", function(d) {
+					
+					return "M0,0L" + (d.target.x - d.source.x) + "," + (d.target.y - d.source.y);
+				});
+
+				svg_edges.attr("d", function(d) {
+					return "M " + d.source.x + " " + d.source.y + " " + "L " + d.target.x + " " + d.target.y
+				});
+
+				svg_nodes.attr("cx", function(d) {
+						return d.x;
+					})
+					.attr('cy', function(d) {
+						return d.y;
+					});
+
+			})
+		</script>
+	</body>
+
+</html>

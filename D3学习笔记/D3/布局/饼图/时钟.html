@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>时钟</title>
+</head>
+<body>
+	
+	<script type="text/javascript" src='../../../js/d3.js'></script>
+	<script type="text/javascript">
+		
+		var width = 500,
+			height = 500;
+		var svg = d3.select('body').append("svg").attr("width", width).attr("height", height);
+		var innerRadius = 190,		//圆的内半径、外半径
+			outerRadius = 200;		
+		var arc = d3.svg.arc()			//弧生成器
+			.innerRadius(innerRadius)	//设置内半径、0则为实心圆
+			.outerRadius(outerRadius);	//设置外半径
+
+		//下面的数组的作用是这样的：
+		//首先我的圆的颜色渐变的，而我的渐变方法是将圆切割成很多份，每份是渐变过程中的一个颜色。
+		//当切割的份数多的时候就是看起来像渐变的一样。	
+		//下面的时针、分针、秒针也会在指着不同的角度的时候同时改变自身的颜色。
+		//当然也看到了其他的圆渐变的方法，你可以自己搜索。
+		var sum = 1000;			//sum代表圆被分成了多少份。				
+		var num = new Array();	
+		for (var i = 0; i < sum; i++) {
+			num.push(1);
+		}
+		var linear = d3.scale.linear() //通过线性比例尺来计算插值。
+			.domain([0, sum])
+			.range([0, 1])
+		var arcs = svg.selectAll("g")
+			.data(d3.layout.pie()(num)) //绑定转换后的数据piedata
+			.enter()
+			.append("g")
+			.attr("transform", "translate(" + (width / 2) + "," + (height / 2) + ")");
+
+		var color = d3.scale.category10()
+		var a = d3.rgb(0, 255, 255); //红色				设置渐变颜色的起始
+		var b = d3.rgb(255, 255, 0); //绿色
+		var c = d3.rgb(255, 0, 0);
+		var compute = d3.interpolate(a, b);	//他的值是介于0-1的
+
+		
+		arcs.append("path")
+			.attr('fill', function(d, i) {
+				return compute(linear(i));		//通过上面的linear比例函数看i当前是在多少。当然也可以直接(1/sum*i)
+			})
+			.attr('stroke-width', "0")
+			.attr("d", function(d) {
+				return arc(d); //使用弧生成器
+			});
+
+		//下面是给将圆给分成了60等份
+		var num2 = new Array();
+		for (var i = 0; i < 60; i++) num2.push(i);
+		var ticks = svg.append('g').selectAll('g')
+			.data(num2)
+			.enter()
+			.append('g')
+			.attr("transform", "translate(" + (width / 2) + "," + (height / 2) + ")")
+			;
+
+		ticks.append("line")
+            .attr("x1", 1)
+            .attr("x1", 0)
+            .attr("x2", function(d,i){
+            		return i%15==0?10:6;	//添加圆内的刻度线 根据是不是3、6、9、12来判断是否加长
+            })
+            .attr("y2", 0)
+            .attr('transform',function(d,i){
+            	
+            	 return "rotate(" + (6*i -90) + ")"	
+                        + "translate(" + (innerRadius-10) +")";
+            })
+            .style('stroke',function(d,i){
+            	return compute(i/60);
+            })
+            .style('stroke-width',5);
+
+
+		
+
+		ticks.append("text")
+			.attr('transform', function(d, i) {
+				var angle = (Math.PI * 2) / 60 * i - Math.PI;
+				return "translate(" + (Math.sin(angle) * (innerRadius - 20) ) + "," + (Math.cos(angle) * (innerRadius - 20) )+ ")";
+			})
+			.attr("x", 8)
+			.attr("dy", ".35em")
+			.style('font-size', function(d, i) {
+				if (i % 15 == 0)
+					return "2em"
+			})
+			.style("text-anchor", function(d) {
+				return i > 29 ? "end" : null;
+			})
+			.text(function(d, i) {
+				return !(i % 5) ? (60 - i) / 5 : null;
+			});
+
+		var arc2 = d3.svg.arc().innerRadius(0).outerRadius(10);
+
+		svg.selectAll('g')
+			.data(d3.layout.pie()(num))
+			.enter()
+			.append('g')
+		arcs.append("path")
+			.attr('fill', function(d, i) {
+				return compute(linear(i))
+			})
+			.attr("d", function(d, i) {
+				return arc2(d);
+			});
+
+		var SecondsLine = svg.append('g').append('line')
+			.attr("x1", width / 2)
+			.attr("y1", height / 2)
+			.style('stroke-width', 1)
+
+
+		var MinutesLine = svg.append('g').append('line')
+			.attr('x1', width / 2)
+			.attr('y1', height / 2)
+			.style('stroke-width', 3)
+
+		var HoursLine = svg.append('g').append('line')
+			.attr('x1', width / 2)
+			.attr('y1', height / 2)
+			.style('stroke-width', 5);
+
+		var str=[1];
+		var  updatetimetext=svg.append('g')
+				.selectAll('.timetext').data(str)
+				.enter()
+				.append('text')
+				.attr('class', 'timetext')
+				.text(function(d, i) {
+					return d;
+				})
+				.attr('transform', function(d, i) {
+					return "translate(" + (width / 2) + "," + (height - 20) + ")"
+				})
+				.style('text-anchor', "middle")
+				.style('font-size', "2em");
+		function chuli() {
+			var d = new Date();
+			var dm = d.getTime() % 1000;
+			var h = (d.getHours() >= 12 ? d.getHours() - 12 : d.getHours());
+			var m = d.getMinutes();
+			var s = d.getSeconds();
+			var angle = (Math.PI * 2) / 60 * (60 - s) + Math.PI;
+			var angle2 = (Math.PI * 2) / (60 * 60) * ((60 * 60 - m * 60-s)) + Math.PI;
+			var angle3 = (Math.PI * 2) / (12 * 60 * 60) * (12 * 60 * 60 - h * 60 * 60 - m * 60 - s) + Math.PI;
+			SecondsLine.attr('x2', function(d, i) {
+					return width / 2 + (innerRadius - 30) * Math.sin(angle);
+				})
+				.attr('y2', function(d, i) {
+					return height / 2 + (innerRadius - 30) * Math.cos(angle);
+				})
+				.style('stroke', compute((s / 60)));
+
+			MinutesLine.attr('x2', function(d, i) {
+					return width / 2 + (innerRadius - 50) * Math.sin(angle2);
+				})
+				.attr('y2', function(d, i) {
+					return height / 2 + (innerRadius - 50) * Math.cos(angle2);
+				})
+				.style('stroke', compute((m / 60)));
+
+			HoursLine.attr('x2', function(d, i) {
+					return width / 2 + (innerRadius - 80) * Math.sin(angle3);
+				})
+				.attr('y2', function(d, i) {
+					return height / 2 + (innerRadius - 80) * Math.cos(angle3);
+				})
+				.style('stroke', compute((h / 12)))
+				.attr('stroke-linecap',"round");
+
+				str.pop();														//删除上一个文本
+				str.push(d.getHours()+":"+(m<10?"0"+m:m)+":"+(s<10?"0"+s:s));	//存入新的时间并且一位数时补0
+				updatetimetext.data(str).text(function(d){return d;})			//更新时间
+    			
+			
+
+			setTimeout(chuli, 1000 - dm);//获取当前的毫秒，用1000减去，则是到下一秒的毫秒时间。
+		}
+		chuli();
+
+	</script>
+</body>
+</html>

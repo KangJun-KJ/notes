@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+	</head>
+
+	<body>
+
+		<button id="btn1">开始</button>
+		<button id="btn2">暂停</button>
+		<script type="text/javascript" src='../../js/d3.js'></script>
+		<script type="text/javascript">
+			var width = 960,
+				height = 500;
+
+			var svg = d3.select('body').append("svg")
+				.attr('width', width)
+				.attr('height', height)
+				.append('g')
+				.attr('transform', 'translate(' + width / 2 + "," + height / 2 + ")");
+
+			var pie = d3.layout.pie();
+			var arc = d3.svg.arc();
+			var cnt = 0;
+			createCircle([1], 150, 170, {
+				fill: "#ccc"
+			});
+			createCircle([1], 150, 170, {
+				fill: "steelblue"
+			});
+
+			function createCircle(data, innerRadius, outerRadius, style) {
+				svg.selectAll('g.circle' + cnt)
+					.data(pie(data))
+					.enter()
+					.append('g')
+					.attr('class', "circle" + (cnt++))
+					.append('path')
+					.attr('d', function(d) {
+
+						return arc.innerRadius(innerRadius).outerRadius(outerRadius)(d);
+					})
+					.style(style)
+			}
+			var index = 0,
+				pinglv = 3600,
+				lastAngle = 0;
+			 setInterval(function(){
+			 	d3.select('.circle1 path')
+			 		.attr('d',function(d){
+			 			return arc.endAngle(Math.PI*2/pinglv*(((index++)>pinglv)?(index=0):index))(d);
+			 		})
+			 },100);
+
+//			var timer;
+//			d3.select('#btn1').on('click', function() {
+//				timer = setInterval(function() {
+//
+//					console.log(11);
+//					d3.select('.circle1 path').attr('fill', 'yellow')
+//						.transition()
+//						.duration(1000)
+//						.attrTween('d', function(b) {
+//							b.endAngle = Math.PI * 2 / pinglv * (((index) > pinglv) ? (index = 0) : index);
+//
+//							var i = d3.interpolate({
+//								startAngle: 0,
+//								endAngle: lastAngle
+//							}, b);
+//							lastAngle = Math.PI * 2 / pinglv * (((index++) > pinglv) ? (index = 0) : index);
+//							return function(t) {
+//								return arc(i(t));
+//							};
+//						});
+//				}, 1000);
+//			});
+//			d3.select('#btn2').on('click', function() {
+//					clearInterval(timer);	
+//				})
+
+				// setInterval(function(){
+				// 	console.log(+new Date()%1000);
+				// 	moveCircle(".circle1 path",(+new Date()%1000),lastAngle,Math.PI*2/pinglv*(((index++)>pinglv)?(index=0):index));
+				// },(1000-+new Date()%1000))
+				// function moveCircle(selection, duration,startJiaoDu,endJiaoDu) {
+				// 	d3.select(selection)
+				// 		.transition()
+				// 		.duration(duration)
+				// 		.attrTween('d', function(b) {
+				// 			var i = d3.interpolate(startJiaoDu,endJiaoDu);
+				// 			lastAngle=endJiaoDu;
+				// 			return function(t) {
+				// 				return arc.endAngle(i(t))(b);
+				// 			};
+				// 		});
+				// }
+		</script>
+	</body>
+
+</html>

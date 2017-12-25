@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript" src="../../../js/d3.js"></script>
+	<script type="text/javascript">
+		var w=960,h=500,nodes=[],node;
+
+		var vis=d3.select('body').append('svg')
+			.attr("width",w)
+			.attr('height',h)
+
+		var force=d3.layout.force()
+			.nodes(nodes)
+			.links([])
+			.size([w,h]);
+
+		force.on('tick',function(e){		//在tick的过程中移动所欲节点坐标。
+			vis.selectAll('path')
+				.attr('transform',function(d){
+					return "translate("+d.x+","+d.y+")";
+				})
+		});
+		console.log(d3.svg.symbolTypes)
+		//d3.svg.symbolTypes:有六种类型 circle cross diamond square triangle-up triangle-down
+		//								圆 	十字架 上下两个三角形  正方形 向上三角形 向下三角形
+		setInterval(function(){
+				nodes.push({
+					type: d3.svg.symbolTypes[~~(Math.random() * d3.svg.symbolTypes.length)],
+					size: Math.random() * 300 + 100
+				});
+
+				force.start();//开始力导图动画。
+				vis.selectAll('path')		
+					.data(nodes)		//添加数据
+					.enter()
+					.append('path')
+					.attr("d",d3.svg.symbol()
+							.size(function(d){return d.size})
+							.type(function(d){return d.type})
+						)
+					.style('fill',"steelblue")
+					.style("stroke","white")
+					.style('stroke-width',"1.5px")
+					.call(force.drag);
+		},1000);
+	</script>
+</body>
+</html>

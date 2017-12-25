@@ -1,0 +1,94 @@
+<!--借鉴：http://www.cnblogs.com/tangyifeng/p/5253629.html-->
+<html>
+
+	<head>
+		<title></title>
+		<style type="text/css">
+			* {
+				padding: 0px;
+				margin: 0px;
+			}
+			
+			#mycanvas {
+				background: black;
+				z-index: -1;
+				position: absolute;
+			}
+			
+			div {
+				height: 100px;
+				width: 100px;
+				color: white;
+				font-size: 100px;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<canvas id="mycanvas">
+			您的浏览器不支持canvas画布
+		</canvas>
+		<div>11231231
+		</div>
+		<script>
+			window.onload = function() {
+				var snow = document.getElementById("snowimg");
+
+				var can = document.getElementById("mycanvas");
+				var ctx = can.getContext("2d");
+
+				var w = window.innerWidth;
+				var h = window.innerHeight;
+
+				can.width = w;
+				can.height = h;
+
+				var snow = 100;
+				var arr = [];
+				
+				var beauty = new Image();
+				beauty.src = "snowfollow.png";
+				for(var i = 0; i < snow; i++) {
+					arr.push({
+						x: Math.random() * w,
+						y: Math.random() * h,
+						r: Math.random() * 10 + 1
+					})
+				}
+				setInterval(drawSnow, 10);
+
+				function drawSnow() {
+					ctx.clearRect(0, 0, w, h);
+					ctx.fillStyle = "white";
+					ctx.beginPath();
+					for(var i = 0; i < snow; i++) {
+						var p = arr[i];
+						ctx.moveTo(p.x, p.y);
+//						ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI, false);
+						ctx.drawImage(beauty,p.x,p.y,p.r,p.r);
+
+					}
+					ctx.fill();
+					ctx.closePath();
+					snowFall();
+				}
+
+				function snowFall() {
+					for(var i = 0; i < snow; i++) {
+						var p = arr[i];;
+						p.y += Math.random() * 1 + 1;
+						if(p.y > h) {
+							p.y = 0;
+						}
+//						p.x += Math.random() *  + 1;
+						if(p.x > w) {
+							p.x = 0;
+						}
+					}
+				}
+			}
+		</script>
+	</body>
+
+</html>

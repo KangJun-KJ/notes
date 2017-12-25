@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			.wrap {
+				margin: 100px 500px;
+				height: 200px;
+				width: 200px;
+				float: left;
+				background-color: black;
+				box-sizing: border-box;
+				border: 10px solid #fff;
+				position: relative;
+				display: flex;
+			}
+			
+			.clickMe {
+				position: relative;
+				color: #fff;
+				margin: auto;
+				cursor: pointer;
+			}
+			
+			span {
+				display: block;
+				margin: 8px;
+				width: 50px;
+				height: 5px;
+				background-color: #fff;
+				position: relative;
+			}
+			
+			.class1 {
+				animation: tt1 2s ease  1;
+			}
+			
+			.class2 {
+				animation: tt2 2s ease  1;
+			}
+			
+			.class3 {
+				animation: tt3 2s ease  1;
+			}
+			.class11 {
+				top: 13px;
+					transform: rotate(45deg);
+			}
+			
+			.class22 {
+				width: 0px;
+					margin-left: 35px;
+			}
+			
+			.class33 {
+				top: -13px;
+					transform: rotate(-45deg);
+			}
+			@keyframes tt1 {
+				0% {}
+				25% {
+					top: 0px;
+				}
+				50% {
+					top: 13px;
+					transform: rotate(0deg);
+				}
+				100% {
+					top: 13px;
+					transform: rotate(45deg);
+				}
+			}
+			
+			@keyframes tt2 {
+				0% {
+					width: 50px;
+					margin-left: 0px;
+				}
+				25% {
+					width: 0px;
+					margin-left: 35px;
+				}
+				100% {
+					width: 0px;
+					margin-left: 35px;
+				}
+			}
+			
+			@keyframes tt3 {
+				0% {}
+				25% {
+					top: 0px;
+				}
+				50% {
+					top: -13px;
+					transform: rotate(0deg);
+				}
+				100% {
+					top: -13px;
+					transform: rotate(-45deg);
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="wrap">
+			<div class="clickMe ">
+				<span></span>
+				<span></span>
+				<span></span>
+			</div>
+		</div>
+
+		<script>
+			document.querySelector(".clickMe").addEventListener("click", function() {
+				document.querySelector("span:nth-child(1)").className = "class1";
+				document.querySelector("span:nth-child(2)").className = "class2";
+				document.querySelector("span:nth-child(3)").className = "class3";
+				setTimeout(function(){
+					document.querySelector("span:nth-child(1)").className = "class11";
+				document.querySelector("span:nth-child(2)").className = "class22";
+				document.querySelector("span:nth-child(3)").className = "class33";
+				},2000);
+			})
+		</script>
+
+	</body>
+
+</html>

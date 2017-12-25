@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		svg{
+			/* border: 1px solid #000; */
+		}
+		#mypath{
+			stroke-dasharray: 0;
+			animation: aa 3s 1;
+		}
+		@keyframes aa{
+			0%{
+				stroke-dasharray: 1256;
+			}
+			
+			100%{
+				stroke-dasharray: 0;
+			}
+		}
+	</style>
+</head>
+<body>
+	<svg ></svg>
+	<script type="text/javascript" src='../../../js/d3.js'></script>
+	<script type="text/javascript">
+		var width=500,height=500;
+		var svg=d3.select("svg")
+			.attr({"width":width,"height":height});
+		var radius=200;
+
+		var defs=svg.append('defs')
+
+		var linearGradient=defs.append("linearGradient")
+			.attr("id","linearColor")
+			.attr("x1","0%")
+			.attr("y1","0%")
+			.attr("x2","100%")
+			.attr("y2","0%");
+
+		var stop0=linearGradient.append("stop")
+				.attr("offset","0%")
+				.attr("stop-color","rgb(255,255,0)");
+		
+		var stop2=linearGradient.append("stop")
+				.attr("offset","50%")
+				.attr("stop-color","rgb(255,0,0)");
+		var stop4=linearGradient.append("stop")
+				.attr("offset","100%")
+				.attr("stop-color","rgb(0,255,255)");		
+
+		
+		var arc=d3.svg.arc()
+				.innerRadius(0)
+				.outerRadius(radius);
+		var dataset=[1];
+		var pie = d3.layout.pie();
+		var piedata=pie(dataset);
+
+		
+		var arcs = svg.selectAll("g")
+					  .data(piedata)		//绑定转换后的数据piedata
+					  .enter()
+					  .append("g")
+					  .attr("transform","translate("+( width/2 )+","+ ( height/2 ) +")");
+		arcs.append("path")
+			.attr("id","mypath")
+			.attr("fill","none")
+			.attr("stroke-width",10)
+			.attr('stroke',"url(#linearColor)")
+			.attr("transform","rotate(90)")
+			.attr("d",function(d){
+				return arc(d);	//使用弧生成器
+			});
+		console.log(radius*2*Math.PI)
+	</script>
+</body>
+</html>

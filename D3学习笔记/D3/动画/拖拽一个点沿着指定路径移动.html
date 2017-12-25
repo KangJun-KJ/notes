@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+	body {
+		font: 10px sans-serif;
+	}
+
+	.road {
+		fill: none;
+		stroke: #aaa;
+
+	}
+	.ball {
+		fill: #dfba49;
+		stroke: #dfba49;
+
+	}
+
+</style>
+<body></body>
+<script src="../../js/d3.js"></script>
+<script>
+	//Dom
+	var svg,track;
+	//path
+	var track_r=200;
+	//坐标
+	var center_XY=[400,300];
+	//event
+	var drag;
+	var event_dom;
+	drag = d3.behavior.drag();
+	drag.on("drag",function(){
+		// console.log(d3.mouse(svg.node())[0]+" "+d3.mouse(svg.node())[1]);
+		//svg.node返回选择中的第一个节点
+		//d3.mouse(selection)根据selection获取相对定位的鼠标的位置。
+		//getAngle获取到鼠标移动的角度
+		//通过setAngle方法重新设置这个当前circle的角度。
+		event_dom.setAngle(getAngle(center_XY[0],center_XY[1],d3.mouse(svg.node())[0],d3.mouse(svg.node())[1]));
+	});
+	function init(){
+		track_path="m 300,300 a 250,250 0 1 1 0,1z";
+		svg=d3.select("body").append("svg").attr({width:800,height:600});
+		//selection.classed()添加或者删除一个class.
+		track=svg.append("circle").attr("r",track_r).classed("road",true).attr("transform","translate("+center_XY+")");
+		createCircle({
+			r:5,
+			angle:0,
+			track:{
+				r:track_r,
+				center:center_XY
+			}
+
+		});
+		createCircle({
+			r:5,
+			angle:90,
+			track:{
+				r:track_r,
+				center:center_XY
+			}
+
+		});
+		createCircle({
+			r:5,
+			angle:180,
+			track:{
+				r:track_r,
+				center:center_XY
+			}
+
+		});
+		createCircle({
+			r:5,
+			angle:270,
+			track:{
+				r:track_r,
+				center:center_XY
+			}
+
+		});
+		createCircle({
+			r:5,
+			style:{fill:"#666"},
+			angle:70,
+			track:{
+				r:track_r,
+				center:center_XY
+			}
+		});
+	};
+ 	function createCircle(p){
+ 		//这里面添加的是圆上的小圆。
+		var circle={};		//定义一个circle对象
+		circle.gdom=svg.append("g").attr({		//在svg里面添加一个分组g将他偏移到中心位置。旋转对应的angle?
+			"transform":"translate("+ p.track.center[0]+","+(p.track.center[1])+")"+
+			"rotate("+ (p.angle || 0)+")"			// ||可以返回第一个有效值，假如没有定义p.angle，则使用0来代替
+		});
+		//在g分组里面添加一个circle
+		circle.cdom=circle.gdom.append("circle").attr({
+			"r": p.r||5,								//设置一个circle的半径
+			"class": p.class||"ball",					//设置一个circle的class属性
+			"transform":"translate("+p.track.r+",0)"	//将它在x轴上移动一个r的距离
+		});
+		p.style && circle.cdom.style(p.style);			//如果p.style有值存在的话，就设置样式。(d3里面自定义的style函数
+		;
+
+		//给circle定义了一个setAngle函数方法：将点偏移到圆中心，然后旋转d角度
+		circle.setAngle=function(d){
+			// console.log(d);
+			circle.gdom.attr({
+				"transform":"translate("+ p.track.center[0]+","+(p.track.center[1])+")"+
+				"rotate("+ d +")"
+			});
+		};
+		//给circle添加一个事件，当鼠标按下的时候当前circle被赋给event_dom
+		circle.cdom.on("mousedown",function(d){
+			event_dom=circle;
+		});
+		// event_dom=circle;
+		circle.cdom.call(drag);
+		//这里return与否应该不影响，
+		return circle;
+	};
+	//让小求自己跑起来。
+	// window.onload=function(){
+	// 	var cnt=0;
+	// setInterval(function(){
+	// 	var pinglv=7010
+	// 	var angle=Math.PI*2/pinglv*(cnt++>pinglv?0:cnt);
+	// 	event_dom.setAngle(getAngle(center_XY[0],center_XY[1],center_XY[0]+200*Math.cos(angle),center_XY[1]+200*Math.sin(angle)));
+	// },1);
+	// }
+	function getAngle(x1,y1,x2,y2){
+		console.log((Math.atan((y2-y1)/(x2-x1))/Math.PI));
+		//k=tan(deg) 斜率等于角度的正切值，那么可以通过反正切值atan来求出角度 打个草稿就知道公式转换了。
+		//通过atan求出角度，这是还是弧度制。
+		//当x2大于x1说明鼠标移动在右边。我也解释不清楚了。反正就是为了得到现在的角度
+		console.log(Math.atan((y2-y1)/(x2-x1))/Math.PI*180);
+		return (Math.atan((y2-y1)/(x2-x1))/Math.PI)*180+((x2-x1)<0?180:360);
+	};
+	init();
+
+</script>

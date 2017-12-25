@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+circle,
+path {
+  cursor: pointer;
+}
+
+circle {
+  fill: none;
+  pointer-events: all;
+}
+svg{
+  border: 2px solid #000;
+}
+</style>
+<body>
+<script src="../js/d3.js"></script>
+<script>
+    var margin = {
+        top: 350,
+        right: 480,
+        bottom: 350,
+        left: 480
+      },
+      radius = Math.min(margin.top, margin.right, margin.bottom, margin.left) - 10;
+
+    var hue = d3.scale.category10();
+
+    var luminance = d3.scale.sqrt()         //平方根比例尺
+      .domain([0, 1e6])                     //范围是从0到10的6次方
+      .clamp(true)                          //指定输出的范围是否闭合
+      .range([90, 20]);                     //对应的值域是90-20;
+
+    var svg = d3.select("body").append("svg")
+      .attr("width", margin.left + margin.right)
+      .attr("height", margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var partition = d3.layout.partition()
+      .sort(function(a, b) {
+        return d3.ascending(a.name, b.name);                          //排序。根据名字升序
+      })
+      .size([2 * Math.PI, radius]);
+
+    var arc = d3.svg.arc()                                            //开始的角度。
+      .startAngle(function(d) {
+        return d.x;
+      })
+      .endAngle(function(d) {                                         //结束的角度
+        return d.x + d.dx;
+      })  
+      .padAngle(.01)                                                  //获取或设置填补（pad）角度访问器
+      .padRadius(radius / 3)                                          //获取或设置填补（pad）半径访问器     
+      .innerRadius(function(d) {                    
+        return radius / 3 * d.depth;                                  //设置空心圆，内半径和外半径
+      })
+      .outerRadius(function(d) {
+        return radius / 3 * (d.depth + 1) - 1;
+      });
+
+    d3.json("flare.json", function(error, root) {
+      if (error) throw error;                   
+
+      // Compute the initial layout on the entire tree to sum sizes.
+      // Also compute the full name and fill color for each node,
+      // and stash the children so they can border restored as we descend.
+      // / /计算整个树上的初始布局和大小。
+      //还计算每个节点的完整名称和填充颜色，
+      //和藏匿的孩子所以他们可以恢复我们下山。
+      partition
+        .value(function(d) {
+          return d.size;
+        })
+        .nodes(root)
+        .forEach(function(d) {
+          d._children = d.children;         //d._children来保存现在子节点的信息
+          d.sum = d.value;                  //sum来保存value的信息
+          d.key = key(d);                   //获取根节点到自己的名字的字符串用.隔开
+          d.fill = fill(d);                 //给每一块添加颜色。
+        });
+
+      // Now redefine the value function to use the previously-computed sum.
+      //现在重新定义使用先前计算的sum的值函数。
+      partition
+        .children(function(d, depth) {
+          return depth < 2 ? d._children : null;
+        })
+        .value(function(d) {
+          // console.log(d.sum);              ?每个子节点有信息，所以依次累加到所有的父节点上面去
+          return d.sum;
+        });
+
+      var center = svg.append("circle")     //添加一个circle 半径是三分之一 应该是空白内圆
+        .attr("r", radius / 3)              //半径为之前的1/3
+        .on("click", zoomOut);              //click触发zoomOut事件。
+
+      center.append("title")
+        .text("zoom out");
+
+      console.log(partition.nodes(root).slice(1));
+      var path = svg.selectAll("path")
+        .data(partition.nodes(root).slice(1))
+        .enter().append("path")
+        .attr("d", arc)
+        .style("fill", function(d) {
+          return d.fill;
+        })
+        .each(function(d) {
+          this._current = updateArc(d);
+        })
+        .on("click", zoomIn);
+
+
+
+      var text=svg.selectAll("text")
+        .data(partition.nodes(root).slice(1))
+        .enter()
+        .append("text");
+
+        text.style("font-size", "12px")
+        .style("font-family", "simsun")
+        .attr("text-anchor", "middle")
+        .attr("transform", function(d, i) {
+          //第一个元素（最中间的），只平移不旋转
+
+            //其他的元素，既平移也旋转
+            var r = 0;
+            // console.log(d.x+d.dx/2); 弧度制转角度 0-2*π
+            if ((d.x + d.dx / 2) / Math.PI * 180 < 180) // 0 - 180 度以内的
+              r = 180 * ((d.x + d.dx / 2 - Math.PI / 2) / Math.PI);
+            //d.x为起始弧度，d.dx为弧度宽，求中间弧度，然后再旋转字体，减去Math.PI/2(起始就是90度)因为
+            //扇形的旋转方向是从垂直方向开始的，而rotate是从右向下开始旋转的。相差90度
+            else // 180 - 360 度以内的 因为左半边的也顺着弧形旋转，不符合我们正常查看，加上Math.PI使我们正常观看。
+              r = 180 * ((d.x + d.dx / 2 + Math.PI / 2) / Math.PI);
+
+            //既平移也旋转
+            return "translate(" + arc.centroid(d) + ")" +
+              "rotate(" + r + ")";
+
+        })
+        .text(function(d) {
+           return d.name;
+        });
+
+      function zoomIn(p) {
+        if (p.depth > 1) p = p.parent;
+        if (!p.children) return;
+        zoom(p, p);
+      }
+
+      function zoomOut(p) {
+        if (!p.parent) return;          //  如果p里面的parent是空的就返回，不执行
+        zoom(p.parent, p);              //  执行zoom函数传一个父节点和本身节点
+      }
+
+      // Zoom to the specified new root.
+      // 缩放到指定的新节点
+      function zoom(root, p) {
+        if (document.documentElement.__transition__) return;
+
+        // Rescale outside angles to match the new layout.
+        // 重新根据上面的角度，来更新的圆
+        var enterArc,
+          exitArc,
+          outsideAngle = d3.scale.linear().domain([0, 2 * Math.PI]);
+
+        function insideArc(d) {
+          return p.key > d.key ? {
+            depth: d.depth - 1,
+            x: 0,
+            dx: 0
+          } : p.key < d.key ? {
+            depth: d.depth - 1,
+            x: 2 * Math.PI,
+            dx: 0
+          } : {
+            depth: 0,
+            x: 0,
+            dx: 2 * Math.PI
+          };
+        }
+
+        function outsideArc(d) {
+          return {
+            depth: d.depth + 1,
+            x: outsideAngle(d.x),
+            dx: outsideAngle(d.x + d.dx) - outsideAngle(d.x)
+          };
+        }
+
+        center.datum(root);
+        console.log(partition.nodes(root).slice(1));
+        // When zooming in, arcs enter from the outside and exit to the inside.
+        // Entering outside arcs start from the old layout.
+        var datasetall=partition.nodes(root).slice(1);
+        if (root === p) enterArc = outsideArc, exitArc = insideArc, outsideAngle.range([p.x, p.x + p.dx]);
+        path = path.data(datasetall, function(d) {
+          return d.key;
+        });
+        // When zooming out, arcs enter from the inside and exit to the outside.
+        // Exiting outside arcs transition to the new layout.
+        if (root !== p) enterArc = insideArc, exitArc = outsideArc, outsideAngle.range([p.x, p.x + p.dx]);
+
+        d3.transition().duration(d3.event.altKey ? 7500 : 750).each(function() {
+          path.exit().transition()
+            .style("fill-opacity", function(d) {
+              return d.depth === 1 + (root === p) ? 1 : 0;
+            })
+            .attrTween("d", function(d) {
+              return arcTween.call(this, exitArc(d));
+            })
+            .remove();
+
+          path.enter().append("text")
+            .style("fill-opacity", function(d) {
+              return d.depth === 2 - (root === p) ? 1 : 0;
+            })
+            .style("fill", function(d) {
+              return d.fill;
+            })
+            .on("click", zoomIn)
+            .each(function(d) {
+              this._current = enterArc(d);
+            });
+
+          path.transition()
+            .style("fill-opacity", 1)
+            .attrTween("d", function(d) {
+              return arcTween.call(this, updateArc(d));
+            });
+
+           
+
+          // text.remove();
+          //  text = svg.selectAll("text")
+          //   .data(datasetall, function(d) {
+          //       return d.key;
+          //   })
+          //   .enter()
+          //   .append("text");
+
+          // // text.style("font-size", "12px")
+          // //   .style("font-family", "simsun")
+          // //   .attr("text-anchor", "middle")
+          // //   .attr("transform", function(d, i) {
+          // //     //第一个元素（最中间的），只平移不旋转
+          // //     //其他的元素，既平移也旋转
+          // //     var r = 0;
+          // //     // console.log(d.x+d.dx/2); 弧度制转角度 0-2*π
+          // //     if ((d.x + d.dx / 2) / Math.PI * 180 < 180) // 0 - 180 度以内的
+          // //       r = 180 * ((d.x + d.dx / 2 - Math.PI / 2) / Math.PI);
+          // //     //d.x为起始弧度，d.dx为弧度宽，求中间弧度，然后再旋转字体，减去Math.PI/2(起始就是90度)因为
+          // //     //扇形的旋转方向是从垂直方向开始的，而rotate是从右向下开始旋转的。相差90度
+          // //     else // 180 - 360 度以内的 因为左半边的也顺着弧形旋转，不符合我们正常查看，加上Math.PI使我们正常观看。
+          // //       r = 180 * ((d.x + d.dx / 2 + Math.PI / 2) / Math.PI);
+
+          // //     //既平移也旋转
+          // //     return "translate(" + arc.centroid(d) + ")" +
+          // //       "rotate(" + r + ")";
+
+          // //   })
+          // //   .text(function(d) {
+          // //     return d.name;
+          // //   });
+
+        });
+      }
+    });
+
+    function key(d) {
+      var k = [],
+        p = d;
+      while (p.depth) k.push(p.name), p = p.parent; //while循环，通过p指向父节点，然后减少的depth来跳出循环
+      // console.log(k.reverse().join("."));      //返回的是根节点一直到自己的节点所有name的拼接字符串
+      return k.reverse().join(".");
+    }
+
+    function fill(d) {
+      var p = d;
+      while (p.depth > 1) p = p.parent;       //遍历到根节点的下个节点，如果没有大于1 如果的颜色将会一样。
+      var c = d3.lab(hue(p.name));            //d3.lab指定一种颜色，创建一个L*a*b*颜色对象。hue（）根据父节点的名字来获取颜色
+
+      c.l = luminance(d.sum);                 //?
+      return c;
+    }
+
+    function arcTween(b) {
+      var i = d3.interpolate(this._current, b);
+      this._current = i(0);
+      return function(t) {
+        return arc(i(t));
+      };
+    }
+
+    function updateArc(d) {
+      return {
+        depth: d.depth,
+        x: d.x,
+        dx: d.dx
+      };
+    }
+
+    d3.select(self.frameElement).style("height", margin.top + margin.bottom + "px");
+
+</script>

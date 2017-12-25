@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+
+	<script type="text/javascript">
+		// var p=new Object();
+		// p.hello=function(){
+		// 	console.log(111);
+		// }
+		// p.hello();
+		var module=new Object({
+			_count:0,
+			m1:function(){
+
+			},
+			m2:function(){
+
+			}
+		});
+		console.info(module._count);
+		module._count=5;
+		console.log(module._count);	//外部可以直接修改模块内部的变量。
+
+
+		
+		// 自执行函数,下面是两种模板写法 
+			(function(){ /*Code*/}());
+			(function(){/*Code*/})();
+
+			function addCount(){
+				var i=0;
+
+				return function(){
+					console.log(++i);
+				};
+			};
+
+			var C1=addCount();
+			C1();//1
+			C1();//2
+
+			var C2=addCount();
+			C2();//1
+			C2();//2
+			//每次函数被调用的时候会创建一个上下文，在函数内部定义的变量和函数只能在该函数内部使用
+			
+			//完成了对函数的调用
+			var foo=function(){};
+			foo();
+
+			//当遇到function关键字的时候，会默认把它当做一个(函数声明)，而函数声明需要一个名字。
+			// function(){}();//或报错，Unexpected token{ 
+
+			//当添加了函数名字的时候还是会报错。
+			//在一个表达式的后面添加括号会立即执行该语句，在一个语句后面添加括号只是一个分组操作符。
+			// function foo(){}();//unexpected token}报错；
+			// 
+			// 
+			// 
+			//立即执行函数在模块中大有用处，可以减少全局变量造成的空间污染，构造更多的私有变量	
+			
+
+
+			var counter=(function(){
+				var i=0;
+
+				return {
+					get:function(){
+						return i;
+					},
+					set:function(val){
+						i=val;
+					},
+					increment:function(){
+						return ++i;
+					}
+				}
+			}());	//tips 后面的小括号里面可以传参数，类似于
+
+
+			// counter是一个对象
+				counter.get(); // 0
+				counter.set(3);
+				counter.increment(); // 4
+				counter.increment(); // 5
+
+				counter.i; // undefined i并不是counter的属性
+				// i; // ReferenceError: i is not defined (函数内部的是局部变量)
+				// 
+				// 
+			
+			function kj(){
+				this.name="kangjun";
+			}
+
+			var k=kj();
+			// console.log(k.name);//Cannot read property 'name' of undifne 不可以访问kj的私有属性。
+
+			var j=new kj();
+			console.log(j.name);	//kangjun  new关键字将kj()函数所有的对象都克隆到自己的身上，所以就可以输出来了。
+
+	</script>
+</body>
+</html>

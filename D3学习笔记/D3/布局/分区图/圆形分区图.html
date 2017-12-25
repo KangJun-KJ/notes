@@ -1,0 +1,123 @@
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Circle - Partition</title>
+	</head>
+
+	<style>
+
+	</style>
+
+	<body>
+		<script src="../../../js/d3.js"></script>
+		<script>
+			var width = 450,
+				height = 450,
+				radius = Math.min(width, height) / 2,
+				color = d3.scale.category20();
+
+			var svg = d3.select("body").append("svg")
+				.attr("width", width)
+				.attr("height", height)
+				.append("g")
+				.attr("transform", "translate(" + radius + "," + radius + ")");
+
+			var partition = d3.layout.partition()
+				.sort(null)
+				.size([2 * Math.PI, radius * radius]) //假如这里不设置radius*radius，下面也可以使用Math.sqrt(d.y)
+				//呈现布局一样是，只是弧的半径不同。	
+				.value(function(d) {
+					console.log(d);
+					return d.value ? d.value : 1
+				});
+
+			var arc = d3.svg.arc()
+				.startAngle(function(d) {
+					return d.x;
+				}) //起始角度为顶点d.x,d.y
+				.endAngle(function(d) {
+					return d.x + d.dx;
+				})
+				.innerRadius(function(d) {
+					return Math.sqrt(d.y);
+				}) //起始
+				.outerRadius(function(d) {
+					return Math.sqrt(d.y + d.dy);
+				});
+
+			d3.json("city.json", function(error, root) {
+
+				if(error)
+					console.log(error);
+				console.log(root);
+
+				var nodes = partition.nodes(root);
+				var links = partition.links(nodes);
+
+				// console.log(nodes);
+
+				var arcs = svg.selectAll("g")
+					.data(nodes)
+					.enter().append("g");
+
+				arcs.append("path")
+					.attr("display", function(d) {
+						return d.depth ? null : null;
+					}) // hide inner ring
+					.attr("d", arc)
+					.style("stroke", "#fff")
+					.style("fill", function(d) {
+						// 设置名字规则：如果一个节点有孩子节点，那么他单独为一个颜色，如果没有子节点就跟父节点的颜色一样
+						// color可以类似map[]函数一样可以通过不是数字下标来获取值。
+						return color((d.children ? d : d.parent).name);
+					})
+					.on("mouseover", function(d) {
+						d3.select(this)
+							.style("fill", "yellow");
+					})
+					.on("mouseout", function(d) {
+						d3.select(this)
+							.transition()
+							.duration(200)
+							.style("fill", function(d) {
+								return color((d.children ? d : d.parent).name);
+							});
+					});
+
+				arcs.append("text")
+					.style("font-size", "12px")
+					.style("font-family", "simsun")
+					.attr("text-anchor", "middle")
+					.attr("transform", function(d, i) {
+						//第一个元素（最中间的），只平移不旋转
+						if(i == 0)
+						// return "translate(" + arc.centroid(d) + ")";
+							return "translate(0);"
+						else {
+							//其他的元素，既平移也旋转
+							var r = 0;
+							// console.log(d.x+d.dx/2); 弧度制转角度 0-2*π
+							if((d.x + d.dx / 2) / Math.PI * 180 < 180) // 0 - 180 度以内的
+								r = 180 * ((d.x + d.dx / 2 - Math.PI / 2) / Math.PI);
+							//d.x为起始弧度，d.dx为弧度宽，求中间弧度，然后再旋转字体，减去Math.PI/2(起始就是90度)因为
+							//扇形的旋转方向是从垂直方向开始的，而rotate是从右向下开始旋转的。相差90度
+							else // 180 - 360 度以内的 因为左半边的也顺着弧形旋转，不符合我们正常查看，加上Math.PI使我们正常观看。
+								r = 180 * ((d.x + d.dx / 2 + Math.PI / 2) / Math.PI);
+
+							//既平移也旋转
+							return "translate(" + arc.centroid(d) + ")" +
+								"rotate(" + r + ")";
+						}
+
+					})
+					.text(function(d) {
+						return d.name;
+					});
+
+			});
+		</script>
+
+	</body>
+
+</html>
