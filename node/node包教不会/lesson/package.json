@@ -1,0 +1,21 @@
+{
+  "name": "lesson",
+  "version": "1.0.0",
+  "description": "",
+  "main": "md5.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.6.0",
+    "axios": "^0.17.1",
+    "cheerio": "^1.0.0-rc.2",
+    "express": "^4.16.2",
+    "iconv-lite": "^0.4.19",
+    "superagent": "^3.8.2",
+    "superagent-charset": "^1.2.0",
+    "utility": "^1.13.1"
+  }
+}
