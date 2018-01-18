@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			cx cy 表示当前位置
+			r 半径
+			rx ry 圆角
+		-->
+		<svg width="400" height="400" style="background-color: gainsboro;">
+			<circle id='circle' cx="50" cy='50' r='40' stroke='black' stroke-width='3' fill='red'></circle>
+			
+			<ellipse cx='200' cy='80' rx='100' ry='50'
+				style='fill:yellow;stroke:purple;stroke-width: 2;stroke-dasharray: 10;'></ellipse>
+				
+				<ellipse cx="240" cy="300" rx="220" ry="30"
+style="fill:purple" />
+				<ellipse cx="220" cy="270" rx="190" ry="20"
+				style="fill:lime" />
+				 
+				<ellipse cx="210" cy="245" rx="170" ry="15"
+				style="fill:yellow" />
+		</svg>
+		<script>
+			var circle=document.getElementById("circle");
+			for(var k in circle){
+//				console.log(`${k} = ${circle[k]}`)
+			}
+			console.log(circle.r);
+			var x=40,cnt=1;
+			setInterval(function(){
+				x+=cnt;
+				circle.r.baseVal.value=x;
+				if(x>60){
+					cnt=-1;
+				}else if(x<20){
+					cnt=1;
+				}
+			},200);
+			circle.onmousedown=function(){
+				console.log('circle被点击了');
+			}
+		</script>		
+	</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<!--
+			rect 矩形元素
+			x,y 距离左上角左边，rx,ry 圆角
+			stroke 描边颜色
+			stroke-width 描边宽度
+			stroke-opacity 描边透明度
+		-->
+		<svg width="400" height="400" style="background-color: gainsboro;">
+			<rect id='rect' x="50" y="20" rx="100" ry="10" width="150" height="150" 
+				style="fill:blue;stroke:black; stroke-width:5;opacity:0.5 ">
+			</rect>
+			<rect x="50" y="180" rx="100" ry="100" width="150" height="150" 
+				style="fill:red;stroke:black;stroke-width:5;opacity:0.5" />
+		</svg>
+		<script>
+			var rect=document.getElementById("rect");
+			console.log(rect.x);
+			function test(){
+				rect.x.baseVal.value=parseInt(rect.x.baseVal.value)+1;
+				console.log(rect.x.baseVal.value);
+				if(rect.x.baseVal.value>400)
+				clearInterval(timer);
+			}
+			var timer=setInterval(function(){
+				test();
+			},100)
+			console.log();
+		</script>
+	</body>
+
+</html>

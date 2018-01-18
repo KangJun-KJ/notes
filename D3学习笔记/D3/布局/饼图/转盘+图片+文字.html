@@ -1,0 +1,167 @@
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>创建提示框</title>
+	</head>
+
+	<body>
+		<script src="../../../js/d3.js" charset="utf-8"></script>
+		<script>
+			var width = 800; //SVG绘制区域的宽度
+			var height = 800; //SVG绘制区域的高度
+
+			var svg = d3.select("body") //选择<body>
+				.append("svg") //在<body>中添加<svg>
+				.attr("width", width) //设定<svg>的宽度属性
+				.attr("height", height); //设定<svg>的高度属性
+
+			//1.确定初始数据
+			var dataset = new Array(10).fill(1)
+
+			//2.转换数据
+			var pie = d3.layout.pie()
+				.sort(null)
+				.value(function(d) {
+					return d;
+				});
+
+			var piedata = pie(dataset);
+
+			//			console.log(piedata);
+
+			//3.绘制
+
+			//字体大小
+			var fontsize = 18;
+
+			//图片的大小
+			var imgWidth = 60,
+				imgHeight = 60;
+			//外半径和内半径
+			var outerRadius = width / 3 - 20;
+			var innerRadius = 0;
+
+			//			第二个弧半径
+			var outerRadius2 = width / 3;
+			var innerRadius2 = width / 3 - 20;
+
+			//创建弧生成器
+			var arc = d3.svg.arc()
+				.innerRadius(innerRadius)
+				.outerRadius(outerRadius);
+			//创建第二个弧生成器
+			var arc2 = d3.svg.arc()
+				.innerRadius(innerRadius2)
+				.outerRadius(outerRadius2);
+			var color = ['rgb(255,249,231)', '#fff']
+
+			//添加对应数目的弧组，即<g>元素
+			var arcs = svg.selectAll("g.first")
+				.data(piedata) //绑定转换后的数据piedata
+				.enter()
+				.append("g")
+				.attr("transform", "translate(" + (outerRadius2) + "," + (outerRadius2) + ")");
+
+			var arcs2 = svg.selectAll("g.second")
+				.data(piedata) //绑定转换后的数据piedata
+				.enter()
+				.append("g")
+				.attr("transform", "translate(" + (outerRadius2) + "," + (outerRadius2) + ")");
+
+			//绘制弧
+			arcs.append("path")
+				.attr("fill", function(d, i) {
+					return color[i % 2]; //设定弧的颜色
+				})
+				.attr("d", function(d) {
+					return arc(d); //使用弧生成器
+				});
+			//绘制弧
+			arcs2.append("path")
+				.attr("fill", function(d, i) {
+					console.log(123);
+					return "rgb(253,140,20)"; //设定弧的颜色
+				})
+				.attr("d", function(d) {
+					return arc2(d); //使用弧生成器
+				});
+
+			//绘制弧内的文字
+			arcs.append("text")
+				.attr("transform", function(d, i) {
+					var angle = (d.startAngle + d.endAngle) / 2 / 6.28 * 360;
+					var x = arc.centroid(d)[0] * 1.7; //文字的x坐标
+					var y = arc.centroid(d)[1] * 1.7; //文字的y坐标
+					return " translate(" + x + "," + y + ") rotate(" + angle + ")";
+				})
+				.attr("text-anchor", "middle")
+				.style("font-size", fontsize)
+				.attr("fill", "rgb(230,40,20)")
+				.text(function(d) {
+					return d.data;
+				});
+
+			//绘制弧内的图片
+			arcs.append("image")
+				.attr("id", function(d, i) {
+					return "image" + i;
+				})
+				.attr("transform-origin", "center center")
+				.attr("transform", function(d, i) {
+					var middle = (d.startAngle + d.endAngle) / 2;
+					var angle = middle / 6.28 * 360;
+					var x = arc.centroid(d)[0] * 1.2 - imgWidth / 2;
+					var y = arc.centroid(d)[1] * 1.2 - imgHeight / 2;
+					return " translate(" + x + "," + y + ") rotate(" + angle + ")";
+				})
+				.attr("xlink:href", function(d, i) {
+					return "wx.png";
+				})
+				.attr("width", imgWidth)
+				.attr("height", imgHeight);
+
+			//圈的外围添加小圆点
+			console.log(arc2);
+			arcs2.append("circle")
+				.attr("transform", function(d, i) {
+					var x = arc2.centroid(d)[0] * 1; //文字的x坐标
+					var y = arc2.centroid(d)[1] * 1; //文字的y坐标
+					return " translate(" + x + "," + y + ")";
+				})
+				.attr("r", "5")
+				.attr("fill", function(d, i) {
+					return ["rgb(255,255,255)", 'rgb(255,234,46)'][i % 2];
+				});
+			//			var middle2 = (outerRadius2 + innerRadius2) / 2;
+			//			arcs2.append("circle")
+			//				.attr("transform", function(d, i) {
+			//					console.log(d.startAngle);
+			//					var angle = d.startAngle;
+			//					if(i==0) angle=3.14
+			//					var x = middle2 * Math.sin(angle * 2 * Math.PI);
+			//					var y = middle2 * Math.cos(angle * 2 * Math.PI);
+			//						return " translate(" + x + "," + y + ")";
+			//
+			//				})
+			//				.attr("r", "5")
+			//				.attr("fill", function(d, i) {
+			//					return ['rgb(255,234,46)', "rgb(255,255,255)"][i % 2];
+			//				});
+			//			arcs2.append("circle")
+			//				.attr("transform", function(d, i) {
+			//					var angle = (d.endAngle);
+			//					var x = middle2 * Math.sin(angle * Math.PI);
+			//					var y = middle2 * Math.cos(angle * Math.PI);
+			//					return " translate(" + x + "," + y + ")";
+			//				})
+			//				.attr("z-index", "1000")
+			//				.attr("r", "5")
+			//				.attr("fill", function(d, i) {
+			//					return ["rgb(255,255,255)", 'rgb(255,234,46)'][i % 2];
+			//				});
+		</script>
+
+	</body>
+
+</html>
