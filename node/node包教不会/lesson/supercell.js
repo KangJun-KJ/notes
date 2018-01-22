@@ -28,24 +28,6 @@ function downfile(url, name) {
 
 	})
 }
-
-function rJson(url, callback) {
-	superagent.get(url)
-		.charset()
-		.end(function(err, sres) {
-			if(err) {
-				return next(err);
-			}
-			var $ = cheerio.load(sres.text);
-			var items = {};
-			$('.td-css1').each(function(idx, element) {
-				var k = $(element).text(),
-					value = $('.td-css2').eq(idx).text();
-				items[k] = value;
-			});
-			callback(items);
-		});
-}
 var concurrencyCount = 0,
 	cnt = 0;
 cardData = [];
@@ -91,11 +73,7 @@ app.get('/', function(req, res, next) {
 			$('.listImg2>li').each(function(idx, element) {
 				//    	items.push(detailLink:$(element).children('a').attr("href"))
 				var href = $(element).children('a').attr("href");
-				//				var result = rJson(href, function(result) {
-				//					
-				//					items.push(result);
-				//					console.log(cnt++);
-				//				});
+				
 				urls.push(href);
 			});
 			async.mapLimit(urls, 1, function(url, callback) {
@@ -110,6 +88,6 @@ app.get('/', function(req, res, next) {
 		});
 });
 
-app.listen(3000, function() {
-	console.log('app is listening at port 3000');
+app.listen(3001, function() {
+	console.log('app is listening at port 3001');
 });

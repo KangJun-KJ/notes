@@ -1,0 +1,9 @@
+{
+  "apps" : [{
+    "name"        : "kj",
+    "script"      : "./supercell.js",
+    "watch"       : true,
+    "exec_interpreter" : "babel-node",
+    "exec_mode"        : "fork"
+  }]
+}

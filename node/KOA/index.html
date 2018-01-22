@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		
+		
+		<script src='jquery-2.1.0.js'></script>
+		<script>
+			
+			$.ajax({
+				url:"http://localhost:3000/api/getUser",
+				data:{
+					u:123,
+					name:"kj"
+				},
+				success:function(res){
+					console.log(res);
+				}
+			})
+		</script>
+	</body>
+</html>
