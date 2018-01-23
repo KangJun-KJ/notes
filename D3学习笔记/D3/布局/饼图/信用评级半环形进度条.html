@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+	path {
+		fill: #ccc;
+		stroke: #000;
+		stroke-width: 1.5px;
+	}
+	
+	text {
+		font: 500 15px "Helvetica Neue";
+	}
+</style>
+
+<body>
+	<!--<script src='../../../js/d3.js'></script>-->
+	<script src="https://cdn.bootcss.com/d3/3.5.17/d3.min.js"></script>
+	<script>
+		var width = 900,//svg的宽度
+			height = 300,//svg的高度
+			radius = height - 20,//圆环半径
+			circleWidth=50,//圆环弧宽度
+			textDistance=80,//字与圆环之间的间隔
+			distance=2*Math.PI*(radius-80)/2/5/2 ; //移动字体距离
+		var arc = d3.svg.arc()
+			.innerRadius(radius - circleWidth)
+			.outerRadius(radius);
+		var arc2 = d3.svg.arc()
+			.innerRadius(radius - 80)
+			.outerRadius(radius - 80);
+			
+		var data = [],
+			tips = ['有待提升有待', '良好', '一般', '优秀', '很好'],
+			color=['#deab72','#342b24','#342b24','#342b24','#342b24'];
+		
+		for(var i = 0; i < 5; i++) {
+			data.push({
+				startAngle: -Math.PI / 2 + i * Math.PI / 5,
+				endAngle: -Math.PI / 2 + (i + 1) * Math.PI / 5,
+				text: tips[i]
+			})
+		}
+		var svg = d3.select("body").append("svg")
+			.attr("width", width)
+			.attr("height", height);
+
+		var g = svg.selectAll("g")
+			.data(data)
+			.enter().append("g")
+			.attr("transform", function(d, i) {
+				return "translate(" + (width / 2) + "," + height + ")";
+			});
+		var g2 = svg.selectAll(".g")
+			.data(data)
+			.enter().append("g")
+			.attr("transform", function(d, i) {
+				return "translate(" + (width / 2) + "," + height + ")";
+			});
+		g.append("path")
+			.attr("d", arc)
+			.style("fill",function(d,i){
+				return color[i];
+			})
+			;
+
+		g2.append("path")
+			.attr("d", arc2)
+			.style("stroke", "transparent")
+			.attr("id", function(d, i) {
+				return "arc-" + i;
+			});
+		
+		g2.append("text")
+			.attr("dx", function(d,i){
+				return distance;
+			})
+			.style({
+				"fill":"#333",
+				"font-size":"20px"
+			})
+			.attr("text-anchor", 'middle')
+			.append("textPath")
+			.attr("xlink:href", function(d, i) {
+				return "#arc-" + i;
+			})
+			.text(function(d) {
+				return d.text;
+			});
+	</script>

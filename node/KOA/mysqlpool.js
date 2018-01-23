@@ -20,12 +20,11 @@ var pool = mysql.createPool({
 	password: '1234',
 	database: 'mydb'
 });
-var sql = "select * FROM myguests";
+
+var sql = "select * FROM myguests ";
 pool.query(sql, function(err, rows) {
 	if(err) throw err;
-	console.log(rows);
-	//回收pool
-	pool.release();
+//	console.log(rows);
 })
 //pool.getConnection(function(err, connection) {
 //	if(err) throw err;

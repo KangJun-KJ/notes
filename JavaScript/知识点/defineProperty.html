@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>defineProperty</title>
+	</head>
+
+	<body>
+
+		<script>
+			//Object.defineProperty()在对象上定义一个新属性
+			//或者修改一个对象的现有属性，并返回对象
+
+			var pattern = {
+				get: function() {
+					return 'I alway return this string,whatever you have assigned';
+				},
+				set: function() {
+					this.myname = 'this is my name string';
+				}
+			};
+
+			function TestDefineSetAndGet() {
+				Object.defineProperty(this, 'myproperty', pattern);
+			}
+
+			var instance = new TestDefineSetAndGet();
+			instance.myproperty = 'test';
+
+			// 'I alway return this string,whatever you have assigned'
+			console.log(instance.myproperty);
+			// 'this is my name string'
+			console.log(instance.myname);
+		</script>
+	</body>
+
+</html>
