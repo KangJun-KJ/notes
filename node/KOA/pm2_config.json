@@ -1,9 +1,0 @@
-{
-  "apps" : [{
-    "name"        : "kj",
-    "script"      : "./mysql.js",
-    "watch"       : true,
-    "exec_interpreter" : "babel-node",
-    "exec_mode"        : "fork"
-  }]
-}
