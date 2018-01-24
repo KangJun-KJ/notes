@@ -1,7 +1,3 @@
-/**
- * @author {benyuwan@gmail.com}
- * @file 遍历加载路由文件
- */
 
 import glob from 'glob'
 

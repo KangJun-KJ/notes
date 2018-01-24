@@ -5,12 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "babel-node server/index.js"
+    "dev-server": "babel-node server/index.js",
+    "start": "pm2 start server/config/pm2_config.json"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.17.1",
     "glob": "^7.1.2",
+    "http-proxy": "^1.16.2",
     "koa": "^2.4.1",
     "koa-body": "^2.5.0",
     "koa-cors": "^0.0.16",
