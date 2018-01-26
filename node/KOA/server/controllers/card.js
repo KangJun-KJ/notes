@@ -3,16 +3,25 @@ import Card from '../models/card.js'
 class CardControllers {
 	//获取当前所有的card列表
 	async getCardList(ctx) {
-		const result = await Card.getAllCards(ctx.request.body.fields);
+		const result = await Card.getAllCards(ctx.request.body);
 		ctx.body = {
-			success:true,
-			data:result
+			success: true,
+			data: result
 		};
 	}
-
+	
+	//获取一种模式的所有卡牌种类
+	async getAllCardsByCardMode(ctx){
+		const result = await Card.getAllCardsByCardMode(ctx.request.body);
+		ctx.body = {
+			success: true,
+			data: result
+		};
+	}
+	
 	//添加了一组新的卡牌
 	async setCarList(ctx) {
-		const card = ctx.request.body.fields;
+		const card = ctx.request.body;
 		const result = await Card.addCard(card);
 		if(result.affectedRows === 1) {
 			ctx.body = {
@@ -28,7 +37,7 @@ class CardControllers {
 
 	//编辑卡牌根据id和userId
 	async editCard(ctx) {
-		const card = ctx.request.body.fields;
+		const card = ctx.request.body;
 		const result = await Card.updateCard(card);
 		if(result.affectedRows === 1) {
 			ctx.body = {
@@ -43,27 +52,31 @@ class CardControllers {
 	}
 	//点赞，如果在表中已经存在数据则表示已经点过赞了。
 	async likeCard(ctx) {
-		const card = ctx.request.body.fields;
+		const card = ctx.request.body;
 		const result = await Card.findLikeCard(card);
-
-		console.log("输出用户的之前是否点过赞")
 		const total = result[0]['count(*)'];
-		console.log(total);
+		console.log("输出用户的之前是否点过赞,total=" + total);
 		if(total >= 1) {
-			ctx.body = {
-				success: false,
-				detail: "你已经点过赞了"
+			const result2 = await Card.cancelLike(card);
+			if(result2[0].affectedRows == 1 && result2[1].affectedRows == 1) {
+				ctx.body = {
+					success: true,
+					content: "取消点赞成功!"
+				}
+			} else {
+				ctx.body = {
+					success: false,
+					content: "修改失败!"
+				}
 			}
 			return;
 		}
 
 		const result2 = await Card.likeCard(card);
-		console.log(typeof(result[0]));
-		console.log(result2[0].affectedRows)
-		console.log(result2[1].affectedRows)
 		if(result2[0].affectedRows == 1 && result2[1].affectedRows == 1) {
 			ctx.body = {
-				success: true
+				success: true,
+				content: '点赞成功了'
 			}
 		} else {
 			ctx.body = {
@@ -71,7 +84,14 @@ class CardControllers {
 				detail: "点赞失败"
 			}
 		}
+	}
 
+	async getCardMode(ctx) {
+		const result = await Card.getAllCardModes();
+		ctx.body = {
+			success: true,
+			data: result
+		};
 	}
 }
 

@@ -28,6 +28,10 @@ class users {
 			
 		})
 	}
+	
+	async sendSuggestion({userId,text}){
+		return await query(escape`INSERT INTO usersuggest SET userId=${userId} , suggestion=${text}`);
+	}
 
 }
 

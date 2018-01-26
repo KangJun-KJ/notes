@@ -1,0 +1,121 @@
+2018-01-26 15:33 +08:00: [ 'select count(*) from userLikeCards Where cardId=',
+  ' AND userId=',
+  '' ]
+2018-01-26 15:33 +08:00: 10 '11111111111112'
+2018-01-26 15:33 +08:00: 输出用户的之前是否点过赞,total=0
+2018-01-26 15:33 +08:00: 0
+[ 'UPDATE card SET peoplelike=peoplelike+1 where id=',
+  ';INSERT INTO userLikeCards SET cardId=',
+  ',userId=',
+  '' ]
+10 10 '11111111111112'
+2018-01-26 15:34 +08:00: [ 'select count(*) from userLikeCards Where cardId=',
+  ' AND userId=',
+  '' ]
+2018-01-26 15:34 +08:00: 10 '11111111111112'
+2018-01-26 15:34 +08:00: 输出用户的之前是否点过赞,total=1
+2018-01-26 15:34 +08:00: 1
+[ 'DELETE FROM userlikecards where cardId=',
+  ' AND userId=',
+  ';UPDATE card SET peoplelike=peoplelike-1 where id=',
+  ';' ]
+10 '11111111111112' 10
+2018-01-26 15:34 +08:00: [ OkPacket {
+    fieldCount: 0,
+    affectedRows: 1,
+    insertId: 0,
+    serverStatus: 42,
+    warningCount: 0,
+    message: '',
+    protocol41: true,
+    changedRows: 0 },
+  OkPacket {
+    fieldCount: 0,
+    affectedRows: 1,
+    insertId: 0,
+    serverStatus: 2,
+    warningCount: 0,
+    message: '(Rows matched: 1  Changed: 1  Warnings: 0',
+    protocol41: true,
+    changedRows: 1 } ]
+2018-01-26 15:45 +08:00: [ 'select count(*) from userLikeCards Where cardId=',
+  ' AND userId=',
+  '' ]
+2018-01-26 15:45 +08:00: 10 '11111111111112'
+2018-01-26 15:45 +08:00: 输出用户的之前是否点过赞,total=0
+2018-01-26 15:45 +08:00: 0
+[ 'UPDATE card SET peoplelike=peoplelike+1 where id=',
+  ';INSERT INTO userLikeCards SET cardId=',
+  ',userId=',
+  '' ]
+10 10 '11111111111112'
+2018-01-26 15:53 +08:00: [ 'select count(*) from userLikeCards Where cardId=',
+  ' AND userId=',
+  '' ]
+2018-01-26 15:53 +08:00: 10 '11111111111112'
+2018-01-26 15:53 +08:00: 输出用户的之前是否点过赞,total=1
+1
+2018-01-26 15:53 +08:00: [ 'DELETE FROM userlikecards where cardId=',
+  ' AND userId=',
+  ';UPDATE card SET peoplelike=peoplelike-1 where id=',
+  ';' ]
+10 '11111111111112' 10
+2018-01-26 15:53 +08:00: [ OkPacket {
+    fieldCount: 0,
+    affectedRows: 1,
+    insertId: 0,
+    serverStatus: 42,
+    warningCount: 0,
+    message: '',
+    protocol41: true,
+    changedRows: 0 },
+  OkPacket {
+    fieldCount: 0,
+    affectedRows: 1,
+    insertId: 0,
+    serverStatus: 2,
+    warningCount: 0,
+    message: '(Rows matched: 1  Changed: 1  Warnings: 0',
+    protocol41: true,
+    changedRows: 1 } ]
+2018-01-26 16:30 +08:00: 报错了
+2018-01-26 16:30 +08:00: ReferenceError: Card is not defined
+    at _callee2$ (E:/notes/node/KOA/dist/controllers/user.js:78:9)
+    at tryCatch (E:\notes\node\KOA\node_modules\_regenerator-runtime@0.10.5@regenerator-runtime\runtime.js:65:40)
+    at Generator.invoke [as _invoke] (E:\notes\node\KOA\node_modules\_regenerator-runtime@0.10.5@regenerator-runtime\runtime.js:303:22)
+    at Generator.prototype.(anonymous function) [as next] (E:\notes\node\KOA\node_modules\_regenerator-runtime@0.10.5@regenerator-runtime\runtime.js:117:21)
+    at step (E:/notes/node/KOA/dist/controllers/user.js:15:183)
+    at E:/notes/node/KOA/dist/controllers/user.js:15:437
+    at new Promise (<anonymous>)
+    at E:/notes/node/KOA/dist/controllers/user.js:15:99
+    at sendSuggestion (E:/notes/node/KOA/dist/controllers/user.js:103:18)
+    at dispatch (E:\notes\node\KOA\node_modules\_koa-compose@3.2.1@koa-compose\index.js:44:32)
+2018-01-26 16:32 +08:00: 报错了
+2018-01-26 16:32 +08:00: { Error: ER_BAD_NULL_ERROR: Column 'userId' cannot be null
+    at Query.Sequence._packetToError (E:\notes\node\KOA\node_modules\_mysql@2.15.0@mysql\lib\protocol\sequences\Sequence.js:52:14)
+    at Query.ErrorPacket (E:\notes\node\KOA\node_modules\_mysql@2.15.0@mysql\lib\protocol\sequences\Query.js:77:18)
+    at Protocol._parsePacket (E:\notes\node\KOA\node_modules\_mysql@2.15.0@mysql\lib\protocol\Protocol.js:279:23)
+    at Parser.write (E:\notes\node\KOA\node_modules\_mysql@2.15.0@mysql\lib\protocol\Parser.js:76:12)
+    at Protocol.write (E:\notes\node\KOA\node_modules\_mysql@2.15.0@mysql\lib\protocol\Protocol.js:39:16)
+    at Socket.<anonymous> (E:\notes\node\KOA\node_modules\_mysql@2.15.0@mysql\lib\Connection.js:103:28)
+    at emitOne (events.js:116:13)
+    at Socket.emit (events.js:211:7)
+    at addChunk (_stream_readable.js:263:12)
+    at readableAddChunk (_stream_readable.js:250:11)
+    --------------------
+    at Pool.query (E:\notes\node\KOA\node_modules\_mysql@2.15.0@mysql\lib\Pool.js:199:23)
+    at E:/notes/node/KOA/dist/utils/query.js:27:8
+    at new Promise (<anonymous>)
+    at query (E:/notes/node/KOA/dist/utils/query.js:26:9)
+    at users._callee2$ (E:/notes/node/KOA/dist/models/user.js:100:16)
+    at tryCatch (E:\notes\node\KOA\node_modules\_regenerator-runtime@0.10.5@regenerator-runtime\runtime.js:65:40)
+    at Generator.invoke [as _invoke] (E:\notes\node\KOA\node_modules\_regenerator-runtime@0.10.5@regenerator-runtime\runtime.js:303:22)
+    at Generator.prototype.(anonymous function) [as next] (E:\notes\node\KOA\node_modules\_regenerator-runtime@0.10.5@regenerator-runtime\runtime.js:117:21)
+    at step (E:/notes/node/KOA/dist/models/user.js:33:183)
+    at E:/notes/node/KOA/dist/models/user.js:33:437
+  code: 'ER_BAD_NULL_ERROR',
+  errno: 1048,
+  sqlMessage: 'Column \'userId\' cannot be null',
+  sqlState: '23000',
+  index: 0,
+  sql: 'INSERT INTO usersuggest SET userId=NULL , suggestion=\'测试建议\'' }

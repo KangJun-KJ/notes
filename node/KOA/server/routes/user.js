@@ -10,5 +10,5 @@ const router = new Router()
 router.prefix(`/${baseApi}/${api}`)
 
 router.post('/getUserId', UserController.getUserId)
-
+router.post("/sendSuggestion",UserController.sendSuggestion);
 module.exports = router

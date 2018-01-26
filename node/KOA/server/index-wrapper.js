@@ -1,6 +1,3 @@
-require("babel-core/register");
-require("babel-polyfill");
-
 import Koa from 'koa'
 import https from 'https'
 import koaBody from 'koa-body'
@@ -31,5 +28,3 @@ var options = {
 
 https.createServer(options, app.callback()).listen(port);
 
-//require('child_process').exec( `babel-node index-wrapper.js` );
-//pm2 delete all

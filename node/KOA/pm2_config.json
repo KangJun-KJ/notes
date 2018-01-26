@@ -1,6 +1,6 @@
 {
-	"name": "ashen-server",
-	"script": "./server/index.js",
+	"name": "kj-server",
+	"script": "./dist/index.js",
 	"watch": true,
 	"exec_mode": "fork",
 	"node_args": "--harmony",

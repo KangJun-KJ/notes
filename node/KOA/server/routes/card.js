@@ -9,7 +9,9 @@ const router = new Router()
 
 router.prefix(`/${baseApi}/${api}`)
 
-router.post('/getCards', CardController.getCardList)
+router.post("/getCardModes",CardController.getCardMode);
+router.post('/getCards', CardController.getCardList);
+router.post('/getCardsByMode', CardController.getAllCardsByCardMode);
 router.post("/addCard",error,CardController.setCarList);
 router.post("/editCard",error,CardController.editCard);
 router.post("/likeCard",error,CardController.likeCard);
