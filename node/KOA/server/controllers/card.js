@@ -12,6 +12,7 @@ class CardControllers {
 	
 	//获取一种模式的所有卡牌种类
 	async getAllCardsByCardMode(ctx){
+		console.log(ctx.request.body);
 		const result = await Card.getAllCardsByCardMode(ctx.request.body);
 		ctx.body = {
 			success: true,

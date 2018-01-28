@@ -24,6 +24,7 @@ router.prefix('/' + _config.baseApi + '/' + api);
 
 router.post("/getCardModes", _card2.default.getCardMode);
 router.post('/getCards', _card2.default.getCardList);
+router.post('/getCardsByMode', _card2.default.getAllCardsByCardMode);
 router.post("/addCard", _error2.default, _card2.default.setCarList);
 router.post("/editCard", _error2.default, _card2.default.editCard);
 router.post("/likeCard", _error2.default, _card2.default.likeCard);

@@ -1,7 +1,7 @@
 
 
 export const db = {
-	host: '127.0.0.1',
+	host: '47.97.166.74',
 	port: '3306',
 	user: 'root',
 	password: 'Kj5895665',
@@ -13,7 +13,7 @@ export const dbName = {
 	database: 'royalwar'
 }
 
-export const port = 3000
+export const port = 443
 
 export const baseApi = 'api/v1'
 

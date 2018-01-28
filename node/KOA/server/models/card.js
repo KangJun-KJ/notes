@@ -10,10 +10,10 @@ class Cards {
     }
     async getAllCardsByCardMode({userId,pageNow=1,pageSize=10,cardmode}){
     	if(cardmode==0){
-    		return await query(escape`SELECT a.*, count(b.cardId) count FROM card a LEFT JOIN userlikecards b ON a.id = b.cardId AND a.userid = ${userId} GROUP BY a.id,a.userid ORDER BY a.peoplelike DESC limit ${(pageNow-1)*pageSize},${pageSize}`);
+    		return await query(escape`SELECT a.*, count(b.cardId) count FROM card a LEFT JOIN userlikecards b ON a.id = b.cardId AND b.userid = ${userId} GROUP BY a.id,a.userid ORDER BY a.peoplelike DESC limit ${(pageNow-1)*pageSize},${pageSize}`);
     	}
     	else if(cardmode==1){
-    		return await query(escape`SELECT a.*, count(b.cardId) count FROM card a LEFT JOIN userlikecards b ON a.id = b.cardId AND a.userid = ${userId} GROUP BY a.id,a.userid limit ${(pageNow-1)*pageSize},${pageSize}`);
+    		return await query(escape`SELECT a.*, count(b.cardId) count FROM card a LEFT JOIN userlikecards b ON a.id = b.cardId AND b.userid = ${userId} GROUP BY a.id,a.userid limit ${(pageNow-1)*pageSize},${pageSize}`);
     	}
     	return await query(escape`SELECT a.*, count(b.cardId) count FROM card a LEFT JOIN userlikecards b ON a.id = b.cardId AND a.userid = ${userId} WHERE a.cardmode =${cardmode} GROUP BY a.id,a.userid limit ${(pageNow-1)*pageSize},${pageSize}`);
     }
