@@ -69,10 +69,11 @@ var CardControllers = function () {
 					while (1) {
 						switch (_context2.prev = _context2.next) {
 							case 0:
-								_context2.next = 2;
+								console.log(ctx.request.body);
+								_context2.next = 3;
 								return _card2.default.getAllCardsByCardMode(ctx.request.body);
 
-							case 2:
+							case 3:
 								result = _context2.sent;
 
 								ctx.body = {
@@ -80,7 +81,7 @@ var CardControllers = function () {
 									data: result
 								};
 
-							case 4:
+							case 5:
 							case "end":
 								return _context2.stop();
 						}

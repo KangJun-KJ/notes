@@ -8,13 +8,15 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _templateObject = _taggedTemplateLiteral(['SELECT a.*, count(b.cardId) count FROM card a LEFT JOIN userlikecards b ON a.id = b.cardId AND a.userid = ', ' GROUP BY a.id,a.userid limit ', ',', ''], ['SELECT a.*, count(b.cardId) count FROM card a LEFT JOIN userlikecards b ON a.id = b.cardId AND a.userid = ', ' GROUP BY a.id,a.userid limit ', ',', '']),
     _templateObject2 = _taggedTemplateLiteral(['SELECT a.*, count(b.cardId) count FROM card a LEFT JOIN userlikecards b ON a.id = b.cardId AND a.userid = ', ' GROUP BY a.id,a.userid ORDER BY a.peoplelike DESC limit ', ',', ''], ['SELECT a.*, count(b.cardId) count FROM card a LEFT JOIN userlikecards b ON a.id = b.cardId AND a.userid = ', ' GROUP BY a.id,a.userid ORDER BY a.peoplelike DESC limit ', ',', '']),
-    _templateObject3 = _taggedTemplateLiteral(['SELECT a.*, count(b.cardId) count FROM card a LEFT JOIN userlikecards b ON a.id = b.cardId AND a.userid = ', ' WHERE a.cardmode =', ' GROUP BY a.id,a.userid limit ', ',', ''], ['SELECT a.*, count(b.cardId) count FROM card a LEFT JOIN userlikecards b ON a.id = b.cardId AND a.userid = ', ' WHERE a.cardmode =', ' GROUP BY a.id,a.userid limit ', ',', '']),
-    _templateObject4 = _taggedTemplateLiteral(['INSERT INTO card SET name=', ',userid=', ',cardgroup=', ',introduction=', ',cardmode=', ',peoplelike=0'], ['INSERT INTO card SET name=', ',userid=', ',cardgroup=', ',introduction=', ',cardmode=', ',peoplelike=0']),
-    _templateObject5 = _taggedTemplateLiteral(['UPDATE card SET name=', ',cardgroup=', ',introduction=', ',cardmode=', ' WHERE id=', ' and userid=', ''], ['UPDATE card SET name=', ',cardgroup=', ',introduction=', ',cardmode=', ' WHERE id=', ' and userid=', '']),
-    _templateObject6 = _taggedTemplateLiteral(['UPDATE card SET peoplelike=peoplelike+1 where id=', ';INSERT INTO userLikeCards SET cardId=', ',userId=', ''], ['UPDATE card SET peoplelike=peoplelike+1 where id=', ';INSERT INTO userLikeCards SET cardId=', ',userId=', '']),
-    _templateObject7 = _taggedTemplateLiteral(['select count(*) from userLikeCards Where cardId=', ' AND userId=', ''], ['select count(*) from userLikeCards Where cardId=', ' AND userId=', '']),
-    _templateObject8 = _taggedTemplateLiteral(['DELETE FROM userlikecards where cardId=', ' AND userId=', ';UPDATE card SET peoplelike=peoplelike-1 where id=', ';'], ['DELETE FROM userlikecards where cardId=', ' AND userId=', ';UPDATE card SET peoplelike=peoplelike-1 where id=', ';']),
-    _templateObject9 = _taggedTemplateLiteral(['select * from mode'], ['select * from mode']);
+    _templateObject3 = _taggedTemplateLiteral(['SELECT a.*, count(b.cardId) count FROM card a LEFT JOIN userlikecards b ON a.id = b.cardId AND b.userid = ', ' GROUP BY a.id,a.userid ORDER BY a.peoplelike DESC limit ', ',', ''], ['SELECT a.*, count(b.cardId) count FROM card a LEFT JOIN userlikecards b ON a.id = b.cardId AND b.userid = ', ' GROUP BY a.id,a.userid ORDER BY a.peoplelike DESC limit ', ',', '']),
+    _templateObject4 = _taggedTemplateLiteral(['SELECT a.*, count(b.cardId) count FROM card a LEFT JOIN userlikecards b ON a.id = b.cardId AND b.userid = ', ' GROUP BY a.id,a.userid ORDER BY a.peoplelike ASC limit ', ',', ''], ['SELECT a.*, count(b.cardId) count FROM card a LEFT JOIN userlikecards b ON a.id = b.cardId AND b.userid = ', ' GROUP BY a.id,a.userid ORDER BY a.peoplelike ASC limit ', ',', '']),
+    _templateObject5 = _taggedTemplateLiteral(['SELECT a.*, count(b.cardId) count FROM card a LEFT JOIN userlikecards b ON a.id = b.cardId AND a.userid = ', ' WHERE a.cardmode =', ' GROUP BY a.id,a.userid limit ', ',', ''], ['SELECT a.*, count(b.cardId) count FROM card a LEFT JOIN userlikecards b ON a.id = b.cardId AND a.userid = ', ' WHERE a.cardmode =', ' GROUP BY a.id,a.userid limit ', ',', '']),
+    _templateObject6 = _taggedTemplateLiteral(['INSERT INTO card SET name=', ',userid=', ',cardgroup=', ',introduction=', ',cardmode=', ',peoplelike=0'], ['INSERT INTO card SET name=', ',userid=', ',cardgroup=', ',introduction=', ',cardmode=', ',peoplelike=0']),
+    _templateObject7 = _taggedTemplateLiteral(['UPDATE card SET name=', ',cardgroup=', ',introduction=', ',cardmode=', ' WHERE id=', ' and userid=', ''], ['UPDATE card SET name=', ',cardgroup=', ',introduction=', ',cardmode=', ' WHERE id=', ' and userid=', '']),
+    _templateObject8 = _taggedTemplateLiteral(['UPDATE card SET peoplelike=peoplelike+1 where id=', ';INSERT INTO userLikeCards SET cardId=', ',userId=', ''], ['UPDATE card SET peoplelike=peoplelike+1 where id=', ';INSERT INTO userLikeCards SET cardId=', ',userId=', '']),
+    _templateObject9 = _taggedTemplateLiteral(['select count(*) from userLikeCards Where cardId=', ' AND userId=', ''], ['select count(*) from userLikeCards Where cardId=', ' AND userId=', '']),
+    _templateObject10 = _taggedTemplateLiteral(['DELETE FROM userlikecards where cardId=', ' AND userId=', ';UPDATE card SET peoplelike=peoplelike-1 where id=', ';'], ['DELETE FROM userlikecards where cardId=', ' AND userId=', ';UPDATE card SET peoplelike=peoplelike-1 where id=', ';']),
+    _templateObject11 = _taggedTemplateLiteral(['select * from mode'], ['select * from mode']);
 
 var _query = require('../utils/query');
 
@@ -123,7 +125,7 @@ var Cards = function () {
 								}
 
 								_context3.next = 3;
-								return (0, _query2.default)((0, _escape2.default)(_templateObject2, userId, (pageNow - 1) * pageSize, pageSize));
+								return (0, _query2.default)((0, _escape2.default)(_templateObject3, userId, (pageNow - 1) * pageSize, pageSize));
 
 							case 3:
 								return _context3.abrupt('return', _context3.sent);
@@ -135,14 +137,14 @@ var Cards = function () {
 								}
 
 								_context3.next = 9;
-								return (0, _query2.default)((0, _escape2.default)(_templateObject, userId, (pageNow - 1) * pageSize, pageSize));
+								return (0, _query2.default)((0, _escape2.default)(_templateObject4, userId, (pageNow - 1) * pageSize, pageSize));
 
 							case 9:
 								return _context3.abrupt('return', _context3.sent);
 
 							case 10:
 								_context3.next = 12;
-								return (0, _query2.default)((0, _escape2.default)(_templateObject3, userId, cardmode, (pageNow - 1) * pageSize, pageSize));
+								return (0, _query2.default)((0, _escape2.default)(_templateObject5, userId, cardmode, (pageNow - 1) * pageSize, pageSize));
 
 							case 12:
 								return _context3.abrupt('return', _context3.sent);
@@ -175,7 +177,7 @@ var Cards = function () {
 						switch (_context4.prev = _context4.next) {
 							case 0:
 								_context4.next = 2;
-								return (0, _query2.default)((0, _escape2.default)(_templateObject4, name, userId, cardgroup, introduction, mode));
+								return (0, _query2.default)((0, _escape2.default)(_templateObject6, name, userId, cardgroup, introduction, mode));
 
 							case 2:
 								return _context4.abrupt('return', _context4.sent);
@@ -210,7 +212,7 @@ var Cards = function () {
 						switch (_context5.prev = _context5.next) {
 							case 0:
 								_context5.next = 2;
-								return (0, _query2.default)((0, _escape2.default)(_templateObject5, name, cardgroup, introduction, mode, id, userid));
+								return (0, _query2.default)((0, _escape2.default)(_templateObject7, name, cardgroup, introduction, mode, id, userid));
 
 							case 2:
 								return _context5.abrupt('return', _context5.sent);
@@ -240,7 +242,7 @@ var Cards = function () {
 						switch (_context6.prev = _context6.next) {
 							case 0:
 								_context6.next = 2;
-								return (0, _query2.default)((0, _escape2.default)(_templateObject6, id, id, userId));
+								return (0, _query2.default)((0, _escape2.default)(_templateObject8, id, id, userId));
 
 							case 2:
 								return _context6.abrupt('return', _context6.sent);
@@ -270,7 +272,7 @@ var Cards = function () {
 						switch (_context7.prev = _context7.next) {
 							case 0:
 								_context7.next = 2;
-								return (0, _query2.default)((0, _escape2.default)(_templateObject7, id, userId));
+								return (0, _query2.default)((0, _escape2.default)(_templateObject9, id, userId));
 
 							case 2:
 								return _context7.abrupt('return', _context7.sent);
@@ -300,7 +302,7 @@ var Cards = function () {
 						switch (_context8.prev = _context8.next) {
 							case 0:
 								_context8.next = 2;
-								return (0, _query2.default)((0, _escape2.default)(_templateObject8, id, userId, id));
+								return (0, _query2.default)((0, _escape2.default)(_templateObject10, id, userId, id));
 
 							case 2:
 								return _context8.abrupt('return', _context8.sent);
@@ -328,7 +330,7 @@ var Cards = function () {
 						switch (_context9.prev = _context9.next) {
 							case 0:
 								_context9.next = 2;
-								return (0, _query2.default)((0, _escape2.default)(_templateObject9));
+								return (0, _query2.default)((0, _escape2.default)(_templateObject11));
 
 							case 2:
 								return _context9.abrupt('return', _context9.sent);

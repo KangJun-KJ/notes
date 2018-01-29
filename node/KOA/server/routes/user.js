@@ -11,4 +11,8 @@ router.prefix(`/${baseApi}/${api}`)
 
 router.post('/getUserId', UserController.getUserId)
 router.post("/sendSuggestion",UserController.sendSuggestion);
+router.post("/setComment",UserController.setComment);
+router.post("/getComment",UserController.getComment);
+router.post("/getAnswer",UserController.getMyAnswer);
+
 module.exports = router

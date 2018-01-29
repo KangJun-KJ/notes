@@ -96,13 +96,14 @@ var users = function () {
 					while (1) {
 						switch (_context2.prev = _context2.next) {
 							case 0:
-								_context2.next = 2;
+								console.log((0, _escape2.default)(_templateObject, userId, text));
+								_context2.next = 3;
 								return (0, _query2.default)((0, _escape2.default)(_templateObject, userId, text));
 
-							case 2:
+							case 3:
 								return _context2.abrupt('return', _context2.sent);
 
-							case 3:
+							case 4:
 							case 'end':
 								return _context2.stop();
 						}

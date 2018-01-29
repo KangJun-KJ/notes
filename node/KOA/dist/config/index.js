@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 var db = exports.db = {
-	host: '127.0.0.1',
+	host: '47.97.166.74',
 	port: '3306',
 	user: 'root',
 	password: 'Kj5895665',
@@ -16,7 +16,7 @@ var dbName = exports.dbName = {
 	database: 'royalwar'
 };
 
-var port = exports.port = 3000;
+var port = exports.port = 443;
 
 var baseApi = exports.baseApi = 'api/v1';
 

@@ -30,10 +30,20 @@ class users {
 	}
 	
 	async sendSuggestion({userId,text}){
-		console.log(escape`INSERT INTO usersuggest SET userId=${userId} , suggestion=${text}`);
 		return await query(escape`INSERT INTO usersuggest SET userId=${userId} , suggestion=${text}`);
 	}
-
+	
+	async setComment({cardId,userId,content}){
+		return await query(escape`INSERT INTO comment SET userId=${userId} , content=${content},cardId=${cardId};UPDATE card SET comments=comments+1 where id=${cardId};`);
+	}
+	
+	async getComment({cardId}){
+		return await query(escape`select a.content from comment a WHERE cardId=${cardId} ORDER BY createtime ASC`);
+	}
+	
+	async getMyAnswer(){
+		return await query(escape`select * from answer`);
+	}
 }
 
 export default new users()

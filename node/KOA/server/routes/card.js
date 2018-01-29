@@ -10,6 +10,7 @@ const router = new Router()
 router.prefix(`/${baseApi}/${api}`)
 
 router.post("/getCardModes",CardController.getCardMode);
+router.post("/getMyCards",CardController.getAllCardOfMySelf);
 router.post('/getCards', CardController.getCardList);
 router.post('/getCardsByMode', CardController.getAllCardsByCardMode);
 router.post("/addCard",error,CardController.setCarList);
