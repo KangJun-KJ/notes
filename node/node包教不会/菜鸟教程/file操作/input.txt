@@ -1,0 +1,1 @@
+通过node中的writeFile方法写入这段文字的

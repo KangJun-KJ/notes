@@ -41,17 +41,15 @@ class UserControllers {
 		}
 	}
 
-	
-	
 	//获取我的回答
-	async getMyAnswer(ctx){
+	async getMyAnswer(ctx) {
 		const result = await User.getMyAnswer();
 		ctx.body = {
 			success: true,
 			data: result
 		}
 	}
-	
+
 	//获取大数据详情
 
 	//添加评论
@@ -75,11 +73,29 @@ class UserControllers {
 	async getComment(ctx) {
 		const data = ctx.request.body;
 		const result = await User.getComment(data);
-		
+
 		ctx.body = {
 			success: true,
 			data: result
 		}
+	}
+	
+	//获取用户的信息并且上传
+	async setUserInfo(ctx) {
+		const data=ctx.request.body;
+		const result=await User.setUserInfo(data);
+		if(result.affectedRows === 2) {
+			ctx.body = {
+				success: true,
+				detail:"信息上传成功"
+			}
+		} else {
+			ctx.body = {
+				success: false,
+				detail: "信息上传失败"
+			}
+		}
+
 	}
 }
 

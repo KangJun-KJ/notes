@@ -44,6 +44,10 @@ class users {
 	async getMyAnswer(){
 		return await query(escape`select * from answer`);
 	}
+	
+	async setUserInfo({userId,nickName,avatarUrl,gender}){
+		return await query(escape`insert into user (userId,nickName,avatarUrl,gender,count) VALUES (${userId},${nickName},${avatarUrl},${gender},0)ON DUPLICATE KEY UPDATE count=count+1; `);
+	}
 }
 
 export default new users()
