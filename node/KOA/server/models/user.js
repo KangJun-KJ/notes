@@ -19,6 +19,7 @@ class users {
 				.then(function(response) {
 					console.log(response.data);
 					console.log(typeof(response.data));
+					query(escape`insert into user (userId) VALUES (${userId.openid})ON DUPLICATE KEY UPDATE count=count+1; `);
 					resolve(response.data);
 				})
 				.catch(function(err){
@@ -46,7 +47,7 @@ class users {
 	}
 	
 	async setUserInfo({userId,nickName,avatarUrl,gender}){
-		return await query(escape`insert into user (userId,nickName,avatarUrl,gender,count) VALUES (${userId},${nickName},${avatarUrl},${gender},0)ON DUPLICATE KEY UPDATE count=count+1; `);
+		return await query(escape`insert into user (userId,nickName,avatarUrl,gender,count) VALUES (${userId},${nickName},${avatarUrl},${gender},0)ON DUPLICATE KEY UPDATE count=count+1,nickName=${nickName},avatarUrl=${avatarUrl},gender=${gender};`);
 	}
 }
 

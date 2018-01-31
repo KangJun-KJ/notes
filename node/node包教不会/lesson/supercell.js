@@ -73,7 +73,7 @@ app.get('/', function(req, res, next) {
 			$('.listImg2>li').each(function(idx, element) {
 				//    	items.push(detailLink:$(element).children('a').attr("href"))
 				var href = $(element).children('a').attr("href");
-				
+
 				urls.push(href);
 			});
 			async.mapLimit(urls, 1, function(url, callback) {
