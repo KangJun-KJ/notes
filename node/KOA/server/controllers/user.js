@@ -51,7 +51,11 @@ class UserControllers {
 	}
 
 	//获取大数据详情
-
+	async getFunnyData(ct){
+		const result= await User.getFunnyData();
+		ctx.body="该接口还没有实现";
+		
+	}
 	//添加评论
 	async setComment(ctx) {
 		const data = ctx.request.body;

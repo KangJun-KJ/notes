@@ -15,4 +15,6 @@ router.post("/setComment",UserController.setComment);									//添加用户的�
 router.post("/getComment",UserController.getComment);									//获取用户的评论
 router.post("/getAnswer",UserController.getMyAnswer);									//获取我的回答
 router.post("/setUserInfo",UserController.setUserInfo); 								//发送用户信息
+router.post("/getFunnyData",UserController.getFunnyData);                               //获取小程序用户使用的数据
+
 module.exports = router

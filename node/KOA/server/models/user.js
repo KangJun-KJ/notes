@@ -45,7 +45,12 @@ class users {
 	async getMyAnswer(){
 		return await query(escape`select * from answer`);
 	}
-	
+
+	//用力啊返回用户的数据	
+	async getFunnyData(){
+		
+	}
+
 	async setUserInfo({userId,nickName,avatarUrl,gender}){
 		return await query(escape`insert into user (userId,nickName,avatarUrl,gender,count) VALUES (${userId},${nickName},${avatarUrl},${gender},0)ON DUPLICATE KEY UPDATE count=count+1,nickName=${nickName},avatarUrl=${avatarUrl},gender=${gender};`);
 	}

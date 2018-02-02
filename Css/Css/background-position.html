@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>background-postion我们不一样</title>
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+				background-color: #333;
+			}
+			
+			.div {
+				position:relative;
+				background-color: lightskyblue;
+				margin: 100px auto 30px;
+				width: 1200px;
+				height: 400px;
+				background-color: #fff;
+				background-image: linear-gradient(#000 0%, #000 100%);
+				background-size: 100px 100px;
+				background-repeat: no-repeat;
+				background-position: 0% 0%;
+				-webkit-animation: changePosition 10s linear infinite;
+				animation: changePosition 10s linear infinite;
+			}
+			
+			@-webkit-keyframes changePosition {
+				0%{
+					background-position: 0 0%;
+				}
+				50% {
+					background-position: 100% 0;
+				}
+				100% {
+					background-position:  0 0%;
+				}
+			}
+			
+			@keyframes changePosition {
+				0%{
+					background-position: 0 0%;
+				}
+				50% {
+					background-position: 100% 0;
+				}
+				100% {
+					background-position:  0 0%;
+				}
+				/*from {
+					background-position: 0 0;
+				}
+				to {
+					background-position: 0 200%;
+				}*/
+			}
+			.child{
+				margin:0;
+				padding:0;
+				width:100px;
+				height:100px;
+				background-color: #000;
+				
+				position:absolute;
+				bottom:0px;
+				
+				-webkit-animation: moveDivByLeft 10s linear infinite;
+				animation: moveDivByLeft 10s linear infinite;
+			}
+			.child::after{
+				content:"";
+				position:absolute;
+				bottom:0px;
+				display: block;
+				height:400px;
+				width:3px;
+				background-color: aqua;
+			}
+			@keyframes moveDivByLeft{
+				0%{
+					left:0;
+				}
+				50%{
+					left:100%;
+				}
+				100%{
+					left:0;
+				}
+			}
+			.div2{
+				position:relative;
+				background-color: lightskyblue;
+				margin:0px auto;
+				width: 200px;
+				height: 200px;
+				background-color: #fff;
+				background-image: linear-gradient(#000 0%, #000 100%);
+				background-size: 300px 300px;
+				background-repeat: no-repeat;
+				/*background-position: -50% -50%;*/
+				background-position: 50px 50px;
+			}
+			/*(容器宽度-图片宽度)*percent*/
+		</style>
+	</head>
+
+	<body>
+		<div class='div'>
+			<div class='child'></div>
+		</div>
+		<!--当背景图片大于容器的时候-->
+		<!--当设置background-position为负值的时候,background-image并没有向左上角去，而是向右偏移了。-->
+		<!-- (200 - 300 )* -0.5=50  (-50%,-50%)等同于(50px,50px)-->
+	
+		<div class='div2'>
+
+		</div>
+	</body>
+
+</html>

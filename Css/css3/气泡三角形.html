@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>心形</title>
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .heartShaped {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-100%, -50%);
+            width: 240px;
+            height: 100px;
+            line-height: 100px;
+            text-align: center;
+            background-color: rgba(20, 209, 146, 1);
+            font-size: 40px;
+            color: #fff;
+            border-radius: 3px;
+        }
+
+        .heartShaped::before {
+            content: "";
+            position: absolute;
+            top: 74px;
+            height: 50px;
+            width: 50px;
+            background-color: rgba(20, 209, 146, 1);
+            transform: skew(-40deg) rotate(-47deg);
+        }
+        .bubbly {
+          position: absolute;
+          top:50%;
+          left: 50%;
+          transform:translate(20%,-50%);
+          background: #00aabb;
+          border-radius: .4em;
+          width: 260px;
+          padding: 60px 20px;
+          text-align: center;
+          color: white;
+          font-size: 200%;
+        }
+        .bubbly::after{
+            content:"";
+            position:absolute;
+            bottom:0;
+            left:50%;
+            border:34px solid transparent;
+            border-top-color: #00aabb;
+            border-bottom:0;
+            border-left: 0;
+          margin: 0 0 -34px -17px;
+        }
+    </style>
+</head>
+
+<body>
+    <hgroup class='heartShaped'>
+        .bubbly
+    </hgroup>
+    <hgroup class='bubbly'>
+            .bubbly
+    </hgroup>
+</body>
+
+</html>

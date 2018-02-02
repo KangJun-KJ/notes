@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>心形</title>
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .heartShaped  {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 140px;
+            line-height: 140px;
+            color:red;
+            transform: rotate(45deg)
+        }
+        .heartShaped::before{
+            position:absolute;
+            left:-50%;
+            content:"";
+            display: block;
+            width:140px;
+            height:140px;
+            border-radius: 100%;
+            background-color: rgb(240, 42, 15);
+        }
+        .heartShaped::after{
+            position:absolute;
+            top:-70px;
+            content:"";
+            display: block;
+            width:140px;
+            height:140px;
+            border-radius: 100%;
+            background-color: rgb(240, 42, 15);
+        }
+        .heartShaped>h1{
+            position:absolute;
+            top:0;
+            left:0;
+            width:140px;
+            height:140px;
+            background-color: rgba(240, 42, 15,.9);
+            color:#fff;
+            font-size:20px;
+            z-index: 2;
+        }
+    </style>
+</head>
+
+<body>
+    <hgroup class='heartShaped'>
+           <h1>.heartShaped</h1> 
+    </hgroup>
+</body>
+
+</html>
