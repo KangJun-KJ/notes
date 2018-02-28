@@ -16,13 +16,14 @@ var _error2 = _interopRequireDefault(_error);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var api = 'cards';
+const api = 'cards';
 
-var router = new _koaRouter2.default();
+const router = new _koaRouter2.default();
 
-router.prefix('/' + _config.baseApi + '/' + api);
+router.prefix(`/${_config.baseApi}/${api}`);
 
 router.post("/getCardModes", _card2.default.getCardMode);
+router.post("/getMyCards", _card2.default.getAllCardOfMySelf);
 router.post('/getCards', _card2.default.getCardList);
 router.post('/getCardsByMode', _card2.default.getAllCardsByCardMode);
 router.post("/addCard", _error2.default, _card2.default.setCarList);

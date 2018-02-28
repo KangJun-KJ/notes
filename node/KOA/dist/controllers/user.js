@@ -4,110 +4,110 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 var _user = require("../models/user.js");
 
 var _user2 = _interopRequireDefault(_user);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+class UserControllers {
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var UserControllers = function () {
-	function UserControllers() {
-		_classCallCheck(this, UserControllers);
+	async getUserId(ctx) {
+		console.log(ctx.request.body);
+		await _user2.default.getUserId(ctx.request.body).then(result => {
+			if (result.openid) {
+				ctx.body = {
+					success: true,
+					userId: result.openid
+				};
+			} else {
+				ctx.body = {
+					success: false,
+					detail: result.errmsg || "获取失败"
+				};
+			}
+		}, result => {
+			ctx.body = {
+				success: false,
+				detail: result
+			};
+		});
 	}
 
-	_createClass(UserControllers, [{
-		key: "getUserId",
-		value: function () {
-			var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(ctx) {
-				return regeneratorRuntime.wrap(function _callee$(_context) {
-					while (1) {
-						switch (_context.prev = _context.next) {
-							case 0:
-								console.log(ctx.request.body);
-								_context.next = 3;
-								return _user2.default.getUserId(ctx.request.body).then(function (result) {
-									if (result.openid) {
-										ctx.body = {
-											success: true,
-											userId: result.openid
-										};
-									} else {
-										ctx.body = {
-											success: false,
-											detail: result.errmsg || "获取失败"
-										};
-									}
-								}, function (result) {
-									ctx.body = {
-										success: fasle,
-										detail: result
-									};
-								});
+	//用户的反馈意见
+	async sendSuggestion(ctx) {
+		const data = ctx.request.body;
+		const result = await _user2.default.sendSuggestion(data);
+		if (result.affectedRows === 1) {
+			ctx.body = {
+				success: true
+			};
+		} else {
+			ctx.body = {
+				success: false,
+				detail: "插入建议失败"
+			};
+		}
+	}
 
-							case 3:
-							case "end":
-								return _context.stop();
-						}
-					}
-				}, _callee, this);
-			}));
+	//获取我的回答
+	async getMyAnswer(ctx) {
+		const result = await _user2.default.getMyAnswer();
+		ctx.body = {
+			success: true,
+			data: result
+		};
+	}
 
-			function getUserId(_x) {
-				return _ref.apply(this, arguments);
-			}
+	//获取大数据详情
+	async getFunnyData(ct) {
+		const result = await _user2.default.getFunnyData();
+		ctx.body = "该接口还没有实现";
+	}
+	//添加评论
+	async setComment(ctx) {
+		const data = ctx.request.body;
+		const result = await _user2.default.setComment(data);
+		console.log(result);
+		if (result[0].affectedRows === 1) {
+			ctx.body = {
+				success: true
+			};
+		} else {
+			ctx.body = {
+				success: false,
+				detail: "插入评论失败"
+			};
+		}
+	}
 
-			return getUserId;
-		}()
-	}, {
-		key: "sendSuggestion",
-		value: function () {
-			var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(ctx) {
-				var data, result;
-				return regeneratorRuntime.wrap(function _callee2$(_context2) {
-					while (1) {
-						switch (_context2.prev = _context2.next) {
-							case 0:
-								data = ctx.request.body;
-								_context2.next = 3;
-								return _user2.default.sendSuggestion(data);
+	//获取评论
+	async getComment(ctx) {
+		const data = ctx.request.body;
+		const result = await _user2.default.getComment(data);
 
-							case 3:
-								result = _context2.sent;
+		ctx.body = {
+			success: true,
+			data: result
+		};
+	}
 
-								if (result.affectedRows === 1) {
-									ctx.body = {
-										success: true
-									};
-								} else {
-									ctx.body = {
-										success: false,
-										detail: "插入建议失败"
-									};
-								}
-
-							case 5:
-							case "end":
-								return _context2.stop();
-						}
-					}
-				}, _callee2, this);
-			}));
-
-			function sendSuggestion(_x2) {
-				return _ref2.apply(this, arguments);
-			}
-
-			return sendSuggestion;
-		}()
-	}]);
-
-	return UserControllers;
-}();
+	//获取用户的信息并且上传
+	async setUserInfo(ctx) {
+		const data = ctx.request.body;
+		const result = await _user2.default.setUserInfo(data);
+		if (result.affectedRows === 2) {
+			ctx.body = {
+				success: true,
+				detail: "信息上传成功"
+			};
+		} else {
+			ctx.body = {
+				success: false,
+				detail: "信息上传失败"
+			};
+		}
+	}
+}
 
 exports.default = new UserControllers();

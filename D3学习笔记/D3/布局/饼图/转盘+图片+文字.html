@@ -10,14 +10,14 @@
 		<script>
 			var width = 800; //SVG绘制区域的宽度
 			var height = 800; //SVG绘制区域的高度
-
+			//1.确定初始数据
+			var dataset = new Array(10).fill(1)
 			var svg = d3.select("body") //选择<body>
 				.append("svg") //在<body>中添加<svg>
 				.attr("width", width) //设定<svg>的宽度属性
-				.attr("height", height); //设定<svg>的高度属性
+				.attr("height", height) //设定<svg>的高度属性
 
-			//1.确定初始数据
-			var dataset = new Array(10).fill(1)
+		
 
 			//2.转换数据
 			var pie = d3.layout.pie()
@@ -61,7 +61,11 @@
 				.data(piedata) //绑定转换后的数据piedata
 				.enter()
 				.append("g")
-				.attr("transform", "translate(" + (outerRadius2) + "," + (outerRadius2) + ")");
+				.attr("transform",function(d,i){
+					var deg = 360 / dataset.length / 2;
+//					return ``;
+					return 	`translate(${outerRadius2},${outerRadius2}) rotate(${deg}) `
+				});
 
 			var arcs2 = svg.selectAll("g.second")
 				.data(piedata) //绑定转换后的数据piedata
@@ -72,6 +76,7 @@
 			//绘制弧
 			arcs.append("path")
 				.attr("fill", function(d, i) {
+					return "rgba(0,0,0,.5)";
 					return color[i % 2]; //设定弧的颜色
 				})
 				.attr("d", function(d) {
@@ -80,7 +85,7 @@
 			//绘制弧
 			arcs2.append("path")
 				.attr("fill", function(d, i) {
-					console.log(123);
+					return "transparent";
 					return "rgb(253,140,20)"; //设定弧的颜色
 				})
 				.attr("d", function(d) {
@@ -99,7 +104,7 @@
 				.style("font-size", fontsize)
 				.attr("fill", "rgb(230,40,20)")
 				.text(function(d) {
-					return d.data;
+					return "我们都爱笑";
 				});
 
 			//绘制弧内的图片
@@ -107,20 +112,33 @@
 				.attr("id", function(d, i) {
 					return "image" + i;
 				})
-				.attr("transform-origin", "center center")
+				//				.attr("transform-origin", "center center")
 				.attr("transform", function(d, i) {
 					var middle = (d.startAngle + d.endAngle) / 2;
 					var angle = middle / 6.28 * 360;
+					console.log(angle);
+					console.log(arc.centroid(d));
 					var x = arc.centroid(d)[0] * 1.2 - imgWidth / 2;
 					var y = arc.centroid(d)[1] * 1.2 - imgHeight / 2;
-					return " translate(" + x + "," + y + ") rotate(" + angle + ")";
+					//					if(i!=0)return ;
+					//					var x=0;
+					//					var y=0;
+					//					return `translate(${- imgWidth / 2},${- imgHeight / 2}) `
+					return " translate(" + x + "," + y + ")";
+					//					rotate("+angle+")
 				})
 				.attr("xlink:href", function(d, i) {
 					return "wx.png";
 				})
 				.attr("width", imgWidth)
 				.attr("height", imgHeight);
-
+			var cnt = 0;
+			//			setInterval(function(){
+			//				d3.select('#image0')
+			//				.attr("transform",function(){
+			////					return "translate(" + (- imgWidth / 2+38.11209597291019)+ "," + (-117.29697034306895+- imgHeight) / 2 + ") rotate("+18+")";
+			//				})
+			//			},100);
 			//圈的外围添加小圆点
 			console.log(arc2);
 			arcs2.append("circle")

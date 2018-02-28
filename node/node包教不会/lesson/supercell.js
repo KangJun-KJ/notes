@@ -68,6 +68,7 @@ app.get('/', function(req, res, next) {
 			}
 			//    var $ = cheerio.load(iconv.decode(sres.text, 'utf-8'),{decodeEntities: false});
 			var $ = cheerio.load(sres.text);
+			console.log($);
 			var urls = [];
 			var cnt = 0;
 			$('.listImg2>li').each(function(idx, element) {

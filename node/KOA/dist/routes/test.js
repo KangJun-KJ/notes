@@ -6,9 +6,9 @@ var _koaRouter2 = _interopRequireDefault(_koaRouter);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var router = new _koaRouter2.default();
+const router = new _koaRouter2.default();
 
-var main = function main(ctx) {
+const main = ctx => {
 	ctx.response.body = '欢迎来到kjbu2的api';
 };
 

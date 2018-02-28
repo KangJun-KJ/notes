@@ -1,8 +1,10 @@
 const fs = require('fs');
 const Koa = require('koa');
 const app = new Koa();
+const serve = require('koa-static');
 
 const main = ctx => {
+	
 	ctx.response.type = 'html';
 	ctx.response.body = fs.createReadStream('./template.html');
 };

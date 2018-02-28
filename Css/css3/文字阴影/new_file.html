@@ -1,82 +1,90 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
-		<meta charset="UTF-8">
-		<title></title>
-	</head>
-	<style>
-		body {
-			background-color: #000;
-			padding: 0px;
-			margin: 0px;
-		}
-		
-		.shadow-box {
-			width: 598px;
-			height: 398px;
-			border: 1px #999 solid;
-			margin: 50px auto;
-			background-color: #666;
-			position: relative;
-			overflow: hidden;
-		}
-		
-		.shadow-box:after {
-			content: '';
-			background-color: #999;
-			position: absolute;
-			width: 100%;
-			height: 182px;
-			left: 0px;
-			top: 216px;
-		}
-		
-		.shadow-box .text {
-			margin: 0;
-			color: #999;
-			font-size: 80px;
-			font-family: arial;
-			font-weight: bold;
-			text-align: center;
-			position: absolute;
-			width: 100%;
-			left: 0;
-			top: 149px;
-			text-shadow: 0px -20px 2px #000;
-		}
-		
-		
-		.shadow-box .light {
-			position: absolute;
-			left: 0;
-			top: 0;
-			z-index: 1;
-			width: 100%;
-			height: 100%;
-			background: url(light.png) center center;
-		}
-	</style>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<style>
+	body {
+		background-color: #000;
+		padding: 0px;
+		margin: 0px;
+	}
 
-	<body>
-		<div class="shadow-box">
-			<p class="text">KAGNJUNWeb</p>
-			<div class="light"></div>
-		</div>
-	</body>
-	<script src="../js/jquery-2.2.3.min.js"></script>
-	<script>
-		$(".shadow-box").on('mousemove',function(event){
-			var x=event.offsetX-600/2+20;
-			var y=event.offsetY-400/2-20;
-			$(".text").css({
-				'text-shadow':x+"px "+y+"px 2px #000"
-			});
-			x=event.offsetX+1200/2;
-			y=event.offsetY+900/2;
-			$(".light").css({
-				'background-position':x+"px "+y+"px"
-			});
-		});
-	</script>
+	.shadow-box {
+		width: 598px;
+		height: 398px;
+		border: 1px #999 solid;
+		margin: 50px auto;
+		background-color: #666;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.shadow-box:after {
+		content: '';
+		background-color: #999;
+		position: absolute;
+		width: 100%;
+		height: 182px;
+		left: 0px;
+		top: 216px;
+	}
+
+	.shadow-box .text {
+		margin: 0;
+		color: #999;
+		font-size: 80px;
+		font-family: arial;
+		font-weight: bold;
+		text-align: center;
+		position: absolute;
+		width: 100%;
+		left: 0;
+		top: 149px;
+		text-shadow: 0px -20px 2px #000;
+	}
+
+
+	.shadow-box .light {
+		position: absolute;
+		left: 0;
+		top: 0;
+		z-index: 1;
+		width: 100%;
+		height: 100%;
+		background: url(light.png) center center;
+	}
+</style>
+
+<body>
+	<div class="shadow-box">
+		<p class="text">KAGNJUNWeb</p>
+		<div class="light"></div>
+	</div>
+</body>
+<!-- <script src="../js/jquery-2.2.3.min.js"></script> -->
+<script>
+	document.getElementsByClassName("shadow-box")[0].addEventListener("mousemove", function (event) {
+		var x = event.offsetX - 600 / 2 + 20;
+		var y = event.offsetY - 400 / 2 - 20;
+		document.getElementsByClassName("text")[0].style.textShadow = `${x}px ${y}px 2px #000`;
+		x = event.offsetX + 1200 / 2;
+		y = event.offsetY + 900 / 2;
+		document.getElementsByClassName("light")[0].style.backgroundPosition = `${x}px ${y}px`;
+	});
+			// $(".shadow-box").on('mousemove',function(event){
+
+			// 	$(".text").css({
+			// 		'text-shadow':x+"px "+y+"px 2px #000"
+			// 	});
+			// 	
+			// 	
+			// 	$(".light").css({
+			// 		'background-position':x+"px "+y+"px"
+			// 	});
+			// });
+</script>
+
 </html>

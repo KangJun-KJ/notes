@@ -28,13 +28,13 @@ var _fs2 = _interopRequireDefault(_fs);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var app = new _koa2.default();
+const app = new _koa2.default();
 app.use((0, _koaCors2.default)()).use((0, _koaBody2.default)({
 	multipart: true
 }));
 
 (0, _routes2.default)(app);
-app.on("error", function (err, ctx) {
+app.on("error", (err, ctx) => {
 	console.log("报错了");
 	console.log(err);
 	ctx.response.body = JSON.stringify({ "success": false, "detail": "请求失败" });

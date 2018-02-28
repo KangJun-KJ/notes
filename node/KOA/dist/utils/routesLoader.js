@@ -5,14 +5,14 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function (dirname) {
-    return new Promise(function (resolve, reject) {
-        var routers = [];
-        (0, _glob2.default)(dirname + '/*', { ignore: '**/index.js' }, function (err, files) {
+    return new Promise((resolve, reject) => {
+        const routers = [];
+        (0, _glob2.default)(`${dirname}/*`, { ignore: '**/index.js' }, (err, files) => {
             if (err) {
                 reject(err);
             }
-            files.forEach(function (file) {
-                var router = require(file);
+            files.forEach(file => {
+                const router = require(file);
                 routers.push(router);
             });
             resolve(routers);

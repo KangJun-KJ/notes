@@ -21,9 +21,9 @@ var _config = require('../config/');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var pool = _mysql2.default.createPool(_config.db);
+const pool = _mysql2.default.createPool(_config.db);
 function query(sql, values) {
-	return new Promise(function (resolve, reject) {
+	return new Promise((resolve, reject) => {
 		pool.query(sql, function (err, rows) {
 			if (err) {
 				reject(err);

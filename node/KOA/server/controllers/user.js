@@ -19,7 +19,7 @@ class UserControllers {
 				}
 			}, (result) => {
 				ctx.body = {
-					success: fasle,
+					success: false,
 					detail: result
 				}
 			})

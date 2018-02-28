@@ -5,8 +5,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function (app) {
-	(0, _routesLoader2.default)('' + __dirname).then(function (routers) {
-		routers.forEach(function (router) {
+	(0, _routesLoader2.default)(`${__dirname}`).then(routers => {
+		routers.forEach(router => {
 			app.use(router.routes()).use(router.allowedMethods({
 				throw: true
 			}));
