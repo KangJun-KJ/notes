@@ -1,4 +1,0 @@
-@media screen and (min-width: 600px) and (max-width: 960px){
-
-}
-当屏幕的宽度为600到960px之间的时候这样显示。
