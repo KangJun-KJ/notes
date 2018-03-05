@@ -1,0 +1,64 @@
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+	</head>
+
+	<body>
+		<input type="text" id='input' />
+
+		<script>
+			function $(ele) {
+				if(ele[0] == "#") {
+					return document.getElementById(ele.slice(1));
+				} else if(ele[0] == '.') {
+					return docuent.getElementsByClassName(ele.slice(1));
+				}
+			}
+			var textCounter = (function() {
+				var options = {},
+					el = 1;
+					
+				var tc = function(ele, op) {
+					//传过来的ele
+					el = $(ele);
+					this.init();
+				}
+
+				function getNum() {
+					console.log(el.value.length);
+					return el.value.length;
+				}
+
+				tc.prototype.init = function() {
+					var _this = this;
+					this.render();
+					el.addEventListener('keyup', function() {
+						_this.render();
+					})
+
+				}
+				
+				tc.prototype.render = function() {
+					if(!$("#counter")) {
+						var html = document.createElement('span');
+						html.innerText = 0;
+						html.id = 'counter';
+						el.parentNode.insertBefore(html, this.nextSibling);
+					}
+					$("#counter").innerText = getNum();
+				}
+				
+				return tc;
+				
+			})();
+			var tc=new textCounter("#input", {
+				a: 1
+			});
+			console.log(tc.render);
+		</script>
+
+	</body>
+
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <canvas id="can"></canvas>
+    <script>
+        var context = document.getElementById("can");
+        var ctx = context.getContext("2d");
+
+        context.width = 300;
+        context.height = 300;
+
+       
+
+        var x = 10, y = 10, size = 20, color = "red";
+
+        function draw() {
+            ctx.beginPath();
+            ctx.fillStyle = color;
+            ctx.moveTo(x + 0.5 * size, y + 0.3 * size);
+            ctx.bezierCurveTo(x + 0.1 * size, y, x,
+                y + 0.6 * size, x + 0.5 *
+                size, y + 0.9 * size);
+            ctx.bezierCurveTo(x + 1 * size, y + 0.6 *
+                size, x + 0.9 * size, y,
+                x + 0.5 * size,
+                y + 0.3 * size);
+            ctx.closePath();
+            ctx.fill();
+        }
+     
+        function init(){
+            // ctx.clearRect(0,0,context.width,context.height);
+            ctx.fillStyle = 'rgba(0,0,0,0.2)';
+            ctx.fillRect(0, 0, context.width, context.height);
+            // ctx.fillStyle = "#272D4D";
+            // ctx.fillRect(0, 0, context.width, context.height);
+        }
+
+        
+        loop();
+        function loop(){
+            x+=1;
+            init();
+            draw();
+            requestAnimationFrame(loop);
+        }
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>文字粒子动画</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id='can'></canvas>
+
+    <script>
+        class Particle {
+            constructor({ x, y, size = 2, color, xEnd, yEnd, e = 60 } = {}) {
+                this.x = x;
+                this.y = y;
+
+                this.size = size;
+                this.color = color || `hsla(${Math.random() * 360}, 90%, 65%, 1)`;
+                this.xEnd = xEnd;
+                this.yEnd = yEnd;
+                this.xStart = x;
+                this.yStart = y;
+                //经过e帧之后到达目标地点
+                this.e = e;
+                //计算每一帧走过的距离
+                this.dx = (xEnd - x) / e;
+                this.dy = (yEnd - y) / e;
+                // this.canMove=Math.random()>0.9?true:false;
+            }
+
+            disorganize() {
+                this.e = 60;
+                [this.xStart, this.xEnd] = [this.xEnd, this.xStart];
+                [this.yStart, this.yEnd] = [this.yEnd, this.yStart];
+                this.dx = (this.xEnd - this.xStart) / this.e;
+                this.dy = (this.yEnd - this.yStart) / this.e;
+            }
+            go() {
+                //到目的后保持不动 （其实这里也可以搞点事情的）
+                if (--this.e <= 0) {
+                    this.x = this.xEnd;
+                    this.y = this.yEnd;
+                    // if(this.canMove)
+                    // this.disorganize();
+                    return;
+                }
+                this.x += this.dx;
+                this.y += this.dy;
+            }
+            render(ctx, op = 1) {
+                this.go();
+                //1圆形 2爱心 3 正方形
+                ctx.beginPath();
+                ctx.fillStyle = this.color;
+                if (op == 1) {
+                    ctx.arc(this.x, this.y, this.size , 0, Math.PI * 2, false);
+                } else if (op == 2) {
+                    //下面是画出心型的贝塞尔曲线
+                    ctx.fillStyle = this.color;
+                    ctx.moveTo(this.x + 0.5 * this.size, this.y + 0.3 * this.size);
+                    ctx.bezierCurveTo(this.x + 0.1 * this.size, this.y, this.x,
+                        this.y + 0.6 * this.size, this.x + 0.5 *
+                        this.size, this.y + 0.9 * this.size);
+                    ctx.bezierCurveTo(this.x + 1 * this.size, this.y + 0.6 *
+                        this.size, this.x + 0.9 * this.size, this.y,
+                        this.x + 0.5 * this.size,
+                        this.y + 0.3 * this.size);
+                } else if (op == 3) {
+                    ctx.rect(this.x,this.y,this.size,this.size);
+                }
+                ctx.fill();
+                // ctx.stroke();
+                ctx.closePath();
+            }
+        }
+        const canvas = {
+            init() {
+                //存储粒子的信息
+                this.particles = [];
+                this.gap = 4;
+
+                //设置canvas的初始化的条件
+                this.initCanvas();
+
+                //画上符号或者文字
+
+                this.draw(2, this.width / 2, this.height / 2, 120, "粒子动画");
+                // this.draw(1);
+
+
+                this.getParticles();
+
+                //canvas动画循环
+                this.loop();
+            },
+            initCanvas() {
+                this.width = 500;
+                this.height = 500;
+
+                this.c = document.getElementById("can");
+                this.ctx = this.c.getContext("2d");
+
+                this.c.width = this.width;
+                this.c.height = this.height;
+                this.ctx.textBaselin = 'middle';
+                this.ctx.textAlign = 'center';
+                this.clearCanvas();
+
+            },
+            draw(op = 1, x = 0, y = 0, size = 40, words) {
+                switch (op) {
+                    case 1:
+                        this.loveheart(100, 50, 300);
+                        break;
+                    case 2:
+                        this.write(words, x, y, size, words);
+                        break;
+                }
+
+            },
+            clearCanvas() {
+                this.ctx.clearRect(0, 0, this.width, this.height);
+                this.ctx.fillStyle = "#272D4D";
+                this.ctx.fillRect(0, 0, this.width, this.height);
+            },
+            loveheart(x, y, size = 300, color = "hsla(0,0%,0%,1)") {
+                this.ctx.beginPath();
+                this.ctx.fillStyle = color;
+                this.ctx.moveTo(x + 0.5 * size, y + 0.3 * size);
+                this.ctx.bezierCurveTo(x + 0.1 * size, y, x,
+                    y + 0.6 * size, x + 0.5 *
+                    size, y + 0.9 * size);
+                this.ctx.bezierCurveTo(x + 1 * size, y + 0.6 *
+                    size, x + 0.9 * size, y,
+                    x + 0.5 * size,
+                    y + 0.3 * size);
+                this.ctx.closePath();
+                this.ctx.fill();
+
+            },
+            write(words, x, y, size = 40) {
+                //清除之前写的字。
+                this.clearCanvas();
+                console.log(2);
+                this.ctx.font = `bold ${size}px Arial`;
+                this.ctx.fillStyle = "hsla(0,0%,0%,1)";
+                this.ctx.fillText(words, x, y);
+            },
+            getPosition() {
+                let positions = [], gap = 4;
+                const data = this.ctx.getImageData(0, 0, this.width, this.height).data;
+                for (let i = 0, len = data.length; i < len; i += 4 * this.gap) {
+                    if (data[i] == 0) {
+                        var x = (i / 4) % this.width;
+                        var y = Math.floor((i / 4) / this.height);
+                        positions.push({ x, y });
+                    }
+                }
+                return positions;
+            },
+            getParticles() {
+                //获取canvas上面的imgData数据
+                const dots = this.getPosition();
+                for (let i = 0; i < dots.length; i++) {
+                    this.particles.push(new Particle({
+                        xEnd: dots[i].x,
+                        yEnd: dots[i].y,
+                        x: Math.random() * this.width,
+                        y: Math.random() * this.height,
+                        size:10,
+                        color: 'hsla(360, 90%, 65%, 1)'
+                    }));
+                }
+            },
+            loop() {
+                //每一帧清除画布，然后再渲染微粒就可以了
+                requestAnimationFrame(this.loop.bind(this));
+                this.clearCanvas();
+                for (var i = 0; i < this.particles.length; i++) {
+                    this.particles[i].render(this.ctx,2);
+                }
+            }
+        }
+        canvas.init();
+    </script>
+</body>
+
+</html>

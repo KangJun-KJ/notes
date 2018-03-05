@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+			}
+			
+			canvas {
+				display: block;
+				margin: auto
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<script src='pixi.min.js'></script>
+		<script>
+			let Application = PIXI.Application,
+				Container = PIXI.Container,
+				loader = PIXI.loader,
+				resources = PIXI.loader.resources,
+				Graphics = PIXI.Graphics,
+				TextureCache = PIXI.utils.TextureCache,
+				Sprite = PIXI.Sprite,
+				Text = PIXI.Text,
+				TextStyle = PIXI.TextStyle;
+			let rectW = 16,
+				rectH = 16,
+				edgeW = rectW * 32,
+				edgeH = rectH * 32,
+				lastendx = 16,
+				lastendy = 16;
+			//当前游戏执行的哪个状态，小蛇的速度
+			let state, speed = 1;
+			let lastime, nowtime;
+			var num = [],
+				foods = [];
+			//Create a Pixi Application
+			let app = new Application({
+				width: edgeW,
+				height: edgeH,
+				antialiasing: true,
+				transparent: false,
+				resolution: 1
+			});
+			/* 512/16 =32*/
+			document.body.appendChild(app.view);
+			loader
+				.add("dungeon.png")
+				.load(setup);
+			let time, speedText, fps;
+			
+			function setup(){
+				let bg = new Sprite(resources["dungeon.png"].texture);
+				app.stage.addChild(bg);
+				initSnake();
+				addSnake(2, 1);
+				addSnake(3, 1);
+				addSnake(4, 1);
+				addSnake(5, 1);
+				addFood(160, 16);
+				lastime = new Date().getTime();
+				app.ticker.add(delta => gameLoop(delta));
+				showText();
+			}
+			//初始化或者在蛇尾加一个长度
+			function initSnake() {
+				var roundBox = new Graphics();
+				num.push({
+					el: roundBox
+				});
+				roundBox.beginFill(0xFFFFFF);
+				roundBox.drawRoundedRect(0, 0, rectW, rectH, 4)
+				roundBox.endFill();
+				roundBox.x = lastendx;
+				roundBox.y = lastendy;
+				roundBox.direction="right";
+				roundBox.vx=rectW;
+				roundBox.vy=0;
+				app.stage.addChild(roundBox);
+				//游戏开始，将游戏循环函数设置成play
+				if(!state){
+					state = play;
+				}
+			}
+			function getDirection(x,y){
+				if(y==0){
+					if(x>0){
+						return "right";
+					}
+					return "left";
+				}else{
+					if(y>0){
+						return "down";
+					}
+					return "up";
+				}
+			}
+			//更新蛇的位置，蛇头朝着运动方向前进一个，而其他部位的位置则变成他前一个部位的位置。
+			function updateSnake() {
+				var len = num.length,
+					i = len - 1;
+				lastendx = num[len - 1].el.x;
+				lastendy = num[len - 1].el.y;
+				for(; i >= 0; i--) {
+					if(i == 0) {
+						num[i].el.x += num[i].el.vx;
+						num[i].el.y += num[i].el.vy;
+						num[i].el.direction=getDirection(num[i].el.vx,num[i].el.vy);
+					} else {
+						num[i].el.x = num[i - 1].el.x;
+						num[i].el.y = num[i - 1].el.y;
+					}
+				}
+				judgeGameOver();
+			}
+			
+			function addSnake(x, y, vx = rectW, vy = 0, deleteIndex) {
+				var rectangle = new Graphics();
+				var roundBox = new Graphics();
+				num.unshift({
+					el: roundBox
+				});
+				if(x==5){
+					roundBox.beginFill(0xFF9933);
+				}else{
+					roundBox.beginFill(0xFFFFFF);
+				}
+				//绘制一个圆角矩形
+				roundBox.drawRoundedRect(0, 0, rectW, rectH, 4)
+				roundBox.endFill();
+				roundBox.x = x * 16;
+				roundBox.y = y*16;
+				roundBox.vx=vx;
+				roundBox.vy=vy;
+				app.stage.addChild(roundBox);
+
+			}
+			
+
+			function addFood(x, y) {
+				var x = x || 16 * Math.round(Math.random() * edgeW / rectW);
+				var y = y || 16 * Math.round(Math.random() * edgeH / rectH);
+				//添加的食物不可以在在蛇自己的本身。
+				for(var i = 0, len = num.length; i < len; i++) {
+					if(x == num[i].el.x && y == num[i].el.y) {
+						addFood();
+						return;
+					}
+				}
+				//添加的食物也不可以存在之前未吃的食物上面
+				for(var i=0,len=foods.length;i<len;i++){
+					if(x==foods[i].el.x&&y==foods[i].el.y){
+						addFood();
+						return ;
+					}
+				}
+				//绘制一个圆形 位置+半径
+				let circle = new Graphics();
+				foods.push({
+					el: circle
+				})
+				circle.beginFill(0xd8d80d);
+				circle.drawCircle(0, 0, 8);
+				circle.endFill();
+				circle.x = x+8;
+				circle.y = y+8;
+				app.stage.addChild(circle);
+			}
+
+			function judgeGameOver() {
+				//边缘检测
+				if(num[0].el.x < 0 || num[0].el.x >= edgeW || num[0].el.y < 0 || num[0].el.y >= edgeH) {
+					state = end;
+					return;
+				}
+				for(var i = 1, len = num.length; i < len; i++) {
+					if(num[i].el.x == num[0].el.x && num[i].el.y == num[0].el.y) {
+						state = end;
+						return;
+					}
+				}
+			}
+
+			function GameOverTips() {
+				let gameOverScene = new Container();
+				app.stage.addChild(gameOverScene);
+
+				let message = new Text("Game Over\n", new TextStyle({
+					fontFamily: "Arial",
+					fontSize: 36,
+					fill: "white",
+					stroke: '#ff3300',
+					strokeThickness: 4,
+					dropShadow: true,
+					dropShadowColor: "#000000",
+					dropShadowBlur: 4,
+					dropShadowAngle: Math.PI / 6,
+					dropShadowDistance: 6,
+
+				}));
+				message.position.set(166, 206);
+				gameOverScene.addChild(message);
+				let score = new Text(`你一共吃了${num.length-5}个`, new TextStyle({
+					fontFamily: "Arial",
+					fontSize: 16,
+					fill: "yellow",
+				}));
+				score.position.set(210, 246);
+				gameOverScene.addChild(score);
+			}
+
+			
+
+			function showText(pos) {
+				speedText = new Text("level:1", {
+					fill: "white",
+					fontSize: 12
+				});
+				speedText.position.set(edgeW - 60, edgeH - 15);
+				app.stage.addChild(speedText);
+				fps = new Text("fps:60", {
+					fill: "white",
+					fontSize: 12
+				});
+				fps.position.set(0, edgeH - 15);
+				app.stage.addChild(fps);
+			}
+			let left = keyboard(37),
+				up = keyboard(38),
+				right = keyboard(39),
+				down = keyboard(40),
+				IsKeyDown=false;
+			left.press = function() {
+				if(num[0].el.direction=="right"){
+					return ;
+				}
+				if(num[0].el.vx == rectW) {
+					return;
+				}
+
+				num[0].el.vx = -rectW;
+				num[0].el.vy = 0;
+			}
+			up.press = function() {
+				if(num[0].el.direction=="down"){
+					return ;
+				}
+				if(num[0].el.vy == rectH) {
+					return;
+				}
+
+				num[0].el.vx = 0;
+				num[0].el.vy = -rectH;
+			}
+			right.press = function() {
+				if(num[0].el.direction=="left"){
+					return ;
+				}
+				if(num[0].el.vx == -rectW) {
+					return;
+				}
+
+				num[0].el.vx = rectW;
+				num[0].el.vy = 0;
+			}
+			down.press = function() {
+				if(num[0].el.direction=="up"){
+					return ;
+				}
+				if(num[0].el.vy == -rectH) {
+					return;
+				}
+
+				num[0].el.vx = 0;
+				num[0].el.vy = rectH;
+			}
+
+			var cnt = 0,
+				foodCnt = 0;
+
+			function gameLoop(delta) {
+				state(delta);
+			}
+
+			function play() {
+				nowtime = new Date().getTime();
+				fps.text = "fps:" + Math.round(1000 / (nowtime - lastime));
+				lastime = nowtime;
+				cnt++;
+				foodCnt++;
+				if(foodCnt == Math.round(Math.random()*120)+60) {
+					foodCnt = 0;
+					addFood();
+				}
+				if(Math.round(60 / cnt) == speed) {
+					cnt = 0;
+					updateSnake();
+					IsKeyDown=false;
+				}
+				for(var i = 0, len = foods.length; i < len; i++) {
+					if(hitTestRectangle(num[0].el, foods[i].el) && foods[i].el.visible == true) {
+						foods[i].el.visible = false;
+						initSnake();
+						setSpeed();
+					}
+				}
+			}
+			//根据当前的长度设置速度
+			function setSpeed() {
+				let len = num.length;
+				speed=Math.min(10,Math.floor((len-4)/2)+1);
+				speedText.text="level:"+speed;
+			}
+
+			function end() {
+				GameOverTips();
+			}
+			//The `hitTestRectangle` function
+			function hitTestRectangle(r1, r2) {
+
+				//Define the variables we'll need to calculate
+				let hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
+
+				//hit will determine whether there's a collision
+				hit = false;
+
+				//Find the center points of each sprite
+				r1.centerX = r1.x + r1.width / 2;
+				r1.centerY = r1.y + r1.height / 2;
+				r2.centerX = r2.x + r2.width / 2;
+				r2.centerY = r2.y + r2.height / 2;
+
+				//Find the half-widths and half-heights of each sprite
+				r1.halfWidth = r1.width / 2;
+				r1.halfHeight = r1.height / 2;
+				r2.halfWidth = r2.width / 2;
+				r2.halfHeight = r2.height / 2;
+
+				//Calculate the distance vector between the sprites
+				vx = r1.centerX - r2.centerX;
+				vy = r1.centerY - r2.centerY;
+
+				//Figure out the combined half-widths and half-heights
+				combinedHalfWidths = r1.halfWidth + r2.halfWidth;
+				combinedHalfHeights = r1.halfHeight + r2.halfHeight;
+
+				//Check for a collision on the x axis
+				if(Math.abs(vx) < combinedHalfWidths) {
+
+					//A collision might be occuring. Check for a collision on the y axis
+					if(Math.abs(vy) < combinedHalfHeights) {
+
+						//There's definitely a collision happening
+						hit = true;
+					} else {
+
+						//There's no collision on the y axis
+						hit = false;
+					}
+				} else {
+
+					//There's no collision on the x axis
+					hit = false;
+				}
+				//`hit` will be either `true` or `false`
+				return hit;
+			};
+			//The `keyboard` helper function
+			function keyboard(keyCode) {
+				var key = {};
+				key.code = keyCode;
+				key.isDown = false;
+				key.isUp = true;
+				key.press = undefined;
+				key.release = undefined;
+				//The `downHandler`
+				key.downHandler = function(event) {
+					if(event.keyCode === key.code) {
+						if(key.isUp && key.press) key.press();
+						key.isDown = true;
+						key.isUp = false;
+					}
+					event.preventDefault();
+				};
+				//The `upHandler`
+				key.upHandler = function(event) {
+					if(event.keyCode === key.code) {
+						if(key.isDown && key.release) key.release();
+						key.isDown = false;
+						key.isUp = true;
+					}
+					event.preventDefault();
+				};
+				//Attach event listeners
+				window.addEventListener(
+					"keydown", key.downHandler.bind(key), false
+				);
+				window.addEventListener(
+					"keyup", key.upHandler.bind(key), false
+				);
+				return key;
+			}
+		</script>
+	</body>
+
+</html>

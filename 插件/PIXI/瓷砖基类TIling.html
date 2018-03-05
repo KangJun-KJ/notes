@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		
+		<script src='pixi.min.js'></script>
+		<script>
+			var app=new PIXI.Application();
+			document.body.appendChild(app.view);
+			
+//			var texture=PIXI.Texture.fromImage("p2.jpeg");
+			var texture=PIXI.Texture.fromImage("p2.jpeg");
+			console.log(app);
+			var tilingSprite=new PIXI.extras.TilingSprite(
+				texture,
+				app.renderer.width,
+				app.renderer.height
+			);
+			app.stage.addChild(tilingSprite);
+			var count=0;
+			app.ticker.add(function(){
+				count+=0.005;
+//				
+//				tilingSprite.tileScale.x=2+Math.sin(count);
+//				tilingSprite.tileScale.y=2+Math.cos(count);
+//				
+//				tilingSprite.tilePosition.x+=1;
+				tilingSprite.tilePosition.y+=1;
+			});
+		</script>
+	</body>
+</html>

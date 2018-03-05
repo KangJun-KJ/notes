@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<script src='../pixi.min.js'></script>
+		<script>
+			var app=new PIXI.Application(800,600,{
+				background:0x1099bb
+			});
+			document.body.appendChild(app.view);
+			var texture=PIXI.Texture.fromImage('bunny.png');
+			
+			texture.baseTexture.scaleMode=PIXI.SCALE_MODES.NEAREST;
+			var bunnys=[];
+			for(var i=0;i<10;i++){
+				createBunny(
+					Math.floor(Math.random()*app.renderer.width),
+					Math.floor(Math.random()*app.renderer.height)
+				)
+			}
+			
+			function createBunny(x,y){
+				console.log(x,y);
+				var bunny=new PIXI.Sprite(texture);
+				
+				bunny.interactive=true;
+				
+				bunny.buttonMode=true;
+				//设置锚点为中心点
+				bunny.anchor.set(0.5);
+				
+				bunny.scale.set(3);
+				
+				bunny.tint=Math.random()*0xFFFFFF;
+				//添加事件
+				bunny
+					.on("pointerdown",onDragStart)
+					.on("pointerup",onDragEnd)
+					.on("pointeroutside",onDragEnd)
+					.on("pointermove",onDragMove)
+				
+				bunny.x=x;
+				bunny.y=y;
+				app.stage.addChild(bunny);
+				bunnys.push(bunny);
+			}
+			var button = new PIXI.Graphics()
+				.beginFill(0xffffff)
+				.drawRoundedRect(0, 0, 100, 40, 10)
+				.endFill()
+
+			button.x = (app.renderer.width - button.width) -30;
+			button.y = 20;
+			
+			button.interactive=true;
+			button.buttonMonde=true;
+			app.stage.addChild(button);
+			
+			button.on('pointertap', onPlayVideo);
+
+			function onPlayVideo() {
+				button.destroy();
+//				for(var i=0;i<9;i++){
+//					console.log(200+i%3*200+"---"+(200+Math.floor(i/3)*200))
+//					moveBunny({x:200+i%3*200,y:200+i/3*200},bunnys[i]);
+//				}
+				moveBunny({x:200,y:150},bunnys[0]);
+				moveBunny({x:400,y:150},bunnys[1]);
+				moveBunny({x:600,y:150},bunnys[2]);
+				moveBunny({x:200,y:300},bunnys[3]);
+				moveBunny({x:400,y:300},bunnys[4]);
+				moveBunny({x:600,y:300},bunnys[5]);
+				moveBunny({x:200,y:450},bunnys[6]);
+				moveBunny({x:400,y:450},bunnys[7]);
+				moveBunny({x:600,y:450},bunnys[8]);
+			}
+			function moveBunny(newPos,bunny){
+				if(newPos.x==bunny.x&&newPos.y==bunny.y){
+					return ;
+				}
+				setTimeout(function(){
+					if(bunny.x!=newPos.x){
+						bunny.x=bunny.x>newPos.x?bunny.x-1:bunny.x+1;
+					}
+					if(bunny.y!=newPos.y){
+						bunny.y=bunny.y>newPos.y?bunny.y-1:bunny.y+1;
+					}
+					
+					moveBunny(newPos,bunny);
+				},17);
+			}
+			function onDragStart(event){
+				console.log(this);
+				console.log(event);
+				this.data=event.data;
+				this.alpha=0.5;
+				this.dragging=true;
+			}
+			
+			function onDragEnd(){
+				this.alpha=1;
+				this.dragging=false;
+				this.data=null;
+			}
+			
+			function onDragMove(){
+				if(this.dragging){
+					var newPosition=this.data.getLocalPosition(this.parent);
+					this.x=newPosition.x;
+					this.y=newPosition.y;
+				}
+			}
+		</script>
+	</body>
+</html>

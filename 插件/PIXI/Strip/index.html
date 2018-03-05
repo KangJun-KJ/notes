@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		111
+		<script src='../pixi.min.js'></script>
+		<script>
+			var app = new PIXI.Application(800, 600);
+			document.body.appendChild(app.view);
+			
+			PIXI.loader.add("t1", "snake.png")
+			PIXI.loader.load(setUp);
+			function setUp(res,resources){
+				console.log(123);
+				var background = new PIXI.Sprite(resources["t1"].texture);
+				background.width=700;
+				app.stage.addChild(background);
+			}
+			
+		</script>
+	</body>
+</html>

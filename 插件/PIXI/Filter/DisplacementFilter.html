@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<script src='../pixi.min.js'></script>
+		<script type="text/javascript">
+			var app = new PIXI.Application();
+			document.body.appendChild(app.view);
+
+			var bg = PIXI.Sprite.fromImage("displace.png");
+			bg.width = 800;
+			bg.height = 600;
+			app.stage.addChild(bg);
+
+			var displacementSprite = PIXI.Sprite.fromImage('displace.png');
+			var displacementFilter = new PIXI.filters.DisplacementFilter(displacementSprite);
+			console.log(displacementSprite)
+			displacementSprite.width = 100;
+			displacementSprite.height = 100;
+			displacementFilter.height = 100;
+			displacementFilter.height = 100;
+			
+			
+			app.stage.addChild(displacementSprite);
+
+			app.filters = [displacementFilter];
+
+			displacementFilter.scale.x = 1;
+			displacementFilter.scale.y = 1;
+			displacementSprite.anchor.set(0.5);
+
+			function onPointerMove(eventData) {
+				displacementSprite.position.set(eventData.data.global.x - 25, eventData.data.global.y);
+			}
+		</script>
+	</body>
+
+</html>

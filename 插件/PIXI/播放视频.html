@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+
+		<script src='pixi.min.js'></script>
+		<script>
+			var app = new PIXI.Application(800, 600, {
+				transparent: true
+			});
+			document.body.appendChild(app.view);
+
+			var button = new PIXI.Graphics()
+				.beginFill(0x0, 0.5)
+				.drawRoundedRect(0, 0, 100, 100, 10)
+				.endFill()
+				.beginFill(0xffffff)
+				.moveTo(36, 30)
+				.lineTo(36, 70)
+				.lineTo(70, 50);
+
+			button.x = (app.renderer.width - button.width) / 2;
+			button.y = (app.renderer.height - button.height) / 2;
+			
+			button.interactive=true;
+			button.buttonMonde=true;
+			app.stage.addChild(button);
+
+			button.on('pointertap', onPlayVideo);
+
+			function onPlayVideo() {
+				button.destroy();
+
+				var texture = PIXI.Texture.fromVideo('../video/1.mp4');
+
+				var videoSprite = new PIXI.Sprite(texture);
+
+				// Stetch the fullscreen
+				videoSprite.width = app.renderer.width;
+				videoSprite.height = app.renderer.height;
+
+				app.stage.addChild(videoSprite);
+			}
+		</script>
+	</body>
+
+</html>

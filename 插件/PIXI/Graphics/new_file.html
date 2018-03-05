@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+
+		<script src='../pixi.min.js'></script>
+		<script>
+			var app = new PIXI.Application(800, 600);
+			document.body.appendChild(app.view);
+
+			var graphics = new PIXI.Graphics();
+			app.stage.addChild(graphics);
+			graphics.x = app.renderer.width / 2;
+			graphics.y = app.renderer.height / 2;
+			var count=0;
+			
+			app.ticker.add(function() {
+				count += 0.1;
+
+				graphics.clear();
+
+				graphics.beginFill(0x8bc5ff, 0.4);
+				graphics.moveTo(-120 + Math.sin(count) * 20, -100 + Math.cos(count) * 20);
+				graphics.lineTo(120 + Math.cos(count) * 20, -100 + Math.sin(count) * 20);
+				graphics.lineTo(120 + Math.sin(count) * 20, 100 + Math.cos(count) * 20);
+				graphics.lineTo(-120 + Math.cos(count) * 20, 100 + Math.sin(count) * 20);
+				graphics.rotation = count * 0.1;
+			})
+		</script>
+	</body>
+
+</html>

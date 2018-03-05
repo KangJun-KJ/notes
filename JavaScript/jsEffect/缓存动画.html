@@ -34,9 +34,19 @@
 					};
 					step();
 				}
-				var doc = document.body.scrollTop ? document.body : document.documentElement;
+				console.log(document.body.scrollTop);
+				if(document.body.scrollTop){
+					console.log("body");
+				}else{
+					console.log('documentElement');
+				}
 				
+				document.getElementById("down").addEventListener("click",function(){
+
+				});
+
 				document.getElementById("up").addEventListener('click', function() {
+					var doc = document.body.scrollTop ? document.body : document.documentElement;
 					Math.easeout(doc.scrollTop, 0, 4, function(value) {
 						doc.scrollTop = value;
 					});

@@ -1,10 +1,10 @@
 
 
 export const db = {
-	host: '47.97.166.74',
+	host: '****',
 	port: '3306',
 	user: 'root',
-	password: 'Kj5895665',
+	password: '****',
 	database: 'royalwar',
 	multipleStatements: true
 }

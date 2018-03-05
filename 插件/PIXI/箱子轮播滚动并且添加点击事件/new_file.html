@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			#mydiv {
+				width: 800px;
+				height: 400px;
+				margin: auto;
+				position: relative;
+				overflow: hidden;
+			}
+			
+			canvas {
+				position: absolute;
+				left: 0;
+				display: block;
+				z-index: 1;
+			}
+			
+			#goodsMask {
+				z-index: 2;
+				width: 800px;
+				height: 400px;
+				background-color: rgba(0, 0, 0, .6);
+				position: absolute;
+				left: 800px;
+				transition: left .5s ease-in-out;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id='mydiv'>
+			<div id="goodsMask">
+				<button id='back'>点击返回</button>
+			</div>
+		</div>
+		<script src='../pixi.min.js'></script>
+		<script>
+			var app = new PIXI.Application({
+				width: 800,
+				height: 400,
+			});
+
+			console.log(app);
+			document.getElementById("mydiv").appendChild(app.view);
+
+			var background = new PIXI.Container();
+			background.width = app.view.width;
+			background.height = app.view.height;
+
+			var background2 = new PIXI.Container();
+			background2.width = app.view.width;
+			background2.height = app.view.height;
+			background2.x = 800;
+			background2.y = 0;
+
+			console.log(background);
+			app.stage.addChild(background);
+			app.stage.addChild(background2);
+
+			var xiangzi = PIXI.Sprite.fromImage("5188灰.png");
+			xiangzi.width = 400;
+			xiangzi.height = 400;
+			xiangzi.data = 1;
+			background.addChild(xiangzi);
+
+			var xiangzi2 = PIXI.Sprite.fromImage("5165黑.png");
+			xiangzi2.width = 400;
+			xiangzi2.height = 400;
+			xiangzi2.x = 400;
+			xiangzi2.y = 0;
+			background.addChild(xiangzi2);
+
+			//			
+			//			var graphics = new PIXI.Graphics();
+			//			graphics.beginFill(0x8bc5ff);
+			//			graphics.moveTo(0,0);
+			//			graphics.lineTo(0,400);
+			//			graphics.lineTo(800,400);
+			//			graphics.lineTo(800,0);
+			//			background2.addChild(graphics);
+
+			var xiangzi3 = PIXI.Sprite.fromImage("5188灰.png");
+			xiangzi3.width = 400;
+			xiangzi3.height = 400;
+			background2.addChild(xiangzi3);
+
+			var xiangzi4 = PIXI.Sprite.fromImage("5165黑.png");
+			xiangzi4.width = 400;
+			xiangzi4.height = 400;
+			xiangzi4.x = 400;
+			xiangzi4.y = 0;
+			background2.addChild(xiangzi4);
+
+			xiangzi.interactive = true;
+			xiangzi.buttonMode = true;
+
+			document.getElementById("back").addEventListener('click', function() {
+				speed = 1;
+				document.getElementById("goodsMask").style.left = "800px";
+			});
+			xiangzi.on("pointerdown", function(e) {
+				speed = 0;
+				console.log(e);
+				document.getElementById("goodsMask").style.left = "0px";
+			})
+			var x = 0,
+				speed = 1;
+			app.ticker.add(function() {
+				x -= speed;
+				background.x = x;
+				background2.x = 800 + x;
+				if(x <= -800) {
+					console.log(123);
+					x = 0;
+					background.x = 0;
+					background.x = 800;
+				}
+			})
+		</script>
+	</body>
+
+</html>

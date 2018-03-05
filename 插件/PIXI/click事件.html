@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<script src='pixi.min.js'></script>
+		<script>
+			let Application = PIXI.Application,
+				loader = PIXI.loader,
+				resources = PIXI.loader.resources,
+				Sprite = PIXI.Sprite,
+				Rectangle = PIXI.Rectangle,
+				TextureCache = PIXI.utils.TextureCache;
+			var app=new Application(800,600,{
+				backgroundColor:0x1099bb
+			});
+			document.body.appendChild(app.view);
+//			PIXI.settings.SCALE_MODE=PIXI.SCALE_MODES.NEAREST;
+			var sprite=Sprite.fromImage('cat.jpg');
+			//设置中心点
+			sprite.anchor.set(0.5);
+			sprite.x=app.renderer.width/2;
+			sprite.y=app.renderer.height/2;
+			//选择进行互动，必须有
+			sprite.interactive=true;
+			//显示鼠标手
+			sprite.buttonMode=true;
+			
+			sprite.on('pointerdown',onClick);
+			
+			app.stage.addChild(sprite);
+			
+			function onClick(){
+				sprite.scale.x*=1.25;
+				sprite.scale.y*=1.25;
+			}
+		</script>
+	</body>
+
+</html>

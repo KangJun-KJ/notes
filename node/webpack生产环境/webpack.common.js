@@ -7,10 +7,10 @@ module.exports={
         app:'./src/index.js'
     },
     plugins:[
-        new CleanWebpackPlugin(['dist']),
-        new HtmlWebpackPlugin({
-            title:"Production"
-        })
+        new CleanWebpackPlugin(['dist'])
+//      ,new HtmlWebpackPlugin({
+//          title:"Production"
+//      })
     ],
     output:{
         filename:'[name].bundle.js',
