@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			#app {
+				display: block;
+				margin: auto;
+				border: 1px solid #808080;
+			}
+		</style>
+	</head>
+
+	<body>
+		<canvas id="app" width="500" height="500">
+			
+		</canvas>
+
+		<script>
+			var c = document.getElementById("app");
+			var ctx = c.getContext("2d");
+			ctx.font = "30px Arial";
+			ctx.fillText("KangJun", 110, 50);
+			ctx.strokeText("KagnJun", 110, 100)
+			ctx.beginPath();
+			//			ctx.fillStyle="#FF0000"
+			ctx.arc(200, 200, 100, 0, 2 * Math.PI);
+			ctx.stroke();
+//			ctx.fill();	
+			var a = 200,
+				b = 200,
+				r = 100;
+			//x=a+r*cosθ,y=a+r*sinθ
+			var arrPos = [
+				[a + r * Math.cos(0), b + r * Math.sin(0)],
+				[a + r * Math.cos(Math.PI * 2 / 3), b + r * Math.sin(Math.PI * 2 / 3)],
+				[a + r * Math.cos(Math.PI * 2 / -3), b + r * Math.sin(Math.PI * 2 / -3)],
+				[a + r * Math.cos(Math.PI / 3), b + r * Math.sin(Math.PI / 3)],
+				[a + r * Math.cos(Math.PI / -3), b + r * Math.sin(Math.PI / -3)],
+				[a + r * Math.cos(Math.PI), b + r * Math.sin(Math.PI)]
+			]
+			console.log(arrPos);
+			ctx.beginPath();
+			ctx.moveTo(arrPos[0][0], arrPos[0][1]);
+			ctx.lineTo(arrPos[1][0], arrPos[1][1]);
+			ctx.lineTo(arrPos[2][0], arrPos[2][1]);
+			
+			ctx.closePath();
+			ctx.stroke();
+			ctx.beginPath();
+			ctx.moveTo(arrPos[3][0], arrPos[3][1]);
+			ctx.lineTo(arrPos[4][0], arrPos[4][1]);
+			ctx.lineTo(arrPos[5][0], arrPos[5][1]);
+			ctx.closePath();
+			ctx.stroke();
+		</script>
+	</body>
+
+</html>

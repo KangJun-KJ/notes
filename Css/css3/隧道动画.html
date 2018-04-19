@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+			
+			body {
+				display: flex;
+				height: 100vh;
+				overflow: hidden;
+				animation: lightToggle 10s infinite;
+			}
+			
+			.container {
+				height: 300px;
+				width: 300px;
+				margin: auto;
+				border: solid 1px #333;
+				box-sizing: content-box;
+				padding: 15px;
+				border-radius: 50%;
+				animation: lightToggle 10s infinite;
+			}
+			
+			.loader {
+				position: relative;
+				width: 100%;
+				height: 100%;
+				border: solid 1px #333;
+				border-radius: 50%;
+				overflow: hidden;
+				animation: lightToggle 10s infinite;
+			}
+			
+			@keyframes lightToggle {
+				0% {
+					border-color: #333;
+					background-color: white;
+				}
+				49% {
+					border-color: #333;
+					background-color: white;
+				}
+				50% {
+					border-color: white;
+					background-color: #333;
+				}
+				99% {
+					border-color: white;
+					background-color: #333;
+				}
+				100% {
+					border-color: #333;
+					background-color: white;
+				}
+			}
+			
+			.tunnel {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				background-color: #333;
+				border-radius: 50%;
+				transform: translate(-50%, -50%);
+				z-index: 1;
+				animation: proximityIncrease linear 5s infinite;
+			}
+			
+			@keyframes proximityIncrease {
+				0% {
+					width: 0;
+					height: 0;
+				}
+				100% {
+					width: 100%;
+					height: 100%;
+				}
+			}
+			
+			.tunnel:after {
+				content: "";
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				background-color: white;
+				border-radius: 50%;
+				transform: translate(-50%, -50%);
+				z-index: 1;
+				animation: InnerProximityIncrease linear 10s infinite;
+			}
+			
+			@keyframes InnerProximityIncrease {
+				0% {
+					width: 0;
+					height: 0;
+				}
+				50% {
+					width: 0;
+					height: 0;
+				}
+				100% {
+					width: 100%;
+					height: 100%;
+				}
+			}
+			
+			.horizon {
+				position: absolute;
+				top: 50%;
+				left: 0;
+				height: 1px;
+				width: 100%;
+				background-color: #333;
+				z-index: 3;
+			}
+			
+			.track {
+				position: absolute;
+				bottom: 0;
+				left: 50%;
+				height: 50%;
+				width: 100%;
+				transform: translate(-50%, 0);
+				clip-path: polygon(-50% 100%, 25% -51%, 100% 100%);
+				z-index: 2;
+			}
+			
+			.track:before,
+			.track:after {
+				content: "";
+				position: absolute;
+				top: 0;
+				left: 50%;
+				height: 100%;
+				width: 1px;
+				background-color: #333;
+				transform-origin: top;
+				animation: changeAccent 10s infinite;
+			}
+			
+			@keyframes changeAccent {
+				0% {
+					background-color: #333;
+				}
+				50% {
+					background-color: white;
+				}
+				100% {
+					background-color: #333;
+				}
+			}
+			
+			.track:before {
+				transform: rotate(45deg);
+			}
+			
+			.track:after {
+				transform: rotate(-45deg);
+			}
+			
+			.tie {
+				height: 1px;
+				margin-bottom: 35px;
+				animation: ride 0.2s linear infinite, changeAccent 10s infinite;
+			}
+			
+			@keyframes ride {
+				0% {
+					transform: translateY(0);
+				}
+				100% {
+					transform: translateY(37px);
+				}
+			}
+			
+			.tie:last-of-type {
+				margin-bottom: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="loader">
+
+				<div class="tunnel"></div>
+
+				<div class="horizon"></div>
+
+				<div class="track">
+					<div class="tie"></div>
+					<div class="tie"></div>
+					<div class="tie"></div>
+					<div class="tie"></div>
+					<div class="tie"></div>
+				</div>
+
+			</div>
+		</div>
+	</body>
+
+</html>
