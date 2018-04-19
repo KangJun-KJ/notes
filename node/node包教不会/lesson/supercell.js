@@ -9,17 +9,17 @@ var fs = require("fs");
 var app = express();
 
 function downfile(url, name) {
-	http.get(url, function(res) {
+	http.get(url, function (res) {
 		var imgData = "";
 		res.setEncoding("binary");
 
-		res.on("data", function(chunk) {
+		res.on("data", function (chunk) {
 			imgData += chunk;
 		});
 
-		res.on("end", function() {
-			fs.writeFile("./public/" + name + ".png", imgData, "binary", function(err) {
-				if(err) {
+		res.on("end", function () {
+			fs.writeFile("./public/" + name + ".png", imgData, "binary", function (err) {
+				if (err) {
 					console.log("down fail");
 				}
 				console.log("down success");
@@ -31,13 +31,13 @@ function downfile(url, name) {
 var concurrencyCount = 0,
 	cnt = 0;
 cardData = [];
-var fetchUrl = function(url, callback) {
+var fetchUrl = function (url, callback) {
 	concurrencyCount++;
 	console.log('现在的并发数是：' + concurrencyCount);
 	superagent.get(url)
 		.charset()
-		.end(function(err, sres) {
-			if(err) {
+		.end(function (err, sres) {
+			if (err) {
 				return next(err);
 			}
 			concurrencyCount--;
@@ -50,7 +50,7 @@ var fetchUrl = function(url, callback) {
 			items.name = name;
 			items.src = ++cnt;
 			downfile(src, cnt);
-			$('.td-css1').each(function(idx, element) {
+			$('.td-css1').each(function (idx, element) {
 				var k = $(element).text(),
 					value = $('.td-css2').eq(idx).text();
 				items[k] = value;
@@ -59,6 +59,7 @@ var fetchUrl = function(url, callback) {
 			callback(null, url);
 		});
 }
+
 app.get('/', function(req, res, next) {
 	superagent.get('http://news.4399.com/gonglue/kpct/kapai/')
 		.charset()
@@ -88,6 +89,6 @@ app.get('/', function(req, res, next) {
 		});
 });
 
-app.listen(3001, function() {
+app.listen(3001, function () {
 	console.log('app is listening at port 3001');
 });

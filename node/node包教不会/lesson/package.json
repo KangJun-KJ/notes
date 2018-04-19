@@ -19,5 +19,8 @@
     "superagent": "^3.8.2",
     "superagent-charset": "^1.2.0",
     "utility": "^1.13.1"
+  },
+  "devDependencies": {
+    "nightmare": "^3.0.1"
   }
 }
