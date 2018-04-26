@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			#app {
+				margin: 50px auto;
+				width: 250px;
+				height: 350px;
+				position: relative;
+				/*拥有近大远小透视效果*/
+				transform-style: preserve-3d;
+				transform: perspective(3000px) rotatex(0deg) rotatey(0deg);
+				transition: transform 1s ease-out;
+				cursor: pointer;
+			}
+			#app:hover{
+				transform: perspective(3000px) rotateY(-180deg);
+			}
+			#app .child {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				transition: all 1.2s linear 10ms;
+			}
+			/**/
+			.front {
+				background-color: yellow;
+			}
+			
+			.reverse {
+				background-color: cadetblue;
+				transform: rotateY(180deg);
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<div class="child reverse"><img src="image/reverse.jpg"/></div>
+			<div class="child front"><img src="image/front.jpg"/></div>
+		</div>
+	</body>
+
+</html>
