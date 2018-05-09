@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			[v-clock] {
+				display: none;
+			}
+			
+			.main {
+				width: 125px;
+			}
+			
+			button {
+				display: block;
+				width: 100%;
+				color: #FFF;
+				background-color: #39f;
+				border: 0;
+				padding: 6px;
+				text-align: center;
+				font-size: 12px;
+				border-radius: 4px;
+				cursor: pointer;
+				outline: none;
+				position: relative;
+			}
+			
+			button:active {
+				top: 1px;
+				left: 1px;
+			}
+			
+			.dropdown {
+				width: 100%;
+				height: 150px;
+				margin: 5px 0;
+				border: 1px solid #000000;
+			}
+		</style>
+	</head>
+
+	<body>
+		<script src='../../js/vue2.0.js'></script>
+		<div id="app">
+			<div class="main" v-clickoutside.esc="handleClose" v-cloak>
+				<button @click="show=!show">点击显示下拉菜单</button>
+				<div class="dropdown" v-show="show">
+					<p>下拉框的内容，点击外面区域可以关闭</p>
+				</div>
+			</div>
+		</div>
+		<script>
+			Vue.directive('clickoutside', {
+				bind: function(el, binding, vnode) {
+					for(let k in binding.modifiers) {
+						if(k == "esc") {
+
+						}
+					}
+
+					function keyboardEvent(keyCode) {
+						document.body.addEventListener('keydown', function(e) {
+//							console.log(e.keyCode);
+							if(e.keyCode==keyCode){
+								binding.value(e);
+							}
+						})
+					}
+					keyboardEvent(27);
+
+					function documentHandler(e) {
+						if(el.contains(e.target)) {
+							return false;
+						}
+						if(binding.expression) {
+							binding.value(e);
+						}
+					}
+					el.__vueClickOutside__ = documentHandler;
+					document.addEventListener('click', documentHandler);
+				},
+				unbind: function(el, binding) {
+					document.removeEventListener('click', el.__vueClickOutside__);
+					delete el.___vueClickOutSide__;
+				}
+
+			})
+
+			var app = new Vue({
+				el: "#app",
+				data: function() {
+					return {
+						show: false
+					}
+				},
+				methods: {
+					handleClose() {
+						this.show = false;
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

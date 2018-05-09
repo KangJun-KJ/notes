@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<script>
+			//for和for in的道理一样
+			var focus = [],
+				object = {
+					a: true,
+					b: true,
+					c: true
+				};
+			// 都是引用k
+			for(var k in object) {
+				focus.push(function() {
+					console.log(k)
+				})
+			}
+			focus.forEach(function(func) {
+				func();
+			});
+			
+			//立即执行函数写法。
+			focus = [];
+			for(let k in object) {
+				focus.push((function(key) {
+					return function() {
+						console.log(key)
+					}
+				})(k))
+			}
+			focus.forEach(function(func) {
+				func();
+			})
+			//let声明，在每一个函数里面都会重新初始化创建一个新的变量，
+			focus = [];
+			for(let k in object) {
+				focus.push(function() {
+					console.log(k)
+				})
+			}
+			focus.forEach(function(func) {
+				func();
+			})
+		</script>
+	</body>
+
+</html>

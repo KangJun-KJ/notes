@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		
+		<script>
+			/*
+			 * 在函数作用域或者全局作用域中通过关键字var声明变量，无论实际上是在哪里声明的，都会被当成在当前作用域顶部声明的变量
+			 */
+			function getVaule(condition){
+				console.log('我在函数作用域中,value='+value);
+				if(condition){
+					var value="blue";
+					console.log('在if中定义了value变量,value='+value);
+					return value;
+				}else{
+					console.log('我在else里面，value='+value);
+					return null;
+				}
+			}
+//			console.log(getVaule(1));
+			console.log(getVaule(0));
+		</script>
+	</body>
+</html>

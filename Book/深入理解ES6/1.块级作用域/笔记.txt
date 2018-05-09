@@ -1,0 +1,2 @@
+小结：let和const引入了词法作用域,它们声明的变量不会提升，一般尽量使用const,在变量需要改变的时候使用let.
+在for-in和for-of中var的行为和const和let常常不相同。

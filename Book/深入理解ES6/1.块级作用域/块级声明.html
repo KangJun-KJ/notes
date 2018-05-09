@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		
+		<script>
+			/* 块级声明用于在指定块的作用域之外无法访问的变量。块级作用域存在于:
+				*函数内部中
+				*块中(字符{和}之间的区域)
+				
+				let 声明：变量不会提升，一般写在函数顶部
+					禁止在同一个块级区域中重复声明
+				
+				const声明：声明的必须是常量，其值被设定之后不可以更改，且声明的常亮必须被初始化。
+				
+			*/
+			
+			const person={
+				name:"kangjun"
+			};
+			person.a=1;
+			console.log(person);
+			//抛出语法错误 Assignment to constant variable
+//			person={
+//				a:1
+//			}
+		</script>
+	</body>
+</html>
