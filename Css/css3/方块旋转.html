@@ -24,6 +24,7 @@
 				top: 50%;
 				left: 50%;
 				transform: translate( -50%, -50%);
+				transform-origin: center center;
 				perspective: 400px;
 			}
 			
@@ -83,9 +84,18 @@
 				}
 			}
 			
+			@keyframes xuanzhuan {
+				0% {
+					transform: rotateY(0deg)
+				}
+				100% {
+					transform: rotateY(360deg)
+				}
+			}
+			
 			.cube:hover {
 				/*旋转动画*/
-				animation: xuanzhuan 4s infinite;
+				animation: xuanzhuan 2s linear infinite;
 			}
 		</style>
 	</head>

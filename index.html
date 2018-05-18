@@ -1,155 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-
-<body>
-    <script>
-        var prd = {
-            "id": 1,
-            "department_id": 42,
-            "products": [{
-                "id": 12,
-                "item_id": 676,
-                "name": "49da",
-                "price": 78,
-                "grouped_addons": [{
-                    "addons": [{
-                        "id": "0_0_40",
-                        "name": "rice",
-                        "qty": 0,
-                        "unit_price": "5.00"
-                    },
-                    {
-                        "id": "0_0_41",
-                        "name": "what",
-                        "qty": 1,
-                        "unit_price": "15.00"
-                    }
-                    ]
-                }]
-            },
-            {
-                "id": 12,
-                "name": "49da",
-                "price": 90,
-                "item_id": 677,
-                "grouped_addons": [{
-                    "addons": [{
-                        "id": "0_0_40",
-                        "name": "rice",
-                        "qty": 0,
-                        "unit_price": "5.00"
-                    }, {
-                        "id": "0_0_41",
-                        "name": "what",
-                        "qty": 1,
-                        "unit_price": "15.00"
-                    }]
-                }]
-            },
-            {
-                "id": 42,
-                "name": "345dd",
-                "item_id": 678,
-                "grouped_addons": [{
-                    "addons": [{
-                        "id": "0_0_42",
-                        "name": "rice",
-                        "qty": 0,
-                        "unit_price": "5.00"
-                    }, {
-                        "id": "0_0_43",
-                        "name": "what",
-                        "qty": 1,
-                        "unit_price": "15.00"
-                    }]
-                }]
-            },
-            {
-                "id": 48,
-                "name": "33ffg",
-                "item_id": 679,
-                "price": 90,
-                "grouped_addons": [{
-                    "addons": [{
-                        "id": "0_0_44",
-                        "name": "rice",
-                        "qty": 0,
-                        "unit_price": "5.00"
-                    }, {
-                        "id": "0_0_45",
-                        "name": "what",
-                        "qty": 1,
-                        "unit_price": "15.00"
-                    }]
-                }]
-            },
-            {
-                "id": 48,
-                "name": "33ffg",
-                "item_id": 680,
-                "price": 100,
-                "grouped_addons": [{
-                    "addons": [{
-                        "id": "0_0_44",
-                        "name": "rice",
-                        "qty": 4,
-                        "unit_price": "5.00"
-                    }, {
-                        "id": "0_0_45",
-                        "name": "what",
-                        "qty": 3,
-                        "unit_price": "15.00"
-                    }]
-                }]
-            },
-            {
-                "id": 48,
-                "name": "33ffg",
-                "price": 200,
-                "item_id": 681,
-                "grouped_addons": [{
-                    "addons": [{
-                        "id": "0_0_44",
-                        "name": "rice",
-                        "qty": 4,
-                        "unit_price": "5.00"
-                    }, {
-                        "id": "0_0_45",
-                        "name": "what",
-                        "qty": 1,
-                        "unit_price": "15.00"
-                    }]
-                }]
-            }
-            ]
+    <title>7Crash图片分享</title>
+    <style>
+        *{
+            padding:0;
+            margin:0;
         }
-        var mp = prd.products.reduce((obj, item) => {
-            if (!obj[item.id]) {
-                obj[item.id] = [item]
-            } else {
-                obj[item.id].push(item)
-            }
-            return obj
-        }, {})
-        let cv = Object.keys(mp).map(id => {
-            return mp[id].reduce((state, item) => {
-                console.log('item', item)
-                if (JSON.stringify(item.grouped_addons) === JSON.stringify(state.grouped_addons)) {
-                    state.price += item.price
-
-                }
-                return state
-            })
-        })
-        console.log(JSON.stringify(cv));
+        html,body{
+            height:100%;
+        }
+        #image{
+            display: block;
+            width:100%;
+            height:100%;
+        }
+    </style>
+</head>
+<body>
+    <img id='image' src="" alt="7Crash图片分享">
+    <script>
+        window.onload=function(){
+			function getQueryVariable(variable) {
+				var url=window.location.href;
+				var query = url.split("?")[1];
+				var vars = query.split("&");
+				for (var i = 0; i < vars.length; i++) {
+					var pair = vars[i].split("=");
+					if (pair[0] == variable) {
+						if(pair[1].indexOf("#")>=0){
+							return pair[1].substring(0,pair[1].indexOf("#"));
+						}
+						return pair[1];
+					}
+				}
+				return "";
+			}
+            
+            document.getElementById("image").src="http://www.winmen.net.cn/myplus/upload/wxshare/"+getQueryVariable("src");
+        }
     </script>
 </body>
-
 </html>
