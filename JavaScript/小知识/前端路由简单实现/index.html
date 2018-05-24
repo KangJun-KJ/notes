@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<ul>
+			<li>
+				<a href='#blue'>蓝色</a>
+			</li>
+			<li>
+				<a href='#yellow'>黄色</a>
+			</li>
+			<li>
+				<a href='#red'>红色</a>
+			</li>
+		</ul>
+		<script src='router.js'></script>
+		<script>
+			var router = new FrontRouter();
+			router.route('blue', function() {
+				document.body.style.backgroundColor = 'blue';
+			});
+			router.route('yellow', function() {
+				document.body.style.backgroundColor = 'yellow';
+			});
+			router.route('red', function() {
+				document.body.style.backgroundColor = 'red';
+			});
+		</script>
+	</body>
+
+</html>

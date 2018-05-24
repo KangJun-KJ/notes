@@ -43,7 +43,7 @@
 	</head>
 
 	<body>
-		<script src='../../js/vue2.0.js'></script>
+		<script src='../../../Vue/vue.js'></script>
 		<div id="app">
 			<div class="main" v-clickoutside.esc="handleClose" v-cloak>
 				<button @click="show=!show">点击显示下拉菜单</button>
@@ -55,6 +55,7 @@
 		<script>
 			Vue.directive('clickoutside', {
 				bind: function(el, binding, vnode) {
+					console.log(binding);
 					for(let k in binding.modifiers) {
 						if(k == "esc") {
 

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .demo {
+            height: 200px;
+            width: 200px;
+            margin: 50px auto;
+            background-color: aquamarine;
+        }
+        .demo:nth-child(1){
+            /* at 后面的两个参数表示中心点的位置，默认50% 居中显示 */
+            /* 100%为长的2倍。 */
+            clip-path: circle(100% at 50% 50%);
+            transition:all .5s;
+        }
+
+        .demo:nth-child(1):hover{
+            clip-path: circle(40% );
+        }
+
+        .demo:nth-child(2){
+            /* clip-path: polygon(50% 0,0 100%,100% 100%) 正三角*/
+            clip-path:polygon(0% 50%,100% 0,100% 100%);
+        }
+        .demo:nth-child(3){
+            clip-path: polygon(0% 0%,100% 0%,100% 40%,85% 41%,55% 60%,63% 40%,0% 40%)
+        }
+        .demo:nth-child(4){
+            clip-path: polygon(50% 0%, 65% 33%, 100% 33%, 80% 60%, 90% 100%, 50% 75%, 10% 100%,20% 60%,0 33%,35% 33%)
+        }
+        .demo:nth-child(5){
+            /* 长 高 */
+            clip-path: ellipse(50% 20% at 50% 50%)
+        }
+    </style>
+</head>
+
+<body>
+    <div class='demo'>
+    </div>
+    <div class="demo">
+    </div>
+    <div class="demo">
+    </div>
+    <div class="demo">
+    </div>
+    <div class="demo">
+    </div>
+</body>
+
+</html>

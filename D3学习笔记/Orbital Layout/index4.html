@@ -1,135 +1,139 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <title>Orbits 3</title>
-  <meta charset="utf-8" />
-</head>
-<style>
 
-  #viz, svg {
-    width: 1000px;
-    height: 1000px;
-  }
-  
-</style>
-<body>
-	<div class='div1'></div>
-</body>
-<script>
-var a=document.createElement('div');
-var b=document.createTextNode('nihao');
-a.appendChild(b);
-document.getElementsByClassName('div1')[0].appendChild(a);	
+	<head>
+		<title>Orbits 3</title>
+		<meta charset="utf-8" />
+	</head>
+	<style>
+		#viz,
+		svg {
+			width: 1000px;
+			height: 1000px;
+		}
+	</style>
 
-function makeViz() {
+	<body>
+		<div class='div1'></div>
+	</body>
+	<script>
+		var a = document.createElement('div');
+		var b = document.createTextNode('nihao');
+		a.appendChild(b);
+		document.getElementsByClassName('div1')[0].appendChild(a);
 
-  d3.json("flare.json", function(data) {drawOrbit(data)});
+		function makeViz() {
 
-
-}
-
-function drawOrbit(_data) {
-
-	//down with category20a()!!
-	colors = d3.scale.category20b();
-
-	//clamp默认为false，作用是当输入值超过了[1,3]自身定义域，自己就会往外返回一个
-	//计算好的符合这个比例函数的值，这个值属于自己定义的range([3.8,1.5])值域范围内。
-	//当设置为true的时候，返回给你的值一定是range([3.8,1.5])这个范围内的。
-	//例如你输入3，返回1.5，输入10返回的还是1.5，如果没设置，就会返回返回负数。
-	orbitScale = d3.scale.linear().domain([1, 3]).range([3.8, 1.5]).clamp(true);
-	radiusScale = d3.scale.linear().domain([0, 1, 2, 3]).range([20, 10, 3, 1]).clamp(true);
-
-	orbit = d3.layout.orbit().size([1000, 1000])
-		.children(function(d) {
-			return d.children
-		})
-		.revolution(function(d) {
-			return d.depth
-		})
-		.orbitSize(function(d) {
-			return orbitScale(d.depth)
-		})
-		.speed(.1)
-		.nodes(_data);
-
-	console.log(orbit.nodes());
-	//
-	d3.select("svg").selectAll("g.node").data(orbit.nodes())
-		.enter()
-		.append("g")
-		.attr("class", "node")
-		.attr("transform", function(d) {
-			return "translate(" + d.x + "," + d.y + ")"
-		})
-		.on("mouseover", nodeOver)
-		.on("mouseout", nodeOut)
-
-	d3.selectAll("g.node")
-		.append("circle")
-		.attr("r", function(d) {
-			return radiusScale(d.depth)
-		})
-		.style("fill", function(d) {
-			return colors(d.depth)
-		})
-
-	d3.select("svg").selectAll("circle.orbits")
-		.data(orbit.orbitalRings())
-		.enter()
-		.insert("circle", "g")
-		.attr("class", "ring")
-		.attr("r", function(d) {
-			return d.r
-		})
-		.attr("cx", function(d) {
-			return d.x
-		})
-		.attr("cy", function(d) {
-			return d.y
-		})
-		.style("fill", "none")
-		.style("stroke", "black")
-		.style("stroke-width", "1px")
-		.style("stroke-opacity", .15)
-
-	orbit.on("tick", function() {
-		d3.selectAll("g.node")
-			.attr("transform", function(d) {
-				return "translate(" + d.x + "," + d.y + ")"
+			d3.json("flare.json", function(data) {
+				drawOrbit(data)
 			});
 
-		d3.selectAll("circle.ring")
-			.attr("cx", function(d) {
-				return d.x
-			})
-			.attr("cy", function(d) {
-				return d.y
+		}
+
+		function drawOrbit(_data) {
+
+			//down with category20a()!!
+			colors = d3.scale.category20b();
+
+			//clamp默认为false，作用是当输入值超过了[1,3]自身定义域，自己就会往外返回一个
+			//计算好的符合这个比例函数的值，这个值属于自己定义的range([3.8,1.5])值域范围内。
+			//当设置为true的时候，返回给你的值一定是range([3.8,1.5])这个范围内的。
+			//例如你输入3，返回1.5，输入10返回的还是1.5，如果没设置，就会返回返回负数。
+			orbitScale = d3.scale.linear().domain([1, 3]).range([3.8, 1.5]).clamp(true);
+			radiusScale = d3.scale.linear().domain([0, 1, 2, 3]).range([20, 10, 3, 1]).clamp(true);
+
+			orbit = d3.layout.orbit().size([1000, 1000])
+				.children(function(d) {
+					return d.children
+				})
+				.revolution(function(d) {
+					return d.depth
+				})
+				.orbitSize(function(d) {
+					return orbitScale(d.depth)
+				})
+				.speed(.1)
+				.nodes(_data);
+
+			console.log(orbit.nodes());
+			//
+			d3.select("svg").selectAll("g.node").data(orbit.nodes())
+				.enter()
+				.append("g")
+				.attr("class", "node")
+				.attr("transform", function(d) {
+					return "translate(" + d.x + "," + d.y + ")"
+				})
+				.on("mouseover", nodeOver)
+				.on("mouseout", nodeOut)
+
+			d3.selectAll("g.node")
+				.append("circle")
+				.attr("r", function(d) {
+					return radiusScale(d.depth)
+				})
+				.style("fill", function(d) {
+					return colors(d.depth)
+				})
+
+			d3.select("svg").selectAll("circle.orbits")
+				.data(orbit.orbitalRings())
+				.enter()
+				.insert("circle", "g")
+				.attr("class", "ring")
+				.attr("r", function(d) {
+					return d.r
+				})
+				.attr("cx", function(d) {
+					return d.x
+				})
+				.attr("cy", function(d) {
+					return d.y
+				})
+				.style("fill", "none")
+				.style("stroke", "black")
+				.style("stroke-width", "1px")
+				.style("stroke-opacity", .15)
+
+			orbit.on("tick", function() {
+				d3.selectAll("g.node")
+					.attr("transform", function(d) {
+						return "translate(" + d.x + "," + d.y + ")"
+					});
+
+				d3.selectAll("circle.ring")
+					.attr("cx", function(d) {
+						return d.x
+					})
+					.attr("cy", function(d) {
+						return d.y
+					});
 			});
-	});
 
-	orbit.start();
+			orbit.start();
 
-	function nodeOver(d) {
-		orbit.stop();
-		d3.select(this).append("text").text(d.name).style("text-anchor", "middle").attr("y", 35);
-		d3.select(this).select("circle").style("stroke", "black").style("stroke-width", 3);
-	}
+			function nodeOver(d) {
+				orbit.stop();
+				d3.select(this).append("text").text(d.name).style("text-anchor", "middle").attr("y", 35);
+				d3.select(this).select("circle").style("stroke", "black").style("stroke-width", 3);
+			}
 
-	function nodeOut() {
-		orbit.start();
-		d3.selectAll("text").remove();
-		d3.selectAll("g.node > circle").style("stroke", "none").style("stroke-width", 0);
-	}
+			function nodeOut() {
+				orbit.start();
+				d3.selectAll("text").remove();
+				d3.selectAll("g.node > circle").style("stroke", "none").style("stroke-width", 0);
+			}
 
+		}
+	</script>
 
-}
+	<body onload="makeViz()">
+		<div id="viz">
+			<svg></svg>
+		</div>
+		<footer>
+			<script src="../js/d3.js"></script>
+			<script src="d3.layout.orbit2.js" charset="utf-8" type="text/javascript"></script>
+		</footer>
+	</body>
 
-</script>
-<body onload="makeViz()">
-<div id="viz"><svg></svg></div>
-<footer>
-<script src="../js/d3.js"></script>
-<script src="d3.layout.orbit2.js" charset="utf-8" type="text/javascript"></script>
-</footer>
-</body>
 </html>
