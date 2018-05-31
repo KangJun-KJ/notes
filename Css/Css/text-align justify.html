@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			.justify{
+				position:relative;
+				text-align: justify;
+				width:300px;
+			}
+			.justify>i{
+				display: inline-block;
+				width:20px;
+				height:20px;
+				border-radius: 50%;
+				text-align: center;
+				background-color: #000;
+				color:#FFF;
+			}
+			/*添加微元素原因在于 justify 只有在存在第二行的情况下，第一行才两端对齐，所以在这里，我们需要制造一个假的第二行，而 :after 伪元素正好再适合不过。*/
+			.justify:after {
+			  content: "";
+			  display: inline-block;
+			  width: 100%;
+			  
+			  position: relative;
+			  left:0;
+			  top:-25px;
+			  background-color: #000;
+			  height:2px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="justify">
+			<i>1</i>
+			<i>2</i>
+			<i>3</i>
+			<i>4</i>
+			<i>5</i>
+		</div>
+		<div class="justify">
+			<i>1</i>
+			<i>2</i>
+			<i>3</i>
+			<i>4</i>
+		</div>
+		<div class="justify">
+			<i>1</i>
+			<i>2</i>
+			<i>3</i>
+		</div>
+		<div class="justify">
+			<i>1</i>
+			<i>2</i>
+		</div>
+		<div class="justify">
+			<i>1</i>
+		</div>
+	</body>
+</html>

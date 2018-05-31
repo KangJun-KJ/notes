@@ -1,0 +1,236 @@
+.turn {
+	display: block!important;
+	z-index: 111;
+	animation: turn 1s linear 1 forwards;
+}
+
+@keyframes turn {
+	from {
+		transform: rotateY(0deg);
+	}
+	to {
+		transform: rotateY(90deg);
+	}
+}
+
+.atlas-item {
+	height: 100%;
+}
+
+.atlas-item-span {
+	height: 100%;
+}
+
+.grid {
+	animation: grid 1s ease 1 forwards;
+}
+
+.grid:nth-child(1) {
+	animation-delay: 0s;
+}
+
+.grid:nth-child(2) {
+	animation-delay: 0.1s;
+}
+
+.grid:nth-child(3) {
+	animation-delay: 0.2s;
+}
+
+.grid:nth-child(4) {
+	animation-delay: 0.3s;
+}
+
+.grid:nth-child(5) {
+	animation-delay: 0.4s;
+}
+
+@keyframes grid {
+	0% {
+		transform: translate3d(0, 0, 0);
+		opacity: 1;
+	}
+	100% {
+		transform: translate3d(0, 100%, 0);
+		opacity: .5;
+	}
+}
+
+.turn2 {
+	transform-style: preserve-3d;
+	transform: perspective(600px);
+	animation: turn2 2s linear 1 both;
+}
+
+@keyframes turn2 {
+	0% {
+		transform: rotateY(0deg);
+	}
+	0% {
+		transform: rotateY(90deg);
+	}
+	0% {
+		transform: rotateY(180deg);
+	}
+}
+
+.dissolve {
+	animation: dissolve 1s linear 1 forwards;
+}
+
+@keyframes dissolve {
+	from {
+		opacity: 1;
+		filter: blur(0);
+	}
+	to {
+		opacity: 0;
+		filter: blur(10px);
+	}
+}
+
+
+/*方块css*/
+
+.c_front {
+	/*transform: translatez(300px);*/
+}
+
+.c_left {
+	/*transform: rotatey(270deg) translatez(300px);*/
+}
+
+.c_right {
+	/*transform: rotatey(90deg) translatez(300px);*/
+}
+
+.rotateLeft {
+	animation: rotateLeft 1s linear 1 forwards;
+}
+
+.rotateRight {
+	animation: rotateRight 1s linear 1 forwards;
+}
+
+@-webkit-keyframes rotateLeft {
+	from {
+		transform: perspective(3000px) rotateY(0deg);
+	}
+	to {
+		transform: perspective(3000px) rotateY(90deg);
+	}
+}
+
+@-webkit-keyframes rotateRight {
+	from {
+		transform: perspective(3000px) rotateY(0deg);
+	}
+	to {
+		transform: perspective(3000px) rotateY(-90deg);
+	}
+}
+
+.fanye {
+	animation: fanye 1s linear 1 forwards;
+	transform-origin: center left;
+}
+
+@keyframes fanye {
+	from {
+		transform: perspective(3000px) rotateY(0deg);
+	}
+	to {
+		transform: perspective(3000px) rotateY(-180deg);
+	}
+}
+
+.fanyeN {
+	animation: fanyeN 1s linear 1 forwards;
+	transform-origin: center right;
+}
+
+@keyframes fanyeN {
+	from {
+		transform: perspective(3000px) rotateY(180deg);
+	}
+	to {
+		transform: perspective(3000px) rotateY(0deg);
+	}
+}
+
+.fanye2 {
+	display: block!important;
+	z-index: 111;
+	animation: fanye2 1s linear 1 forwards;
+	transform-origin: center right;
+}
+
+@keyframes fanye2 {
+	from {
+		transform: perspective(3000px) rotateY(0deg);
+	}
+	to {
+		transform: perspective(3000px) rotateY(180deg);
+	}
+}
+
+
+/*碎片渐渐消失*/
+
+.clipsHide {
+	animation: clipsHide .7s ease 1 forwards;
+}
+
+@keyframes clipsHide {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+}
+
+
+/*碎片飞出的效果*/
+
+.clips1 {
+	animation: clips1 1s linear 1 forwards;
+}
+
+@keyframes clips1 {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+		transform: rotate(-90deg) scale(3) translate(-10px -20px);
+	}
+}
+
+.clips2 {
+	animation: clips2 1s ease 1 forwards;
+}
+
+@keyframes clips2 {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+		transform: rotate(45deg) scale(3) translate(20px);
+	}
+}
+
+.clips3 {
+	animation: clips3 1s linear 1 forwards;
+}
+
+@keyframes clips3 {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+		transform: rotate(-45deg) scale(3) translate(-10px -20px);
+	}
+}

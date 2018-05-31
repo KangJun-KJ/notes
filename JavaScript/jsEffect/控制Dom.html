@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+			}
+			
+			#app {
+				width: 300px;
+				height: 300px;
+				background-color: #000000;
+				position: absolute;
+				top: 100px;
+				left: 300px;
+			}
+			
+			#div-select {
+				position: absolute;
+				border: 1px solid #08A1EF;
+				cursor: move;
+				display: none;
+			}
+			
+			.bar {
+				position: absolute;
+				width: 11px;
+				height: 11px;
+				border-radius: 100%;
+				border: 1px solid #08a1ef;
+				background-color: #fff;
+			}
+			
+			.bar-s {
+				top: -5px;
+				left: 50%;
+				margin-left: -6px;
+				cursor: s-resize;
+			}
+			
+			.bar-n {
+				bottom: -5px;
+				left: 50%;
+				margin-left: -6px;
+				cursor: n-resize;
+			}
+			
+			.bar-e {
+				top: 50%;
+				margin-top: -6px;
+				right: -5px;
+				cursor: e-resize;
+			}
+			
+			.bar-w {
+				top: 50%;
+				margin-top: -6px;
+				left: -5px;
+				cursor: w-resize;
+			}
+			
+			.bar-nw {
+				left: -5px;
+				top: -5px;
+				cursor: nw-resize;
+			}
+			
+			.bar-ne {
+				right: -5px;
+				top: -5px;
+				cursor: ne-resize;
+			}
+			
+			.bar-sw {
+				left: -5px;
+				bottom: -5px;
+				cursor: sw-resize;
+			}
+			
+			.bar-se {
+				right: -5px;
+				bottom: -5px;
+				cursor: se-resize;
+			}
+			
+			.bar-r {
+				position: relative;
+				background-color: #44cb83;
+				top: -28px;
+				left: 50%;
+				margin-left: -6px;
+				cursor: pointer;
+			}
+			
+			.bar-r::after {
+				content: "";
+				height: 20px;
+				width: 1px;
+				background-color: #44CB83;
+				position: absolute;
+				bottom: -20px;
+				left: 50%;
+				margin-left: -1px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id='app'>
+
+		</div>
+		<div id="div-select">
+			<div class="bar bar-r"></div>
+			<div class="bar bar-s"></div>
+			<div class="bar bar-e"></div>
+			<div class="bar bar-w"></div>
+			<div class="bar bar-n"></div>
+			<div class="bar bar-nw"></div>
+			<div class="bar bar-ne"></div>
+			<div class="bar bar-sw"></div>
+			<div class="bar bar-se"></div>
+		</div>
+		<script>
+			function $(ele) {
+				return document.querySelector(ele);
+			}
+
+			var drag = ((el) => {
+				var oName = "div-select",
+					oDiv = $("#" + oName),
+					eDiv;
+				var emove = false,
+					smove = false,
+					wmove = false,
+					nmove = false,
+					nemove = false,
+					nwmove = false,
+					swmove = false,
+					semove = false,
+					rmove = false,
+					drag = false,
+					startX = 0,
+					startY = 0,
+					width = 0,
+					height = 0,
+					left = 0,
+					top = 0,
+					rotate=0;
+
+				var _bind = (that) => {
+					document.addEventListener('mousedown', function(e) {
+						var cn = e.target.classList;
+						var pos = eDiv.getBoundingClientRect();
+						width = pos.width;
+						height = pos.height;
+						left = pos.left;
+						top = pos.top;
+						startX = e.clientX;
+						startY = e.clientY;
+						if(cn[1] === 'bar-e') {
+							if(rotate>90 ||rotate<-90){
+								emove = true;
+							}else{
+								wmove=true;
+							}
+						} else if(cn[1] === 'bar-w') {
+							if(rotate>90 ||rotate<-90){
+								wmove = true;
+							}else{
+								emove=true;
+							}
+						} else if(cn[1] === 'bar-s') {
+							smove = true;
+						} else if(cn[1] === 'bar-n') {
+							nmove = true;
+						} else if(cn[1] === 'bar-nw') {
+							nwmove = true;
+						} else if(cn[1] === 'bar-se') {
+							semove = true;
+						} else if(cn[1] === 'bar-sw') {
+							swmove = true;
+						} else if(cn[1] === 'bar-ne') {
+							nemove = true;
+						} else if(cn[1] === 'bar-r') {
+							rmove = true;
+						} else if(e.target.id == oName) {
+							drag = true;
+						} else if(e.target.id === "app") {
+							that.show();
+						} else {
+							that.hide();
+						}
+					});
+
+					var isCan = true;
+
+					document.addEventListener('mousemove', function(e) {
+						if(rmove != true && drag != true && emove != true && smove != true && wmove != true && nmove != true && nemove != true && nwmove != true && swmove != true && semove != true) {
+							return;
+						}
+						var pos = eDiv.getBoundingClientRect();
+						var disAX = (width + e.clientX - startX),
+							disMX = width - (e.clientX - startX),
+							disAY = (height + e.clientY - startY),
+							disMY = height - (e.clientY - startY),
+							disL = left + (e.clientX - startX),
+							disT = top + (e.clientY - startY);
+						//						if(disAX <= 0 || disMX <= 0 || disAY <= 0 || disMY <= 0) {
+						//							if(drag == true) {
+						//
+						//							}
+						//							return;
+						//						}
+						console.log('移动中ing');
+						if(emove === true) {
+							eDiv.style.width = disAX + "px";
+							oDiv.style.width = disAX + "px";
+						} else if(wmove === true) {
+							eDiv.style.width = disMX + "px";
+							eDiv.style.left = disL + "px";
+							oDiv.style.width = disMX + "px";
+							oDiv.style.left = disL + "px";
+						} else if(smove === true) {
+							eDiv.style.height = disMY + "px";
+							eDiv.style.top = disT + "px";
+							oDiv.style.height = disMY + "px";
+							oDiv.style.top = disT + "px";
+						} else if(nmove === true) {
+							eDiv.style.height = disAY + "px";
+							oDiv.style.height = disAY + "px";
+						} else if(semove === true) {
+							eDiv.style.width = disAX + "px";
+							eDiv.style.height = disAY + "px";
+							oDiv.style.width = disAX + "px";
+							oDiv.style.height = disAY + "px";
+						} else if(nwmove === true) {
+							eDiv.style.width = disMX + "px";
+							eDiv.style.height = disMY + "px";
+							eDiv.style.left = disL + "px";
+							eDiv.style.top = disT + "px";
+							oDiv.style.width = disMX + "px";
+							oDiv.style.height = disMY + "px";
+							oDiv.style.left = disL + "px";
+							oDiv.style.top = disT + "px";
+						} else if(swmove === true) {
+							eDiv.style.height = disAY + "px";
+							oDiv.style.height = disAY + "px";
+							eDiv.style.width = disMX + "px";
+							eDiv.style.left = disL + "px";
+							oDiv.style.width = disMX + "px";
+							oDiv.style.left = disL + "px";
+						} else if(nemove === true) {
+							eDiv.style.height = disMY + "px";
+							eDiv.style.top = disT + "px";
+
+							oDiv.style.height = disMY + "px";
+							oDiv.style.top = disT + "px";
+
+							eDiv.style.width = disAX + "px";
+							oDiv.style.width = disAX + "px";
+						} else if(rmove === true) {
+							var center = {
+								x: (pos.left + pos.right) / 2,
+								y: (pos.top + pos.bottom) / 2
+							}
+							var ox = e.clientX - center.x; //cx,cy为圆心
+							var oy = e.clientY - center.y;
+							var to = Math.abs(ox / oy);
+							var angle = Math.atan(to) / (2 * Math.PI) * 360; //鼠标相对于旋转中心的角度
+							if(ox < 0 && oy < 0) //相对在左上角，第四象限，js中坐标系是从左上角开始的，这里的象限是正常坐标系
+							{
+								angle = -angle;
+							} else if(ox < 0 && oy > 0) //左下角,3象限
+							{
+								angle = -(180 - angle)
+							} else if(ox > 0 && oy < 0) //右上角，1象限
+							{
+								angle = angle;
+							} else if(ox > 0 && oy > 0) //右下角，2象限
+							{
+								angle = 180 - angle;
+							}
+							oDiv.style.transform = "rotate(" + angle + "deg)"
+							eDiv.style.transform = "rotate(" + angle + "deg)"
+							rotate=angle;
+						} else if(drag === true) {
+							eDiv.style.left = disL + "px";
+							eDiv.style.top = disT + "px";
+
+							oDiv.style.left = disL + "px";
+							oDiv.style.top = disT + "px";
+						}
+					});
+					document.addEventListener("mouseup", function(e) {
+						console.log('起来了');
+						emove = false,
+							smove = false,
+							wmove = false,
+							nmove = false,
+							nemove = false,
+							nwmove = false,
+							swmove = false,
+							semove = false,
+							rmove = false,
+							drag = false;
+					});
+				}
+
+				var dragDiv = function(config) {
+
+				}
+
+				dragDiv.prototype.init = function(config) {
+					eDiv = $(config.el);
+					_bind(this);
+					return this;
+				};
+
+				dragDiv.prototype.show = function() {
+					var pos = getComputedStyle(eDiv);
+					var {
+						left,
+						top,
+						width,
+						height
+					} = pos;
+					oDiv.style.width = width;
+					oDiv.style.height = height;
+					oDiv.style.left = left;
+					oDiv.style.top = top;
+					oDiv.style.display = "block";
+				}
+
+				dragDiv.prototype.hide = function() {
+					oDiv.style.display = "none";
+				}
+				return dragDiv;
+			})();
+			new drag().init({
+				el: "#app"
+			});
+		</script>
+	</body>
+
+</html>

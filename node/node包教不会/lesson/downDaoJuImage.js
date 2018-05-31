@@ -1,5 +1,3 @@
-
-
 var data = [
     {
         "pid": "https://www.cjqut.com/product/pid/95.html",

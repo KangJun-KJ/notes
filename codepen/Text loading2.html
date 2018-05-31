@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<!--https://codepen.io/srekoble/pen/ZYXRzE?editors=1100-->
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+			}
+			
+			.method-1 {
+				position: relative;
+				display: inline-block;
+				font-size: 100px;
+				color: #d4d4d4;
+			}
+			
+			.method-1:before {
+				content: attr(data-text);
+				position: absolute;
+				overflow: hidden;
+				white-space: nowrap;
+				width: 0;
+				color: #72cc96;
+				-webkit-animation: fill-1 2s infinite;
+				animation: fill-1 2s infinite;
+			}
+			
+			@-webkit-keyframes fill-1 {
+				50% {
+					width: 100%;
+				}
+				100% {
+					width: 0%;
+				}
+			}
+			
+			@keyframes fill-1 {
+				50% {
+					width: 100%;
+				}
+				100% {
+					width: 0%;
+				}
+			}
+			
+			.method-2 {
+				display: inline-block;
+				font-size: 100px;
+				background: url("https://s3.amazonaws.com/f.cl.ly/items/0A2z3P0k3C45013S0z1J/clip-bg.jpg") no-repeat;
+				/*让背景图片是字体的背景图片，不是整个的DIV的*/
+				-webkit-background-clip: text;
+				color: rgba(255, 255, 255, 0);
+				text-shadow: 0 0 rgba(0, 0, 0, 0.1);
+				background-size: 0 100%;
+				-webkit-animation: fill-2 2s infinite;
+				animation: fill-2 2s infinite;
+			}
+			
+			@-webkit-keyframes fill-2 {
+				50% {
+					background-size: 100% 100%;
+				}
+				100% {
+					background-size: 0 100%;
+				}
+			}
+			
+			@keyframes fill-2 {
+				50% {
+					background-size: 100% 100%;
+				}
+				100% {
+					background-size: 0 100%;
+				}
+			}
+			
+			.method-3 {
+				font-size: 100px;
+				position: relative;
+				color: #d4d4d4;
+				display: inline-block;
+			}
+			
+			.method-3:before {
+				content: attr(data-text);
+				position: absolute;
+				color: #72cc96;
+				clip: rect(0, 0, 132px, 0);
+				-webkit-animation: fill-3 2s infinite;
+				animation: fill-3 2s infinite;
+			}
+			
+			@-webkit-keyframes fill-3 {
+				50% {
+					clip: rect(0, 350px, 132px, 0);
+				}
+				100% {
+					clip: rect(0, 0, 132px, 0);
+				}
+			}
+			
+			@keyframes fill-3 {
+				50% {
+					clip: rect(0, 350px, 132px, 0);
+				}
+				100% {
+					clip: rect(0, 0, 132px, 0);
+				}
+			}
+			
+			body {
+				text-align: center;
+			}
+			
+			p {
+				margin: 50px 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<h2>With data-attributes & content</h2>
+		<p>通过改变width来隐藏和显示伪元素</p>
+		<p data-text="loading" class="method-1">loading</p>
+
+		<h2>With background-clip</h2>
+		
+		<p class="method-2">loading</p>
+
+		<h2>With clip rect</h2>
+		<p data-text="loading" class="method-3">loading</p>
+	</body>
+
+</html>

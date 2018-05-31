@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>React Icon</title>
+    <style>
+        #app{
+            position: relative;
+            width:100px;
+            height:200px;
+            margin:100px auto;
+        }
+        #app::after{
+            content:"";
+            position: absolute;
+            top:50%;left:50%;
+            transform: translate(-50%,-50%);
+            width: 30px;
+            height:30px;
+            border-radius: 50%;
+            background-color: rgb(0, 216, 255);
+        }
+        .ellipse {
+            position: absolute;
+            width: 100px;
+            height: 200px;
+            border: 7px solid rgb(0, 216, 255);
+            border-radius: 50%;
+        }
+        .ellipse1{
+            transform: rotate(90deg);
+        }
+        .ellipse2{
+            transform: rotate(30deg);
+        }
+        .ellipse3{
+            transform: rotate(-30deg);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="ellipse ellipse1"></div>
+        <div class="ellipse ellipse2"></div>
+        <div class="ellipse ellipse3"></div>
+    </div>
+</body>
+
+</html>

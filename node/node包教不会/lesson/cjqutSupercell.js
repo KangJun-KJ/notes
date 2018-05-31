@@ -2,9 +2,9 @@
 const http = require("https");
 const fs = require("fs");
 const cheerio = require('cheerio');
-const superagent = require('superagent');
+const superagent = require('superagent');//爬虫框架
 const axios = require("axios");
-const Nightmare = require("nightmare");
+const Nightmare = require("nightmare");//爬虫框架
 const request = require("request");
 
 

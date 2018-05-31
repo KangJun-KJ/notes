@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Velocity入门</title>
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+			}
+			
+			.element {
+				width: 200px;
+				height: 200px;
+				background-color: #9FF;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="element">
+
+		</div>
+
+		<script src='velocity.min.js'></script>
+
+		<script>
+			function $(ele) {
+				return document.querySelector(ele);
+			}
+
+			Velocity($(".element"), {
+				marginLeft: "200px",
+			}, {
+				duration: 1000, // 动画执行时间
+				easing: "swing", // 缓动效果
+				queue: "", // 队列
+				begin: undefined, // 动画开始时的回调函数
+				progress: undefined, // 动画执行中的回调函数（该函数会随着动画执行被不断触发）
+				complete: undefined, // 动画结束时的回调函数
+				display: undefined, // 动画结束时设置元素的 css display 属性
+				visibility: undefined, // 动画结束时设置元素的 css visibility 属性
+				loop: false, // 循环
+				delay: false, // 延迟
+				mobileHA: true // 移动端硬件加速（默认开启）
+			})
+			
+			Velocity($(".element"), {
+				marginTop: "200px"
+			}, {
+				duration: 1000, // 动画执行时间
+				easing: "swing", // 缓动效果
+				queue: "", // 队列
+				begin: undefined, // 动画开始时的回调函数
+				progress: undefined, // 动画执行中的回调函数（该函数会随着动画执行被不断触发）
+				complete: undefined, // 动画结束时的回调函数
+				display: undefined, // 动画结束时设置元素的 css display 属性
+				visibility: undefined, // 动画结束时设置元素的 css visibility 属性
+				loop: false, // 循环
+				delay: false, // 延迟
+				mobileHA: true // 移动端硬件加速（默认开启）
+			})
+		</script>
+	</body>
+
+</html>

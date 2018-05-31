@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>颜色选择器</title>
+		<link rel="stylesheet" href="color-picker.css" />
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+			}
+			
+			.btn {
+				position:fixed;
+				top:50%;
+				left:50%;
+				transform: translate(-50%,-50%);
+				display: block;	
+				width: 100px;
+				text-align: center;
+				line-height: 30px;
+				margin: 50px auto;
+				cursor: pointer;
+				border: 0;
+				outline: none;
+			}
+			
+			#test{
+				position:fixed;
+				top:10%;
+				left:80%;
+			}
+		</style>
+	</head>
+
+	<body id='body'>
+		<button class='btn'>点击看看</button>
+		<button id="test">
+			你是不是没有看到我
+		</button>
+		
+		<script src='tinycolor-min.js'></script>
+		<script src='color-picker.js'></script>
+		<script>
+			//			HSL 为 色相，饱和度，亮度，
+			//			HSV 为色相，饱和度，明度。
+			
+			var colorPicker=new colorPicker();
+			document.getElementById("test").addEventListener('click',function(){
+				colorPicker.init({
+					el:this,//触发元素
+					color:"rgba(0,0,0,0)",//颜色的初始值,可选
+					change:function(rgb){//回调事件
+						document.getElementById("body").style.backgroundColor=rgb;
+					}
+				});
+			});
+			
+			document.getElementsByClassName("btn")[0].addEventListener('click',function(){
+				colorPicker.init({
+					el:this,
+					color:"rgba(0,0,0,0)",
+					change:function(rgb){
+						document.getElementById("body").style.backgroundColor=rgb;
+					}
+				});
+			});
+			
+		</script>
+	</body>
+
+</html>

@@ -8,6 +8,7 @@
 
 	<body>
 		<input type="text" name="" id="J_input" value="" />
+		<input type="text" name="" id="J_input2" value="" />
 		
 		<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
 		<script>
@@ -30,6 +31,7 @@
 				console.log(this);
 				TextCountFun.prototype.init = function(config) {
 					this.input = $(config.id);
+					console.log(this.input)
 					_bind(this);
 
 					return this;
@@ -49,8 +51,11 @@
 
 			})();
 			$(function() {
-				new TextCount().init({
+				var b=new TextCount().init({
 					id: '#J_input'
+				}).render();
+				var a=new TextCount().init({
+					id: '#J_input2'
 				}).render();
 			})
 		</script>

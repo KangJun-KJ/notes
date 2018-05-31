@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>百叶窗效果图</title>
+		<link rel="stylesheet" href="altas.css" />
+		<style>
+			.container{
+				width:1200px;
+				margin:100px auto;
+				text-align: justify;
+			}
+			.app{
+				display: inline-block;
+				
+				width: 300px;
+				height: 200px;
+				margin-top:50px;
+				overflow: hidden;
+				position: relative;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="container">
+			<div id="app" class='app'></div>
+			<div id="app2" class='app'></div>
+			<div id="app3" class='app'></div>
+			<div id="app4" class='app'></div>
+			<div id="app5" class='app'></div>
+			<div id="app6" class='app'></div>
+			<div id="app7" class='app'></div>
+		</div>
+		<script src="https://cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
+		<script src='altas.js'></script>
+		<script>
+			var obj = {
+				autoplay: true,
+				effects: 0
+			};
+			
+			var obj2 = {
+				autoplay: true,
+				effects: 1
+			};
+			
+			var obj3 = {
+				autoplay: true,
+				effects: 3
+			};
+			
+			var obj4 = {
+				autoplay: true,
+				effects: 4
+			};
+			
+			var obj5 = {
+				autoplay: true,
+				effects: 5
+			};
+			
+			var obj6 = {
+				autoplay: true,
+				effects: 6
+			};
+			
+			var obj7 = {
+				autoplay: true,
+				effects: 7
+			};
+			$("#app").atlas(obj);
+			$("#app2").atlas(obj2);
+			$("#app3").atlas(obj3);
+			$("#app4").atlas(obj4);
+			$("#app5").atlas(obj5);
+			$("#app6").atlas(obj6);
+			$("#app7").atlas(obj7);
+		</script>
+	</body>
+
+</html>

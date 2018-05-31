@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{
+				padding:0;
+				margin:0;
+			}
+			#app{
+				margin:100 auto;
+				font-size:60px;
+				text-align: center;
+			}
+			span{
+				position:relative;
+				cursor: pointer;
+			}
+			span:after{
+				content:attr(data-text);
+				position: absolute;
+				top:0;
+				left:0;
+				color:#9FF;
+				width:0;
+				/*animation: leftToRight 2s 1;*/
+				transition:width 1s ;
+				white-space: nowrap;
+				overflow: hidden;
+				
+			}
+			span:hover:after{
+				width:100%;
+			}
+			@keyframes leftToRight{
+				from{
+					width:0;
+				}
+				to{
+					width:100%;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div id='app'>
+			<span data-text="hover loadding">hover loadding</span>
+		</div>
+	</body>
+</html>

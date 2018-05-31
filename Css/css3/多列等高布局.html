@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+			}
+			
+			#container {
+				width: 400px;
+				margin: 0 auto;
+				background-color: #ddd;
+				overflow: hidden;
+				display: flex;
+				/*align-items: stretch;*/
+			}
+			
+			#container .left,
+			#container .right {
+				display: 1;
+				width: 200px;
+				font-size: 16px;
+				line-height: 24px;
+				color: #333;
+			}
+			
+			#container2 {
+				width: 400px;
+				margin: 0 auto;
+				background: #eee;
+				overflow: hidden;
+			}
+			
+			#container2 .left,
+			#container2 .right {
+				width: 200px;
+				float: left;
+				font-size: 16px;
+				line-height: 24px;
+				color: #333;
+				padding-bottom: 5000px;
+				margin-bottom: -5000px;
+			}
+			
+			#container3 {
+				width: 400px;
+				margin: 0 auto;
+				background: #eee;
+				overflow: hidden;
+				display: table;
+			}
+			
+			#container3 .left,
+			#container3 .right {
+				display: table-cell;
+				width: 200px;
+				font-size: 16px;
+				line-height: 24px;
+				color: #333;
+			}
+			
+			.left {
+				background-color: deeppink;
+			}
+			
+			.right {
+				background-color: yellowgreen;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="container">
+			<div class="left">
+				多列等高布局
+			</div>
+			<div class="right">
+				多列等高布局,使用(display:flex) 实现。多列等高布局,使用(display:flex) 实现。多列等高布局,使用(display:flex) 实现。多列等高布局,使用(display:flex) 实现。
+			</div>
+		</div>
+		<br />
+		<div id="container2">
+			<div class="left">
+				多列等高布局左
+			</div>
+			<div class="right">
+				多列等高布局,使用正负 margin 与 padding 相冲的方式实现。多列等高布局,使用正负 margin 与 padding 相冲的方式实现。
+			</div>
+		</div>
+<br />
+		<div id="container3">
+			<div class="row">
+				<div class="left">
+					多列等高布局
+				</div>
+				<div class="right">
+					多列等高布局,使用 display:table-cell 的方式实现。多列等高布局,使用 display:table-cell 的方式实现。多列等高布局,使用 display:table-cell 的方式实现。
+				</div>
+			</div>
+		</div>
+
+	</body>
+
+</html>

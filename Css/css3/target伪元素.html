@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{
+				padding:0;
+				margin:0;
+			}
+			.nav>a{
+				width:200px;
+				height:40px;
+				line-height: 40px;
+				text-align: center;
+				display: inline-block;
+				background-color: gainsboro;
+				cursor: div;
+			}
+			.nav>a:target{
+				background-color: orange;
+			}
+			#con1,
+			#con2{
+				width:400px;
+				background-color: antiquewhite;
+				display: none;
+			}
+			#con1:target,
+			#con2:target{
+				display: block;
+			}
+		</style>
+	</head>
+
+	<body>
+		
+		
+		<ul class="nav">
+			<a href="#con1">列表1</a><a href="#con2">列表2</a>
+		</ul>
+		<div id='con1'>
+			第一个内容
+		</div>
+		<div id='con2'>
+			第二个内容
+		</div>
+		
+		
+	</body>
+
+</html>

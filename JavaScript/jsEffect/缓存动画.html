@@ -42,7 +42,8 @@
 				}
 				
 				document.getElementById("down").addEventListener("click",function(){
-
+					var doc = document.body.scrollTop ? document.body : document.documentElement;
+					doc="10000px";
 				});
 
 				document.getElementById("up").addEventListener('click', function() {

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{
+				padding:0;
+				margin:0;
+			}
+			.seconds{
+				position:relative;
+				margin:100px auto;
+				width:10px;
+				height:100px;
+				background-color:rosybrown;
+				transform-origin: bottom center;
+				/*
+				 	steps将动画切割成很多部分，然后从每一个部分直接到下一个部分，没有过度动画。
+				 	当steps的步骤足够多的时候，就类似连续动画了。
+				 */
+				animation: rotateWidthStep 10s  steps(60);
+				
+			}
+			@keyframes rotateWidthStep{
+				from{
+					transform: rotate(0);
+				}
+				to{
+					transform: rotate(360deg);
+				}
+			}
+			.seconds2{
+				position:relative;
+				margin:100px auto;
+				width:10px;
+				height:100px;
+				background-color:rosybrown;
+				transform-origin: bottom center;
+				animation: rotate 10s linear;
+				
+			}
+			@keyframes rotate{
+				from{
+					transform: rotate(0);
+				}
+				to{
+					transform: rotate(360deg);
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class='seconds'>
+			
+		</div>
+		<div class='seconds2'>
+			
+		</div>
+	</body>
+</html>

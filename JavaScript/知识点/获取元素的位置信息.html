@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            padding:0;
+            margin:0;
+        }
+        #app{
+            height:150px;
+        }
+        .example{
+            position:relative;
+            left:0px;
+            top:0px;
+            width:200px;
+            height:200px;
+            background-color: #9FF;
+            /* 当div旋转的时候，他获取到的getBoundingClientRect 是四个其他的顶角的位置,宽高也都变化了。 */
+            /* transform: rotate(45deg) */
+        }
+        .scrollBar{
+            position:fixed;
+            bottom:0;
+            left:0;
+            width:300px;
+            background-color: coral;
+        }
+        button{
+            position: fixed;
+            top:150px;
+            left:0%;
+            z-index: 11;
+        }
+        #goDown{
+            left:200px;
+        }
+    </style>
+</head>
+<body>
+    <p>缩小或者放大浏览器大小,查看页面的变化。</p>
+    <div id="app">
+    </div>
+    <p>
+            右下角有一个方块用于获取位置信息的。  
+    </p> 
+    <button id='goLeft'>往左移动</button>
+    <button id='goDown'>往下移动</button>
+    <div class='example'>
+    
+    </div>
+    <div class='scrollBar'>
+            # 获取滚动条的位置信息
+    </div>
+    <div style='height:10000px;width:10000px;'>
+
+    </div>
+    <h3>
+        点击屏幕会出现鼠标点击的位置信息
+    </h3>
+    <script>
+        window.onresize=function(){
+            var wid=window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+            var hei=window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+            var str="浏览器可见窗口区域：\n宽为：" + (wid) + "，高为" + (hei);
+            str+="\n 浏览器窗口的大小(包括览器的菜单,导航栏,缩放大小不变,减去系统的任务栏高度):\n 宽为："+window.screen.availWidth+" 高为："+window.screen.availHeight;
+            str+='\n 系统屏幕的大小: \n 宽为：'+window.screen.width+" 高为："+window.screen.height;
+            document.getElementById("app").innerText=str;
+        }
+        var ele=document.querySelector(".example");
+        document.getElementById("goLeft").addEventListener("click",function(){
+            ele.style.left=parseInt(getComputedStyle(ele).left)+100+"px";
+            getDomPos();
+        })
+        document.getElementById("goDown").addEventListener("click",function(){
+            ele.style.top=parseInt(getComputedStyle(ele).top)+100+"px";
+            getDomPos();
+        })
+        getDomPos();
+
+        function getDomPos(){
+            console.log();
+            var pos=ele.getBoundingClientRect();
+            console.log(pos);
+            var str="通过getBoundingClientRect()获取到的位置信息不包括滚动条的位置！";
+            str+="\n left:"+pos.left+"px";
+            str+="\n top:"+pos.top+"px";
+            str+="\n 加上滚动条的left:"+(parseInt(pos.left)+getScrollLeft())+"px";
+            str+="\n 加上滚动条的top:"+(parseInt(pos.top)+getScrollTop())+"px";
+            ele.innerText=str;
+        }
+
+        var scrollEle=document.getElementsByClassName('scrollBar')[0];
+        // window.pageXoffset or window.pageYoffset 获取滚动条的横向或者纵向。兼容性IE8以上。
+        // window.scrollX 
+        // scrollLeft  (document.documentELement || doucment.body)
+        window.onscroll=function(){
+            var str="window.pageXoffset="+window.pageXOffset;
+            str+="\n window.pageYoffset="+window.pageYOffset;
+            str+="\n window.scrollX="+window.scrollX;
+            str+="\n window.scrollY="+window.scrollY;
+            str+="\n scrollLeft="+(document.documentElement || document.body).scrollLeft;
+            str+="\n scrollTop="+(document.documentElement || document.body).scrollTop;
+            scrollEle.innerText=str;
+        }
+        function getScrollLeft(){
+            return window.pageXOffset||window.scrollX||(document.documentELement||document.body).scrollLeft;
+        }
+        function getScrollTop(){
+            return window.pageYOffset||window.scrollY||(document.documentELement||document.body).scrollTop;
+        }
+        
+        // 鼠标事件的位置信息。
+        document.addEventListener("click",function(e){
+        	
+        	
+        	
+        	
+            console.log(e);
+            console.log('clientX获取当前窗口 相对位置，不包括浏览器的滚动条')
+            console.log("clientX: "+e.clientX+" -- clientY:"+e.clientY);
+            console.log('pagex获取浏览器的绝对的位置，包括浏览器的滚动条')
+            console.log("pageX: "+e.pageX+" -- pageY:"+e.pageY);
+            console.log("获取的是距离屏幕的相对位置")
+            console.log("screenX: "+e.screenX+" -- screeY:"+e.screenY)
+        })
+    </script>
+</body>
+</html>
