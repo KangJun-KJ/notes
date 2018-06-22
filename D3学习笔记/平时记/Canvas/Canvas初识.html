@@ -15,51 +15,56 @@ Your browser does not support the HTML5 canvas tag.
 		<script>
 			var c = document.getElementById("myCanvas");
 			var ctx = c.getContext("2d");
-			//			ctx.fillStyle = "#FF0000";
-			//			ctx.fillRect(0, 0, 150, 75);
-			//			ctx.moveTo(0,0);
-			//			ctx.lineTo(200,100);
-			//			ctx.stroke();
-
-			//			ctx.beginPath();
-			//			ctx.arc(95,50,40,0,2*Math.PI);
-			//			ctx.stroke();
-
-			//			ctx.font="30px Arial";
-			//			ctx.strokeText("Helloo World",10,50);
-
+//			ctx.fillStyle = "#FF0000";
+//			ctx.fillRect(0, 0, 150, 75);
+//			ctx.moveTo(0, 0);
+//			ctx.lineTo(200, 100);
+//			ctx.stroke();
+//
+//			ctx.beginPath();
+//			ctx.arc(95, 50, 40, 0, 2 * Math.PI);
+//			ctx.stroke();
+//
+//			ctx.save();
+//			ctx.rotate(0.2);
+////			ctx.translate(100, 20);
+//			ctx.font = "30px Arial";
+//			ctx.strokeText("Helloo World", 10, 50);
+//			ctx.restore();
+//			
+//			ctx.font = "30px Arial";
+//			ctx.strokeText("Helloo World", 10, 50);
 			//创建一个线性渐变，渐变的颜色从0-1
 			//x1,y1,x2,y2渐变开始的起点和终点。
-			//			var grd=ctx.createLinearGradient(0,0,200,0);
-			//			grd.addColorStop(0,"red");
-			//			grd.addColorStop(1,"white");
-			//			
-			//			ctx.fillStyle=grd;
-			//			ctx.fillRect(10,10,150,80);
+//						var grd=ctx.createLinearGradient(0,0,200,0);
+//						grd.addColorStop(0,"red");
+//						grd.addColorStop(1,"white");
+//						
+//						ctx.fillStyle=grd;
+//						ctx.fillRect(10,10,150,80);
+//
+//						var grd = ctx.createRadialGradient(90, 60, 5, 90, 60, 100);
+//						grd.addColorStop(0, "red");
+//						grd.addColorStop(1, "blue");
+//			
+//						ctx.fillStyle = grd;
+//						ctx.fillRect(10, 10, 150, 80);
+//						ctx.stroke();
 
-			//			var grd = ctx.createRadialGradient(90, 60, 5, 90, 60, 100);
-			//			grd.addColorStop(0, "red");
-			//			grd.addColorStop(1, "blue");
-			//
-			//			ctx.fillStyle = grd;
-			//			ctx.fillRect(10, 10, 150, 80);
-			//			ctx.stroke();
+						ctx.strokeRect(5,5,25,15);
+						ctx.scale(1.2,1.2);
+						ctx.strokeRect(5,5,25,15);
+						ctx.scale(1.2,1.2);
+						ctx.strokeRect(5,5,25,15);
+			
+						ctx.scale(1.2,1.2);
+						ctx.strokeRect(5,5,25,15);
 
-			//			ctx.strokeRect(5,5,25,15);
-			//			ctx.scale(1.2,1.2);
-			//			ctx.strokeRect(5,5,25,15);
-			//			ctx.scale(1.2,1.2);
-			//			ctx.strokeRect(5,5,25,15);
-			//
-			//			ctx.scale(1.2,1.2);
-			//			ctx.strokeRect(5,5,25,15);
-
-			var bg=new Image();
-			bg.onload=function(){
-				ctx.drawImage(bg,0,0);
-			}
-			bg.src="123.gif";
-
+			//			var bg=new Image();
+			//			bg.onload=function(){
+			//				ctx.drawImage(bg,0,0);
+			//			}
+			//			bg.src="123.gif";
 		</script>
 	</body>
 

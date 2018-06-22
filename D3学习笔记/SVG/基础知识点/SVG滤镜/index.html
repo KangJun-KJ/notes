@@ -1,9 +1,52 @@
-<!DOCTYPE html>
 <html>
+
 	<head>
-		<meta charset="UTF-8">
 		<title></title>
 	</head>
+
 	<body>
+		<!--
+			feGaussianBlur 创建模糊效果
+			filter 元素定义一个滤镜唯一名称
+			feGaussianBlur 定义模糊效果
+			in="SourceGraphic"这个部分定义了由整个图像创建效果
+			stdDeviation属性定义模糊量
+			<rect>元素的滤镜属性用来把元素链接到"f1"滤镜
+		-->
+		<svg>
+			<defs>
+				<filter id='f1' x='0' y='0'>
+					<feGaussianBlur in="SourceGraphic" stdDeviation="11" />
+				</filter>
+			</defs>
+			<rect width='90' height='90' stroke='green' stroke-width='3' fill='yellow' filter='url(#f1)'>
+
+			</rect>
+		</svg>
+
+		<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+			<defs>
+				<filter id="f2" x="0" y="0" width="200%" height="200%">
+					<feOffset result="offOut" in="SourceGraphic" dx="0" dy="0" />
+					<feGaussianBlur result="blurOut" in="offOut" stdDeviation="5" />
+					<feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+				</filter>
+			</defs>
+			<circle id='circle' cx="50" cy='50' r='40' filter='url(#f2)' fill='yellow'></circle>
+			<!--<rect width="90" height="90" stroke="green" stroke-width="3" fill="yellow" filter="url(#f2)" />-->
+		</svg>
+
+		<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+			<defs>
+				<filter id="f3" x="0" y="0" width="200%" height="200%">
+					<feOffset result="offOut" in="SourceAlpha" dx="20" dy="20" />
+					<feGaussianBlur result="blurOut" in="offOut" stdDeviation="10" />
+					<feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+				</filter>
+			</defs>
+			<rect width="90" height="90" stroke="green" stroke-width="3" fill="yellow" filter="url(#f3)" />
+		</svg>
+
 	</body>
+
 </html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>SVG渐变</title>
+		<style>
+			*{
+				padding:0;
+				margin:0;
+			}
+			.svg1{
+				width:620px;
+				height:320px;
+			}
+		</style>
+	</head>
+	<body>
+		<svg class="svg1">
+			<defs>
+				<!--
+					id:用于被引用的名字
+					x1,y1 起点  x2 y2 终点
+				-->
+				<lineargradient id="linear" x1="0%" y1="0%" x2="100%" y2="0%">
+					<!--
+						offset="颜色的终点位置"
+					-->
+					<stop offset="0%" stop-color="#05a"></stop>
+					<stop offset="100%" stop-color="#0a5"></stop>
+				</lineargradient>
+			</defs>
+			<rect x="10" y="10" width="600" height="100" fill="url(#linear)"></rect>
+			<rect x="20" y="140" width="580" height="100" stroke="url(#linear)" stroke-width=20 fill='#FFF'></rect>
+		</svg>
+		<svg class="svg1">
+			<defs>
+				<radialgradient id='radial' fx='50%' fy='50%' cx='50%'  cy='50%' r='50%'>
+					<stop offset='0%' stop-color="#05a" stop-opacity='1'></stop>
+					<stop offset='100%' stop-color="#0a5" stop-opacity='1'></stop>
+				</radialgradient>
+			</defs>
+			<rect x="10" y='10' width="600" height="100" fill='url(#radial)'></rect>
+		</svg>
+	</body>
+</html>

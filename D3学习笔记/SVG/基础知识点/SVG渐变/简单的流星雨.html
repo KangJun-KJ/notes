@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset='UTF-8'>
+		<title></title>
+
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+			}
+			
+			#app {
+				width: 50vmin;
+				height: 100vmin;
+				background-color: yellow;
+			}
+			
+			svg {
+				display: block;
+				width: 100%;
+				height: 100%;
+				background-color: #000;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id='app'>
+			<!--<svg id='svg'>
+				<defs>
+					<lineargradient id='linear' x1='0' y1='0' x1='0%' y1='0%' x2='100%' y2='0%'>
+						<stop offset='0%' stop-color='transparent'></stop>
+						<stop offset='100%' stop-color='#FFF'></stop>
+					</lineargradient>
+				</defs>
+				<line x1='0%' y1='0%' x2='5%' y2='5%' stroke-width='2' stroke='url(#linear)'>
+					<animate attributename='x1' from='-5%' to='95%' begin='1s' dur='5s' repeatcount='indefinite'></animate>
+					<animate attributename='y1' from='-5%' to='95%' begin='1s' dur='5s' repeatcount='indefinite'></animate>
+					<animate attributename='x2' from='0%' to='100%' begin='1s' dur='5s' repeatcount='indefinite'></animate>
+					<animate attributename='y2' from='0%' to='100%' begin='1s' dur='5s' repeatcount='indefinite'></animate>
+				</line>
+				<line x1='50%' y1='0%' x2='55%' y2='5%' stroke-width='2' stroke='url(#linear)'>
+					<animate attributename='x1' from='50%' to='100%' begin='1s' dur='5s' repeatcount='indefinite'></animate>
+					<animate attributename='y1' from='0%' to='50%' begin='1s' dur='5s' repeatcount='indefinite'></animate>
+					<animate attributename='x2' from='55%' to='105%' begin='1s' dur='5s' repeatcount='indefinite'></animate>
+					<animate attributename='y2' from='5%' to='55%' begin='1s' dur='5s' repeatcount='indefinite'></animate>
+				</line>
+				<line x1='55%' y1='0%' x2='60%' y2='5%' stroke-width='2' stroke='url(#linear)'>
+					<animate attributename='x1' from='55%' to='100%' begin='1s' dur='5s' repeatcount='indefinite'></animate>
+					<animate attributename='y1' from='0%' to='45%' begin='1s' dur='5s' repeatcount='indefinite'></animate>
+					<animate attributename='x2' from='60%' to='105%' begin='1s' dur='5s' repeatcount='indefinite'></animate>
+					<animate attributename='y2' from='5%' to='50%' begin='1s' dur='5s' repeatcount='indefinite'></animate>
+				</line>
+			</svg>-->
+		</div>
+		<script>
+			var str = `
+				<svg id='svg'>
+					<defs>
+						<lineargradient id='linear' x1='0' y1='0' x1='0%' y1='0%' x2='100%' y2='0%'>
+							<stop offset='0%' stop-color='transparent'></stop>
+							<stop offset='100%' stop-color='#FFF'></stop>
+						</lineargradient>
+					</defs>
+				`;
+			for(var i = 0; i < 30; i++) {
+				var time = Math.ceil(Math.random() *8),dur=Math.ceil(Math.random() *3+2),
+					pos = Math.ceil(Math.random() * 100) - 60 ,
+					lineLen=20,
+					yStart=-lineLen*2,
+					yEnd;
+				str += `
+					<line x1='${pos}%' y1='${yStart}%' x2='${pos+lineLen}%' y2='${yStart+lineLen}%' stroke-width='2' stroke='url(#linear)'>
+						<animate attributename='x1' from='${pos}%' to='100%' begin='${time}s' dur='${dur}s' repeatcount='indefinite' keySplines='0 .75 .25 1'></animate>
+						<animate attributename='y1' from='${yStart}%' to='${100-pos}%' begin='${time}s' dur='${dur}s' repeatcount='indefinite' keySplines='0 .75 .25 1'></animate>
+						<animate attributename='x2' from='${pos+lineLen}%' to='${100+lineLen}%' begin='${time}s' dur='${dur}s' repeatcount='indefinite' keySplines='0 .75 .25 1'></animate>
+						<animate attributename='y2' from='${yStart+lineLen}%' to='${100-pos+lineLen}%' begin='${time}s' dur='${dur}s' repeatcount='indefinite' keySplines='0 .75 .25 1'></animate>
+						<animate attributeName='opacity' from='0' to='1' begin='${time}s' dur='${dur}s' repeatCount='indefinite' />
+					</line>
+					`;
+			}
+			str += '</svg>';
+			var p=document.createElement('div');
+			p.innerHTML=str;
+			document.getElementById('app').appendChild(p.childNodes[1]);
+		</script>
+	</body>
+
+</html>

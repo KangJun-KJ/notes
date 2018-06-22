@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+			}
+			
+			#app {
+				width: 50vmin;
+				height: 50vmin;
+				background-color: yellow;
+			}
+			
+			svg {
+				display: block;
+				width: 100%;
+				height: 100%;
+				background-color: #000;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+				<!--<defs>
+					<filter id="f2" x="0" y="0" width="100%" height="100%">
+						<feOffset result="offOut" in="SourceGraphic" dx="0" dy="0" />
+						<feGaussianBlur result="blurOut" in="offOut" stdDeviation="3" />
+						<feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+					</filter>
+				</defs>
+				<circle id='circle' cx="100%" cy='50%' r='10' fill='#FFF' filter='url(#f2)'>
+					<animate attributename='r' values='10;5;10' dur='10s' repeatcount='indefinite'></animate>
+				</circle>-->
+		</div>
+
+		<script>
+			var str = `
+				<svg>
+				<defs>
+					<filter id="f2" x="0" y="0" width="100%" height="100%">
+						<feOffset result="offOut" in="SourceGraphic" dx="0" dy="0" />
+						<feGaussianBlur result="blurOut" in="offOut" stdDeviation="3" />
+						<feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+					</filter>
+				</defs>
+				
+				`;
+			for(var i = 0; i < 100; i++) {
+				var size = Math.ceil(Math.random() * 3),
+					posX = Math.ceil(Math.random() * 99),
+					posY = Math.ceil(Math.random() * 99),
+					time = Math.ceil(Math.random() *1),
+					dur=Math.ceil(Math.random() *2+0.5);
+
+				str += `
+						<circle id='circle' cx="${posX}%" cy='${posY}%' r='${size}' fill='#FFF' filter='url(#f2)'>
+							<animate attributename='r' values='${size};0;${size}' begin='${time}' dur='${dur}' repeatcount='indefinite'></animate>
+						</circle>
+					`;
+			}
+			str += '</svg>';
+			var p = document.createElement('div');
+			p.innerHTML = str;
+			document.getElementById('app').appendChild(p.childNodes[1]);
+		</script>
+	</body>
+
+</html>

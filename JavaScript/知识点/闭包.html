@@ -1,26 +1,124 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
 	</head>
+
 	<body>
-		
+		<!--https://stackoverflow.com/questions/111102/how-do-javascript-closures-work-->
 		<script>
-			var adder=function(x){
-				var base=x;
-				return function(n){
-					return n+base;
-				};
+			//------------example 1
+
+			function sayHello(name) {
+				var text = 'Hello ' + name;
+				var say = function() {
+					console.log(text);
+				}
+				say();
+			}
+			sayHello('Joe'); //logs "Hello Joe"
+
+			//------------example 2
+
+			function sayHello2(name) {
+				var text = 'Hello ' + name; // Local variable
+				var say = function() {
+					console.log(text);
+				}
+				return say;
+			}
+			var say2 = sayHello2('Bob');
+			say2(); // logs "Hello Bob"
+
+			//------------example 3
+
+			function say667() {
+				// Local variable that ends up within closure
+				var num = 42;
+				var say = function() {
+					console.log(num);
+				}
+				num++;
+				return say;
+			}
+			var sayNumber = say667();
+			sayNumber(); // logs 43
+
+			//------------example 4
+
+			var gLogNumber, gIncreaseNumber, gSetNumber;
+
+			function setupSomeGlobals() {
+				// Local variable that ends up within closure
+				var num = 42;
+				// Store some references to functions as global variables
+				gLogNumber = function() {
+					console.log(num);
+				}
+				gIncreaseNumber = function() {
+					num++;
+				}
+				gSetNumber = function(x) {
+					num = x;
+				}
+			}
+
+			setupSomeGlobals();
+			gIncreaseNumber();
+			gLogNumber(); // 43
+			gSetNumber(5);
+			gLogNumber(); // 5
+			//			
+			//			setupSomeGlobals();
+			//			gLogNumber(); //42
+
+			var oldLog = gLogNumber;
+
+			setupSomeGlobals();
+			gLogNumber(); // 42
+
+			oldLog() // 5
+
+			//----------------------example 5
+			function sayAlice() {
+				var say = function() {
+					console.log(alice);
+				}
+				// Local variable that ends up within closure
+				var alice = 'Hello Alice';
+				return say;
+			}
+			sayAlice()(); // logs "Hello Alice"
+
+			//-----------------example 7
+			function newClosure(someNum, someRef) {
+				// Local variables that end up within closure
+				var num = someNum;
+				var anArray = [1, 2, 3];
+//				var ref = JSON.parse(JSON.stringify(someRef));
+				var ref=someRef;
+				return function(x) {
+					num += x;
+					anArray.push(num);
+					console.log('num: ' + num +
+						'; anArray: ' + anArray.toString() +
+						'; ref.someVar: ' + ref.someVar + ';');
+				}
+			}
+			obj = {
+				someVar: 4
 			};
-			console.log(adder(10));
+			fn1 = newClosure(4, obj); //每次新建的时候，都会将重新初始化函数内部的变量。
+			fn2 = newClosure(5, obj);
+			fn1(1); // num: 5; anArray: 1,2,3,5; ref.someVar: 4;
+			fn2(1); // num: 6; anArray: 1,2,3,6; ref.someVar: 4;
+			obj.someVar++;
+			fn1(2); // num: 7; anArray: 1,2,3,5,7; ref.someVar: 5;
+			fn2(2); // num: 8; anArray: 1,2,3,6,8; ref.someVar: 5;
 			
-			var add10=adder(10);
-			console.log(add10(5));
-			console.log(add10(5));
-			var add20=adder(20);
-			console.log(add20(5));
-			console.log(add20(5));
 		</script>
 	</body>
+
 </html>

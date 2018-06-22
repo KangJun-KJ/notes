@@ -1,58 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Document</title>
+		<style>
 
-<body>
+		</style>
+	</head>
 
+	<body>
+		<!--
+			<select id="select">
+				<option value="SimSun">宋体</option>
+				<option value="SimHei">黑体</option>
+				<option value="Microsoft Yahei">微软雅黑</option>
+				<option value="Microsoft JhengHei">微软正黑体</option>
+				<option value="KaiTi">楷体</option>
+				<option value="NSimSun">新宋体</option>
+				<option value="FangSong">仿宋</option>
+				<option value="STKaiti">华文楷体</option>
+				<option value="STSong">华文宋体</option>
+				<option value="STFangsong">华文仿宋</option>
+				<option value="STZhongsong">华文中宋</option>
+				<option value="STHupo">华文琥珀</option>
+				<option value="STXinwei">华文新魏</option>
+				<option value="STLiti">华文隶书</option>
+				<option value="STXingkai">华文行楷</option>
+				<option value="YouYuan">幼圆</option>
+				<option value="LiSu">隶书</option>
+				<option value="STXihei">华文细黑</option>
+				<option value="STCaiyun">华文彩云</option>
+				<option value="FZShuTi">方正舒体</option>
+				<option value="FZYaoti">方正姚体</option>
+			</select>
+		-->
+		<script>
+			var fontArr = [{
+				"value": "SimSun",
+				"name": "宋体"
+			}, {
+				"value": "SimHei",
+				"name": "黑体"
+			}, {
+				"value": "Microsoft Yahei",
+				"name": "微软雅黑"
+			}, {
+				"value": "Microsoft JhengHei",
+				"name": "微软正黑体"
+			}, {
+				"value": "KaiTi",
+				"name": "楷体"
+			}, {
+				"value": "NSimSun",
+				"name": "新宋体"
+			}, {
+				"value": "FangSong",
+				"name": "仿宋"
+			}, {
+				"value": "STKaiti",
+				"name": "华文楷体"
+			}, {
+				"value": "STSong",
+				"name": "华文宋体"
+			}, {
+				"value": "STFangsong",
+				"name": "华文仿宋"
+			}, {
+				"value": "STZhongsong",
+				"name": "华文中宋"
+			}, {
+				"value": "STHupo",
+				"name": "华文琥珀"
+			}, {
+				"value": "STXinwei",
+				"name": "华文新魏"
+			}, {
+				"value": "STLiti",
+				"name": "华文隶书"
+			}, {
+				"value": "STXingkai",
+				"name": "华文行楷"
+			}, {
+				"value": "YouYuan",
+				"name": "幼圆"
+			}, {
+				"value": "LiSu",
+				"name": "隶书"
+			}, {
+				"value": "STXihei",
+				"name": "华文细黑"
+			}, {
+				"value": "STCaiyun",
+				"name": "华文彩云"
+			}, {
+				"value": "FZShuTi",
+				"name": "方正舒体"
+			}, {
+				"value": "FZYaoti",
+				"name": "方正姚体"
+			}];
 
-    <script>
-      
-        var isSupportFontFamily = function (fontFamily) {
-            if (typeof fontFamily != 'string') {
-                return false;
-            }
+			//    http://www.zhangxinxu.com/wordpress/2018/02/js-detect-suppot-font-family/
+			var isSupportFontFamily = function(fontFamily) {
+				if(typeof fontFamily != 'string') {
+					return false;
+				}
 
-            var defaultFontFamily = 'Arial';
-            if (fontFamily.toLowerCase() == defaultFontFamily.toLowerCase()) {
-                return true;
-            }
+				var defaultFontFamily = 'Arial';
+				if(fontFamily.toLowerCase() == defaultFontFamily.toLowerCase()) {
+					return true;
+				}
 
-            var defaultLetter = 'a';
-            var defaultFontSize = 100;
+				var defaultLetter = 'a';
+				var defaultFontSize = 100;
 
-            // 使用该字体绘制的canvas
-            var width = 100, height = 100;
-            var canvas = document.createElement('canvas');
-            var context = canvas.getContext('2d');
-            canvas.width = width;
-            canvas.height = height;
-            // 全局一致的绘制设定
-            context.textAlign = 'center';
-            context.fillStyle = 'black';
-            context.textBaseline = 'middle';
+				// 使用该字体绘制的canvas
+				var width = 100,
+					height = 100;
+				var canvas = document.createElement('canvas');
+				var context = canvas.getContext('2d');
+				canvas.width = width;
+				canvas.height = height;
+				// 全局一致的绘制设定
+				context.textAlign = 'center';
+				context.fillStyle = 'black';
+				context.textBaseline = 'middle';
 
-            var getFontData = function (fontFamily) {
-                // 清除
-                context.clearRect(0, 0, width, height);
-                // 设置字体
-                context.font = defaultFontSize + 'px ' + fontFamily + ', ' + defaultFontFamily;
-                context.fillText(defaultLetter, width / 2, height / 2);
+				var getFontData = function(fontFamily) {
+					// 清除
+					context.clearRect(0, 0, width, height);
+					// 设置字体
+					context.font = defaultFontSize + 'px ' + fontFamily + ', ' + defaultFontFamily;
+					context.fillText(defaultLetter, width / 2, height / 2);
 
-                var data = context.getImageData(0, 0, width, height).data;
+					var data = context.getImageData(0, 0, width, height).data;
+					return [].slice.call(data).filter(function(value) {
+						return value != 0;
+					});
+				};
+				return getFontData(defaultFontFamily).join('') !== getFontData(fontFamily).join('');
+			};
+			//			for(var i = 0; i < fontArr.length; i++) {
+			//				console.log(isSupportFontFamily(fontArr[i].value));
+			//			}
+			isSupportFontFamily("SimSun")
+		</script>
+	</body>
 
-                return [].slice.call(data).filter(function (value) {
-                    return value != 0;
-                });
-            };
-            return getFontData(defaultFontFamily).join('') !== getFontData(fontFamily).join('');
-        };
-        isSupportFontFamily("Arias");
-    </script>
-</body>
 </html>

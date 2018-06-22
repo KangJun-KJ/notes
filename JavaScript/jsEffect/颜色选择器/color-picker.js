@@ -17,7 +17,8 @@ var colorPicker = (function() {
 	var presetColors = [
 		'#D0021B', '#F5A623', '#F8E71C', '#8B572A', '#7ED321',
 		'#417505', '#BD10E0', '#9013FE', '#4A90E2', '#50E3C2',
-		'#B8E986', '#000000', '#4A4A4A', '#9B9B9B', '#FFFFFF'
+		'#B8E986', '#000000', '#4A4A4A', '#9B9B9B', '#FFFFFF',
+		"transparent"
 	]
 	var strToDom = function(str) {
 		var div = document.createElement('div');
@@ -80,12 +81,12 @@ var colorPicker = (function() {
 
 		bright = bright > 0 ? bright : 0
 		bright = bright > 1 ? 1 : bright
-
+		
 		var data = {
 			h: set.colors.hsv.h,
 			s: saturation,
 			v: bright,
-			a: set.colors.hsv.a
+			a: 1
 		};
 		Object.assign(set.colors.hsv, data)
 
