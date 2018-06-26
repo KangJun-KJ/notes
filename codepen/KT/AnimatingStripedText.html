@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+			}
+			
+			.c {
+				width: 10px;
+				height: 10px;
+				background-color: #4bc0c8;
+			}
+			
+			.c2 {
+				width: 10px;
+				height: 10px;
+				background-color: #feac5e;
+			}
+			
+			.con {
+				margin: 100px auto;
+				background: linear-gradient(-45deg, #4bc0c8 25%, #feac5e 25%, #feac5e 50%, #4bc0c8 50%, #4bc0c8 75%, #feac5e 75%, #feac5e);
+				background-size: 40px 40px;
+				-webkit-background-clip: text;
+				color: transparent;
+				font-size: 16vw;
+				/*background-repeat: no-repeat;*/
+				animation: stripes 1s linear infinite;
+			}
+			
+			@keyframes stripes {
+				100% {
+					background-position: 40px 0, 40px 0, 40px 0;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="c"></div>
+		<div class="c2"></div>
+		<div class="con">
+			KJBU2
+		</div>
+	</body>
+
+</html>
